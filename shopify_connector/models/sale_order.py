@@ -96,6 +96,8 @@ class SaleOrder(models.Model):
                 final_discount_amount = float(final_discount_amount)
                 inv_discount_product = invoice_lines.filtered(lambda i: i.product_id.shopify_discount_product)
                 inv_discount_product.price_unit = final_discount_amount
+        #Explicitly compute Tax against invoice
+        account_invoice_obj.compute_taxes()
         return res
 
 
