@@ -4,7 +4,7 @@
         <xpath expr="//table[@name='invoice_line_table']/thead/tr" position="replace">
             <tr>
                 <th>Description</th>
-                <th class="hidden">Source Document</th>
+                <!-- <th class="hidden">Source Document</th> -->
                 <th class="text-right">Ordered Qty</th>
                 <th class="text-right">Backorder Qty</th>
                 <th class="text-right">Invoiced Qty</th>
@@ -14,20 +14,20 @@
                 <th class="text-right">Amount</th>
             </tr>
         </xpath>
-        <xpath expr="//span[@t-field='l.quantity']/.." position="before">
+        <xpath expr="//span[@t-field='line.quantity']/.." position="before">
             <td class="text-right">
-                <span t-field="l.ordered_qty"/>
-                <span t-field="l.uom_id"  groups="product.group_uom"/>
+                <span t-field="line.ordered_qty"/>
+                <span t-field="line.uom_id" groups="uom.group_uom"/>
             </td>
             <td class="text-right">
-                <span t-field="l.back_order_qty"/>
-                <span t-field="l.uom_id"  groups="product.group_uom"/>
+                <span t-field="line.back_order_qty"/>
+                <span t-field="line.uom_id" groups="uom.group_uom"/>
             </td>
         </xpath>
-        <xpath expr="//tr[@t-foreach='range(max(5-len(o.invoice_line_ids),0))']//td[2]" position="before">
-            <td>
-            </td>
-        </xpath> 
     </template>
+    <!-- <xpath expr="//tr[@t-foreach='range(max(5-len(o.invoice_line_ids),0))']//td[2]" position="before">
+        <td>
+        </td>
+    </xpath>  -->
 </odoo>
 

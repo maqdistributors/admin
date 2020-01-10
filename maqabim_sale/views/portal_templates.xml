@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-	<template id="portal_invoice_report_inherit_maqabim_sale" inherit_id="account.portal_invoice_report">
+	<!-- <template id="portal_invoice_report_inherit_maqabim_sale" inherit_id="account.portal_invoice_report">
 		<xpath expr="//table/thead/tr" position="replace">
 			<tr>
                 <th>Description</th>
@@ -28,5 +28,5 @@
 			<td>
 			</td>
 		</xpath>
-	</template>
+	</template> -->
 </odoo>
