@@ -111,7 +111,7 @@ class ProcurementGroup(models.Model):
                                             if move._name == 'stock.move':
                                                 move._action_confirm()
                                     except UserError as error:
-                                        self.env['procurement.rule']._log_next_activity(orderpoint.product_id, error.name)
+                                        self.env['stock.rule']._log_next_activity(orderpoint.product_id, error.name)
                                     self._procurement_from_orderpoint_post_process([orderpoint.id])
                                 if use_new_cursor:
                                     cr.commit()
