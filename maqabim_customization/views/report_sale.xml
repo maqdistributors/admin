@@ -2,7 +2,7 @@
 <odoo>
 
     <template id="report_saleorder_document_maqabim" inherit_id="sale.report_saleorder_document">
-        <xpath expr="//t[@t-as='page']/table/thead/tr" position="replace">
+        <xpath expr="//div[hasclass('page')]/table/thead/tr" position="replace">
             <tr>
                 <th>Description</th>
                 <th class="text-right">Ordered</th>
@@ -15,14 +15,14 @@
                 <th class="text-right price_tax_included" groups="sale.group_show_price_total">Total Price</th>
             </tr>
         </xpath>
-        <xpath expr="//span[@t-field='l.product_uom_qty']/.." position="after">
+        <xpath expr="//span[@t-field='line.product_uom_qty']/.." position="after">
             <td class="text-right">
-                <span t-field="l.qty_delivered"/>
-                <span t-field="l.product_uom" groups="product.group_uom"/>
+                <span t-field="line.qty_delivered"/>
+                <span t-field="line.product_uom" groups="product.group_uom"/>
             </td>
             <td class="text-right">
-                <span t-field="l.qty_invoiced"/>
-                <span t-field="l.product_uom" groups="product.group_uom"/>
+                <span t-field="line.qty_invoiced"/>
+                <span t-field="line.product_uom" groups="product.group_uom"/>
             </td>
         </xpath>
     </template>
