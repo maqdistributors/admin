@@ -12,14 +12,14 @@
         </xpath>
     </template>
 
-    <template id="modal_maqabim_hp" inherit_id="website_sale_options.modal">
+    <!-- <template id="modal_maqabim_hp" inherit_id="website_sale_options.modal">
         <xpath expr="//td[@name='price']" position="attributes">
             <attribute name="groups">!ecommerce_category.group_hide_website_price</attribute>
         </xpath>
         <xpath expr="//th[hasclass('td-price')]" position="attributes">
             <attribute name="groups">!ecommerce_category.group_hide_website_price</attribute>
         </xpath>
-    </template>
+    </template> -->
 
     <template id="cart_lines_maqabim_hp" inherit_id="website_sale.cart_lines">
         <xpath expr="//td[@name='price']" position="attributes">
@@ -37,7 +37,7 @@
     </template>
 
     <template id="cart_maqabim_hp" inherit_id="website_sale.cart">
-        <xpath expr="//a[@t-if='not optional_products and website_sale_order and website_sale_order.website_order_line']" position="attributes">
+        <xpath expr="//a[@t-if='website_sale_order and website_sale_order.website_order_line']" position="attributes">
             <attribute name="groups">!ecommerce_category.group_hide_website_price</attribute>
         </xpath>
     </template>

@@ -14,7 +14,6 @@
 
     'depends': [
         'website_sale',
-        'website_multi',
         'im_livechat'
     ],
     'data': [
@@ -26,9 +25,9 @@
         'views/website_views.xml',
         'views/hide_pricing_template.xml',
         # emali debranding files
-        'data/sale_mail_template_data.xml',
-        'data/account_mail_template_data.xml',
-        'data/purchase_mail_template_data.xml',
+        # 'data/sale_mail_template_data.xml',
+        # 'data/account_mail_template_data.xml',
+        # 'data/purchase_mail_template_data.xml',
         #Delivery is not enable in prod 
         #'data/delivery_mail_template_data.xml'
     ],
