@@ -539,71 +539,76 @@ class SalesReport(models.Model):
                         continue
                 # prod_list = [46106]
                 warehouse_location_id = self.env['stock.location'].search([('m_warehouse_id', '=', wr_house.id)])
-                location_list.append(warehouse_location_id)
-                for loc in location_list:
-                    locations.append(loc.ids)
-                for locat in locations:
-                    for l in locat:
-                        flat_list_locations.append(l)
-#                 tuple_locations = tuple(flat_list_locations)
-#                 domain = ' sq.location_id in %s AND sq.product_id in %s'
-#                 args = (tuple_locations,tuple(prod_list))
+                if not warehouse_location_id:
+                    warehouse_location_id = wr_house.company_id.shopify_location_id
+                if len(warehouse_location_id) >= 1:
+                    location_list.append(warehouse_location_id)
+                    for loc in location_list:
+                        locations.append(loc.ids)
+                    for locat in locations:
+                        for l in locat:
+                            flat_list_locations.append(l)
+    #                 tuple_locations = tuple(flat_list_locations)
+    #                 domain = ' sq.location_id in %s AND sq.product_id in %s'
+    #                 args = (tuple_locations,tuple(prod_list))
 
-                if len(flat_list_locations) == 1:
-                    domain = "sq.location_id = %s " % flat_list_locations[0]
+                    if len(flat_list_locations) == 1:
+                        domain = "sq.location_id = %s " % flat_list_locations[0]
+                    else:
+                        domain = "sq.location_id in %s " % (tuple(flat_list_locations),)
+
+                    if len(prod_list) == 1:
+                        domain += " AND sq.product_id = %s " % prod_list[0]
+                    else:
+                        domain += " AND sq.product_id in %s " % (tuple(prod_list),)
+
+                    # 4. based on the locations, gets warehouse base qty on hand aginst product and prepare a vals
+                    vals = []
+                    Product = self.env['product.product']
+                    # # Empty recordset of products available in stock_quants
+                    quant_products = self.env['product.product']
+                    # # Empty recordset of products to filter
+                    products_to_filter = self.env['product.product'].browse(prod_list)
+
+                    self.env.cr.execute("""
+                        SELECT product_id, qty_on_hand, warehouse_id
+                        FROM
+                        (
+                            SELECT sq.product_id as product_id, sum(sq.quantity) as qty_on_hand, sl.m_warehouse_id as warehouse_id
+                            FROM stock_quant sq
+                            LEFT JOIN product_product pp ON pp.id = sq.product_id
+                            LEFT JOIN stock_location sl ON sl.id = sq.location_id
+                            WHERE %s -- AND sq.product_id = 51530
+                            GROUP BY product_id, sl.m_warehouse_id
+                        ) t
+                        WHERE t.warehouse_id is not null
+                        """ % domain)
+                    results = self.env.cr.dictfetchall()
+                    _logger.info("stock quants records ------%s"%len(results))
+                    if results:
+                        wr_house_data.extend(results)
+
+                    for product_data in results:
+                        if product_data['product_id']:
+                            quant_products |= Product.browse(product_data['product_id'])
+
+                    # 5. Fetch exhausted products
+                    if self.m_exhausted:
+                        _logger.info("Start with exhausted values fetch")
+                        exhausted_vals = self._get_exhausted_inventory_line(products_to_filter, quant_products)
+                        exhausted_values = []
+                        # 6. update vals of exhusted product based on warehouse
+                        for exhausted_val in exhausted_vals:
+                            # for warehouse_id in self.m_warehouse_id.ids:
+                            temp_val = {}
+                            temp_val.update(exhausted_val)
+                            temp_val.update({'warehouse_id':wr_house.id,'qty_on_hand':0})
+                            exhausted_values.extend([temp_val])
+                        if exhausted_values:
+                            wr_house_data.extend(exhausted_values)
+                        _logger.info("End with exhausted values fetch")
                 else:
-                    domain = "sq.location_id in %s " % (tuple(flat_list_locations),)
-
-                if len(prod_list) == 1:
-                    domain += " AND sq.product_id = %s " % prod_list[0]
-                else:
-                    domain += " AND sq.product_id in %s " % (tuple(prod_list),)
-
-                # 4. based on the locations, gets warehouse base qty on hand aginst product and prepare a vals
-                vals = []
-                Product = self.env['product.product']
-                # # Empty recordset of products available in stock_quants
-                quant_products = self.env['product.product']
-                # # Empty recordset of products to filter
-                products_to_filter = self.env['product.product'].browse(prod_list)
-
-                self.env.cr.execute("""
-                    SELECT product_id, qty_on_hand, warehouse_id
-                    FROM
-                    (
-                        SELECT sq.product_id as product_id, sum(sq.quantity) as qty_on_hand, sl.m_warehouse_id as warehouse_id
-                        FROM stock_quant sq
-                        LEFT JOIN product_product pp ON pp.id = sq.product_id
-                        LEFT JOIN stock_location sl ON sl.id = sq.location_id
-                        WHERE %s -- AND sq.product_id = 51530
-                        GROUP BY product_id, sl.m_warehouse_id
-                    ) t
-                    WHERE t.warehouse_id is not null
-                    """ % domain)
-                results = self.env.cr.dictfetchall()
-                _logger.info("stock quants records ------%s"%len(results))
-                if results:
-                    wr_house_data.extend(results)
-
-                for product_data in results:
-                    if product_data['product_id']:
-                        quant_products |= Product.browse(product_data['product_id'])
-
-                # 5. Fetch exhausted products
-                if self.m_exhausted:
-                    _logger.info("Start with exhausted values fetch")
-                    exhausted_vals = self._get_exhausted_inventory_line(products_to_filter, quant_products)
-                    exhausted_values = []
-                    # 6. update vals of exhusted product based on warehouse
-                    for exhausted_val in exhausted_vals:
-                        # for warehouse_id in self.m_warehouse_id.ids:
-                        temp_val = {}
-                        temp_val.update(exhausted_val)
-                        temp_val.update({'warehouse_id':wr_house.id,'qty_on_hand':0})
-                        exhausted_values.extend([temp_val])
-                    if exhausted_values:
-                        wr_house_data.extend(exhausted_values)
-                    _logger.info("End with exhausted values fetch")
+                    raise ValidationError(_("Location is not set against '%s' warehouse")%wr_house.name)
 
             # if wr_house_data:
             #     values = []
