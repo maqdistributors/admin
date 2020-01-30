@@ -3,7 +3,7 @@
 {
     "name": "Maq Website Order Comment",
     "author": "Bista",
-    "version": "11.0.1.0.0",
+    "version": "1.0",
     'license': 'OPL-1',
     "category": "Website",
     "website": "https://www.bistasolutions.com",
