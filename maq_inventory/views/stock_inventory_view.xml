@@ -25,8 +25,8 @@
                     <button name="action_cancel_draft" states="approved,waiting_approval" string="Cancel Inventory" type="object" groups="stock.group_stock_manager,maq_inventory.maq_inventory_adjustment_manager"/>
                     <button name="action_cancel_user_draft" states="confirm" string="Cancel Inventory" type="object"/>
                 </xpath>
-                <xpath expr="/form/header/button[@name='action_done']" position="replace">
-                    <button name="action_done" states="approved" string="Validate Inventory" type="object" class="oe_highlight" groups="stock.group_stock_manager,maq_inventory.maq_inventory_adjustment_manager"/>
+                <xpath expr="/form/header/button[@name='action_validate']" position="replace">
+                    <button name="action_validate" states="approved" string="Validate Inventory" type="object" class="oe_highlight" groups="stock.group_stock_manager,maq_inventory.maq_inventory_adjustment_manager"/>
                 </xpath>
                 <xpath expr="/form/header/field[@name='state']" position="replace">
                     <field name="state" widget="statusbar" statusbar_visible="draft,waiting_approval,approved,confirm,done"/>
