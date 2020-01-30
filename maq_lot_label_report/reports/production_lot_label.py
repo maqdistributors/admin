@@ -8,7 +8,7 @@ class ReportProductionLotLabel(models.AbstractModel):
     _name = 'report.maq_lot_label_report.report_productionlotlabel'
 
     @api.model
-    def get_report_values(self, docids, data=None):
+    def _get_report_values(self, docids, data=None):
         if not data.get('form'):
             raise UserError(
                 _("Form content is missing, this report cannot be printed."))
