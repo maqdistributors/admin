@@ -42,7 +42,7 @@
             </field>
         </record>
 
-        <record id="view_shopify_order_error_log_search" model="ir.ui.view">
+        <!-- <record id="view_shopify_order_error_log_search" model="ir.ui.view">
             <field name="name">view.shopify.order.error.log.search</field>
             <field name="model">shopify.order.error.log</field>
             <field name="arch" type="xml">
@@ -58,14 +58,14 @@
                     </group>
                 </search>
             </field>
-        </record>
+        </record> -->
 
         <record id="action_shopify_order_error_log" model="ir.actions.act_window">
             <field name="name">Shopify Order Error Log</field>
             <field name="res_model">shopify.order.error.log</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-            <field name="search_view_id" ref="shopify_connector.view_shopify_order_error_log_search"/>
+            <!-- <field name="search_view_id" ref="shopify_connector.view_shopify_order_error_log_search"/> -->
         </record>
     </data>
 </odoo>

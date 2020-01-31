@@ -540,12 +540,12 @@ class ShopifyConfig(models.Model):
                 _('Facing a problems while update a product quantity!: %s') % e)
 
     @api.multi
-    def test_import_orders(self):
+    def test_import_orders(self, shopify_order_id):
         """
         Fetch order ids from shopify with give condition and pass it to import_order function
         """
         self.test_connection()
-        shopify_order_id = 1346887714636
+#         shopify_order_id = 1346887714636
 #         shopify_orders = shopify.Order.find(
 #             status='any', financial_status='paid', fulfillment_status='fulfilled')
 #         for shopify_order in shopify_orders:
@@ -555,10 +555,10 @@ class ShopifyConfig(models.Model):
 #             status='any', financial_status='partially_refunded', fulfillment_status='partial')
 #         for shopify_order in shopify_orders:
 #             self.import_order(shopify_order.id)
-        order_company = self.sudo().get_shopify_order_company(1360243590988)
+        order_company = self.sudo().get_shopify_order_company(shopify_order_id)
 #         self.import_order(1706514022485, order_company, True)
         self.sudo(order_company.shopify_user_id.id).import_order(
-                            1360243590988, order_company, True)
+                            shopify_order_id, order_company, True)
         # self.import_order(1112794693725)
 
     def _process_so(self, odoo_so_rec, done_qty_vals = {}):
@@ -761,7 +761,6 @@ class ShopifyConfig(models.Model):
                 shopify_vendor_rec = order_company.shopify_vendor_id
                 if shopify_vendor_rec:
                     shopify_vendor_id = shopify_vendor_rec.id
-            
             shopify_warehouse_id = order_company.shopify_warehouse_id.id
             shopify_location_rec = order_company.shopify_location_id
             shopify_location_id = shopify_location_rec.id

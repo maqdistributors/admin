@@ -79,6 +79,7 @@ class StockLocation(models.Model):
          'You can select only one shopify location!', ['shopify_location_ids']),
     ]
 
+
 class StockPicking(models.Model):
 
     _inherit = 'stock.picking'
@@ -117,7 +118,8 @@ class StockMoveLine(models.Model):
 
     def _action_done(self):
         res = super(StockMoveLine, self)._action_done()
-        # exclude the method call if action done happening while shopify order import
+        # exclude the method call if action done happening while shopify order
+        # import
         shopify_picking = self._context.get('shopify_picking_validate')
         if not shopify_picking:
             try:
@@ -134,7 +136,8 @@ class StockMoveLine(models.Model):
                             negative_qty = qty * -1
                             location_id = move.location_id
                             location_dest_id = move.location_dest_id
-                            self._check_location_config(location_id,location_dest_id)
+                            self._check_location_config(
+                                location_id, location_dest_id)
                             if location_id:
                                 for shopify_location_rec in location_id.shopify_location_ids:
                                     shopify_config_rec = shopify_location_rec.shopify_config_id
@@ -170,7 +173,8 @@ class StockMoveLine(models.Model):
                     if shopify_export_val:
                         move.shopify_export = shopify_export_val
             except Exception as e:
-                _logger.error('Stock update operation have following error: %s', e)
+                _logger.error(
+                    'Stock update operation have following error: %s', e)
                 move.shopify_error_log = str(e)
                 pass
         return res

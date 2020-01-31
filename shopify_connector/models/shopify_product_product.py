@@ -47,7 +47,7 @@ class ShopifyProductProduct(models.Model):
         string='Sale Price', help="Sale price for Shopify", required=True)
     shopify_weight = fields.Float(string="Weight", help="Weight of Product Variants",
                                   related="product_variant_id.weight", readonly=True)
-    shopify_uom = fields.Many2one("product.uom", string="UOM", help="UOM of product",
+    shopify_uom = fields.Many2one("uom.uom", string="UOM", help="UOM of product",
                                   related="product_variant_id.uom_id", readonly=True)
     meta_fields_ids = fields.Many2many("shopify.metafields",
                                      help="Enter Shopify Variant Metafields", track_visibility='onchange')
