@@ -7,7 +7,8 @@ class StockLocation(models.Model):
 
     _inherit = 'stock.location'
 
-    @api.depends('name','parent_left','parent_right','usage','location_id')
+    #@api.depends('name','parent_left','parent_right','usage','location_id')
+    @api.depends('name','usage','location_id')
     def _get_m_warehouse_id(self):
         """
         If source location type is internal then warehouse id will be set from source location
