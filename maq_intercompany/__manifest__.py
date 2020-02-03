@@ -4,7 +4,7 @@
     'name': 'Maq Intercompany',
     'category': 'Custom',
     'summary': 'Update a view as per company restrictions and make fields to be company dependent',
-    'version': '11.0.1.0.0',
+    'version': '1.0',
     'author': 'Bista Solutions',
     'website': 'http://www.bistasolutions.com',
     'license': 'AGPL-3',
@@ -36,15 +36,16 @@ Update a view as per company restrictions and make fields to be company dependen
 * Customer Lead Time
     """,
     'depends': [
-        'stock','product', 'website_multi', 'website_sale', 'ecommerce_category', 'sale_coupon',
+        #'stock','product', 'website_multi', 'website_sale', 'ecommerce_category', 'sale_coupon',
+        'stock','product', 'website_sale', 'ecommerce_category', 'sale_coupon',
         'calendar'
     ],
     'data': [
         'security/intercompany_security.xml',
         'security/ir.model.access.csv',
         'views/delivery_slip_report_view_inherit.xml',
-        'views/product_attribute_price.xml',
-        'views/product_public_categ_view.xml',
+#         'views/product_attribute_price.xml',
+        'views/product_public_categ_inherit.xml',
         'views/product_style_view.xml',
         'views/product_template_inherit.xml',
         'views/product_template_website_desc_view.xml',
