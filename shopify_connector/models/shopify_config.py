@@ -1036,7 +1036,7 @@ class ShopifyConfig(models.Model):
                                                     for vendor in vendors:
                                                         price_unit = vendor.price
                                                 elif not vendors:
-                                                    vendors = product.seller_ids.filtered(lambda v: v.name.id == shopify_vendor_id and v.product_id.id == None)
+                                                    vendors = product.seller_ids.filtered(lambda v: v.name.id == shopify_vendor_id and not v.product_id.id)
                                                     if vendors:
                                                         for vendor in vendors:
                                                             price_unit = vendor.price
@@ -1095,7 +1095,8 @@ class ShopifyConfig(models.Model):
                     odoo_po_rec.sudo(shopify_user_id).button_confirm()
                     if not po_order_line_rec:
                         # forcefully calculate price unit according to quantity of the product
-                        odoo_po_rec.order_line._onchange_quantity()
+                        for po_line in odoo_po_rec.order_line:
+                            po_line._onchange_quantity()
                         po_order_line_rec = odoo_po_rec.order_line.filtered(lambda line: line.price_unit == 0)
                     if not po_order_line_rec:
                         try:
