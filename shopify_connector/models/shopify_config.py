@@ -5,7 +5,7 @@ import logging
 import json
 
 from datetime import datetime
-from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
 
 from odoo import models, fields, api, _
 from odoo.exceptions import Warning, ValidationError
@@ -1031,17 +1031,22 @@ class ShopifyConfig(models.Model):
                                                 product = product_variant_env.sudo(shopify_user_id).search(
                                                     [('default_code', '=', line_data.get('sku'))])
                                             if product:
-                                                vendors = product.seller_ids.filtered(lambda v: (v.name.id == shopify_vendor_id and v.product_id.id == product.id))
+                                                today_date = datetime.today().date().strftime(DEFAULT_SERVER_DATE_FORMAT)
+                                                prod_seller_ids = product.seller_ids
+                                                vendors = prod_seller_ids.filtered(lambda v: (v.name.id == shopify_vendor_id and v.product_id.id == product.id and v.date_start and v.date_start <= today_date and v.date_end and v.date_end >= today_date))
+                                                if not vendors:
+                                                    vendors = prod_seller_ids.filtered(lambda v: (v.name.id == shopify_vendor_id and not v.product_id.id and v.date_start and v.date_start <= today_date and v.date_end and v.date_end >= today_date))
+                                                    if not vendors:
+                                                        vendors = prod_seller_ids.filtered(lambda v: (v.name.id == shopify_vendor_id and v.product_id.id == product.id))
+                                                        if not vendors:
+                                                            vendors = prod_seller_ids.filtered(lambda v: v.name.id == shopify_vendor_id and not v.product_id.id)
                                                 if vendors:
                                                     for vendor in vendors:
                                                         price_unit = vendor.price
-                                                elif not vendors:
-                                                    vendors = product.seller_ids.filtered(lambda v: v.name.id == shopify_vendor_id and not v.product_id.id)
-                                                    if vendors:
-                                                        for vendor in vendors:
-                                                            price_unit = vendor.price
-                                                    else:
-                                                        price_unit = product.standard_price
+                                                        if price_unit > 0:
+                                                            break
+                                                else:
+                                                    price_unit = product.standard_price
                                                 product_id = product.id
                                                 product_name = product.name or ''
                                                 qty_move = line_data.get('quantity')
