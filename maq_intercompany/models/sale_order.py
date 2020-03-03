@@ -24,14 +24,15 @@ class SaleOrder(models.Model):
         for order in self:
             current_website_id = self.env['website'].get_current_website()
             website_company_id = current_website_id.company_id
-            accessory_products = order.website_order_line.mapped('product_id.accessory_product_ids').filtered(lambda product: product.company_id == website_company_id and product.website_published)
             products = order.website_order_line.mapped('product_id')
-            accessory_products -= products
-
-            for product in products:
-                for product_template in accessory_products.mapped('product_tmpl_id'):
-                    template_accessory_products = accessory_products.filtered(lambda accessory_product: accessory_product.product_tmpl_id == product_template)
-                    # remove from the accessories the ones that are not available for the selected product
-                    accessory_products -= template_accessory_products - product_template.get_filtered_variants(product)
+            accessory_products = self.env['product.product']
+            for line in order.website_order_line.filtered(lambda l: l.product_id):
+                combination = line.product_id.product_template_attribute_value_ids + line.product_no_variant_attribute_value_ids
+                accessory_products |= line.product_id.accessory_product_ids.filtered(lambda product:
+                    product.website_published and
+                    product not in products and
+                    (product.company_id == website_company_id or not product.company_id) and
+                    product._is_variant_possible(parent_combination=combination)
+                )
 
             return random.sample(accessory_products, len(accessory_products))
