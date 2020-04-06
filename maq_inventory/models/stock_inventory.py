@@ -87,7 +87,7 @@ class Inventory(models.Model):
         self.write({
             'line_ids': [(5,)],
             'approve_id': None,
-            'approve_date': '',
+            'approve_date': None,
             'state': 'draft'
         })
 
