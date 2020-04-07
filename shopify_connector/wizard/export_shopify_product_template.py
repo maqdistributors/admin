@@ -6,6 +6,7 @@ from odoo import models, fields, api, _
 
 class ShopifyProductExport(models.TransientModel):
     _name = 'export.shopify.product'
+    _description = "Shopify Product Export"
 
     @api.multi
     def export_shopify_product_template(self):

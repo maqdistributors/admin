@@ -52,7 +52,9 @@ class ProductTemplate(models.Model):
             if not can_be_sold or not can_be_purchased:
                 shopify_product_templates = rec.shopify_product_template_ids
                 for s_prod_temp in shopify_product_templates:
-                    shopify_published_list.append(s_prod_temp.shopify_published)
+                    shopify_published_list.append(
+                        s_prod_temp.shopify_published)
                 if True in shopify_published_list:
-                    raise ValidationError(_("The product should be unpublished on shopify end as well!!"))
+                    raise ValidationError(
+                        _("The product should be unpublished on shopify end as well!!"))
         return res
