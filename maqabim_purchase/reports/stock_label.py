@@ -9,7 +9,7 @@ class ReportPickingLabel(models.AbstractModel):
     _name = 'report.maqabim_purchase.report_pickinglabel'
 
     @api.model
-    def get_report_values(self, docids, data=None):
+    def _get_report_values(self, docids, data=None):
         if not data.get('form'):
             raise UserError(_("Form content is missing, this report cannot be printed."))
 

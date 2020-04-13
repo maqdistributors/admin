@@ -16,7 +16,7 @@
         "views/products_template.xml",
         "views/assets.xml",
         'views/product_details_template.xml',
-        "data/data.xml",
+        # "data/data.xml",
     ],
     "installable": True,
     "application": True,

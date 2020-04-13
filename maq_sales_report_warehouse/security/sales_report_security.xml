@@ -27,6 +27,15 @@
         </record> -->
 
         <!-- Write ir.rule so user can view it's own created record -->
+        <!-- <record id="sales_report_view_rule" model="ir.rule">
+            <field name="name">Show records Sales Report Manager</field>
+            <field ref="model_sales_report" name="model_id"/>
+            <field eval="1" name="global"/>
+            <field name="domain_force">[('id','in',user.get_sales_report_ids())]</field>
+            <field name="groups" eval="[(4, ref('maq_sales_report_warehouse.group_sales_report_manager'))]"/>
+        </record> -->
+
+        <!-- Write ir.rule so user can view it's own created record -->
         <record id="sales_report_view_rule" model="ir.rule">
             <field name="name">Show records Sales Report Manager</field>
             <field ref="model_sales_report" name="model_id"/>

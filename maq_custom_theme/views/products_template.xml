@@ -2,8 +2,8 @@
 <odoo>
     <template id="products_inherit" inherit_id="website_sale.products">
         <xpath expr="//table" position="replace">
-            <table width="100%"/>
-            <t t-foreach="bins" t-as="tr_product">
+            <table width="100%">
+            <tr t-foreach="bins" t-as="tr_product">
                 <t t-foreach="tr_product" t-as="td_product">
                     <t t-if="td_product">
                         <t t-set="product" t-value="td_product['product']"/>
@@ -16,7 +16,8 @@
                     </t>
                     <div t-if="not td_product" class="oe-height-2"/>
                 </t>
-            </t>
+            </tr>
+        </table>
         </xpath>
     </template>
 

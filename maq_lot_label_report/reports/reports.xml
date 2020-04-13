@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="paperformat_a4_label" model="report.paperformat">
-        <field name="name">A4 Label Report</field>
+    <record id="paperformat_a4_label_maq" model="report.paperformat">
+        <field name="name">Custom A4 Label Report</field>
         <field name="default" eval="False" />
         <field name="format">custom</field>
         <field name="page_width">216</field>
@@ -18,24 +18,24 @@
 
     <report
         id="report_production_lot_label"
-        string="Print Production Lot Labels"
+        string="Print Custom LOT Labels"
         model="stock.production.lot"
         report_type="qweb-pdf"
         name="maq_lot_label_report.report_productionlotlabel"
         file="maq_lot_label_report.report_productionlotlabel"
         print_report_name="'Production Lot Labels - %s' % (object.name)"
-        paperformat="paperformat_a4_label"
+        paperformat="paperformat_a4_label_maq"
         menu="False"
     />
     <report
         id="report_product_label"
-        string="Print Product Labels"
+        string="Print Custom LOT Labels"
         model="product.product"
         report_type="qweb-pdf"
         name="maq_lot_label_report.report_productlabel"
         file="maq_lot_label_report.report_productlabel"
         print_report_name="'Product Labels - %s' % (object.name)"
-        paperformat="paperformat_a4_label"
+        paperformat="paperformat_a4_label_maq"
         menu="False"
     />
 </odoo>

@@ -4,7 +4,7 @@
     'name': 'Product Variant Show/Hide',
     'version': '1.0',
     'summary': 'Show or Hide Product Variant on the website shop',
-    'description': "",
+    'description': "This module will be used to unpublish the product variant and/or hide the product variant from the website product page.",
     'depends': ['product', 'sale', 'website_sale'],
     'category': 'Sale',
     'data': [

@@ -10,7 +10,7 @@ class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
     @api.multi
-    def _action_launch_procurement_rule(self):
+    def _action_launch_stock_rule(self):
         """
         Launch procurement group run method with required/custom fields genrated by a
         sale order line. procurement group will launch '_run_move', '_run_buy' or '_run_manufacture'

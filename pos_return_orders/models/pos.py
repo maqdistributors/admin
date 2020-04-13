@@ -86,7 +86,8 @@ class pos_order(models.Model):
             # order_date = datetime.strftime(pytz.utc.localize(datetime.strptime(pos_order.date_order,DEFAULT_SERVER_DATETIME_FORMAT)).astimezone(local),"%m/%d/%Y %I:%M %p") 
             order_date = ""
             if pos_order.date_order:
-                order_date = datetime.strptime(pos_order.date_order, DEFAULT_SERVER_DATETIME_FORMAT)
+                order_date = datetime.strftime(pos_order.date_order, DEFAULT_SERVER_DATETIME_FORMAT)
+                order_date = datetime.strptime(order_date, DEFAULT_SERVER_DATETIME_FORMAT)
             tax_details2 = []
             if tax_details:
                 for k in tax_details:

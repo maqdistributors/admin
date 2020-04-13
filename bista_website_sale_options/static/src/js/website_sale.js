@@ -54,7 +54,26 @@ $('.oe_website_sale #add_to_cart, .oe_website_sale #products_grid .a-submit')
                     // $modal.modal('hide');
                     ev.preventDefault();
                 });
+               /* $('#add_to_cart_a_submit').on("click", function (e) {
+                    console.log("add to cart a submit");
 
+                    $.ajax({
+                            type: 'GET',
+                            url: '/save_billing_details_by_checkbox/',
+                            dataType: 'json',
+                            data: {
+                                "save_personal_details": $('#save-as-personal-details').prop('checked'),
+                            },
+                            success: function (result) {
+                                $("#billing-pfn").val(result['fname']);
+                                $("#billing-pln").val(result['lname']);
+                                $("#billing-bill-address").val(result['address']);
+
+                            }
+                        });
+
+
+                });*/
                 $modal.on('click', '.css_attribute_color input', function (event) {
                     $modal.find('.css_attribute_color').removeClass("active");
                     $modal.find('.css_attribute_color:has(input:checked)').addClass("active");

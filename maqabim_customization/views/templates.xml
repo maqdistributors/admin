@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-    <template id="frontend_layout_maqabim" inherit_id="portal.frontend_layout">
+    <!-- <template id="frontend_layout_maqabim" inherit_id="portal.frontend_layout">
         <xpath expr="//div[hasclass('navbar-static-top')]" position="attributes">
             <attribute name="class">navbar navbar-default navbar-fixed-top</attribute>
         </xpath>
@@ -13,5 +13,5 @@
             <script type="text/javascript" src="/maqabim_customization/static/src/js/website.js"></script>
         </xpath>
     </template>
-
+ -->
 </odoo>

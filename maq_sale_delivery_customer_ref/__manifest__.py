@@ -3,7 +3,7 @@
 {
     'name': 'MAQ Customer Reference Sale Delivery',
     'version': '1.0',
-    'summary': 'Add ',
+    'summary': 'Add customer reference in sales order and delivery order.',
     'description': """
     Following feature will be added
     1.96 Set customer reference from So to Pick/Pack Shipment""",

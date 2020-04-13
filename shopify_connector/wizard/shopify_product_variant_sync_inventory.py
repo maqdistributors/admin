@@ -7,6 +7,7 @@ from odoo import models, fields, api, _
 
 class ShopifyVariantInventorySync(models.TransientModel):
     _name = 'shopify.variant.inventory.sync'
+    _description = "Shopify Product variant Sync"
 
     @api.multi
     def shopify_product_variant_inventory_sync(self):
@@ -14,8 +15,9 @@ class ShopifyVariantInventorySync(models.TransientModel):
         stock_quant_obj = self.env['stock.quant']
         for rec in self:
             active_ids = rec._context.get('active_ids')
-            shopify_prod_search = shopify_prod_obj.search([('id', 'in', active_ids), ("shopify_product_id", "not in", ['', False])])
-            #Add counter b'coz we can send only 2 request per second
+            shopify_prod_search = shopify_prod_obj.search(
+                [('id', 'in', active_ids), ("shopify_product_id", "not in", ['', False])])
+            # Add counter b'coz we can send only 2 request per second
             count = 1
             for prod in shopify_prod_search:
                 shopify_variant_id = prod
@@ -23,7 +25,7 @@ class ShopifyVariantInventorySync(models.TransientModel):
                 shopify_config_id = prod.shopify_config_id.id
                 prod.shopify_config_id.test_connection()
                 shopify_locations_records = self.env['shopify.locations'].sudo().search(
-                                        [('shopify_config_id', '=', shopify_config_id)])
+                    [('shopify_config_id', '=', shopify_config_id)])
                 for shopify_locations_record in shopify_locations_records:
                     shopify_location = shopify_locations_record.shopify_location_id
                     shopify_location_id = shopify_locations_record.id

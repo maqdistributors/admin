@@ -16,7 +16,7 @@ class SalesReport(models.Model):
 
     m_sales_start_date = fields.Datetime(string="Start Date", default=datetime.today().replace(day=1), required=True, track_visibility='onchange')
     m_sales_end_date = fields.Datetime(string="End Date", default=datetime.today(), required=True, track_visibility='onchange')
-    m_warehouse_id = fields.Many2many("stock.warehouse", string="Warehouse", required=True, track_visibility='onchange')
+    m_warehouse_id = fields.Many2many("stock.warehouse", string="Warehouse", track_visibility='onchange')
     m_exhausted = fields.Boolean("Include Exhausted Products", default=True, track_visibility='onchange')
     m_sales_report_lines = fields.One2many("sales.report.lines", "sales_report_id", "Sales Report Lines", copy=False)
     #TO DO: put domain on partner_ids and show only those vendors who are registred with product.supplierinfo
@@ -66,8 +66,8 @@ class SalesReport(models.Model):
     def _check_date(self):
         tommorrow_date = datetime.now() + timedelta(days=1)
         tommorrow_min_date = datetime.combine(tommorrow_date, time.min)
-        start_date = datetime.strptime(self.m_sales_start_date, DEFAULT_SERVER_DATETIME_FORMAT)
-        end_date = datetime.strptime(self.m_sales_end_date, DEFAULT_SERVER_DATETIME_FORMAT)
+        start_date = datetime.strptime(str(self.m_sales_start_date), DEFAULT_SERVER_DATETIME_FORMAT)
+        end_date = datetime.strptime(str(self.m_sales_end_date), DEFAULT_SERVER_DATETIME_FORMAT)
 
         if start_date and start_date > tommorrow_min_date:
             raise ValidationError(_("Date should not be future date. Kindly check the start date."))
@@ -551,17 +551,20 @@ class SalesReport(models.Model):
     #                 tuple_locations = tuple(flat_list_locations)
     #                 domain = ' sq.location_id in %s AND sq.product_id in %s'
     #                 args = (tuple_locations,tuple(prod_list))
-
+    
                     if len(flat_list_locations) == 1:
                         domain = "sq.location_id = %s " % flat_list_locations[0]
                     else:
                         domain = "sq.location_id in %s " % (tuple(flat_list_locations),)
-
-                    if len(prod_list) == 1:
-                        domain += " AND sq.product_id = %s " % prod_list[0]
+    
+                    if prod_list:
+                        if len(prod_list) == 1:
+                            domain += " AND sq.product_id = %s " % prod_list[0]
+                        else:
+                            domain += " AND sq.product_id in %s " % (tuple(prod_list),)
                     else:
-                        domain += " AND sq.product_id in %s " % (tuple(prod_list),)
-
+                        raise ValidationError(_("Product is not available for company"))
+    
                     # 4. based on the locations, gets warehouse base qty on hand aginst product and prepare a vals
                     vals = []
                     Product = self.env['product.product']
@@ -569,7 +572,7 @@ class SalesReport(models.Model):
                     quant_products = self.env['product.product']
                     # # Empty recordset of products to filter
                     products_to_filter = self.env['product.product'].browse(prod_list)
-
+    
                     self.env.cr.execute("""
                         SELECT product_id, qty_on_hand, warehouse_id
                         FROM
@@ -587,11 +590,11 @@ class SalesReport(models.Model):
                     _logger.info("stock quants records ------%s"%len(results))
                     if results:
                         wr_house_data.extend(results)
-
+    
                     for product_data in results:
                         if product_data['product_id']:
                             quant_products |= Product.browse(product_data['product_id'])
-
+    
                     # 5. Fetch exhausted products
                     if self.m_exhausted:
                         _logger.info("Start with exhausted values fetch")
