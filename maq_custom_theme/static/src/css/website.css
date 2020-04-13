@@ -1,0 +1,30 @@
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td{
+    vertical-align: middle !important;
+}
+#product_details h1{
+    color:#4286f4;
+}
+#add_to_cart_b {
+    padding: 30px;
+    min-width: 240px;
+    display: inline-block;
+    -webkit-transition: all 0.5s ease-out;
+    -o-transition: all 0.5s ease-out;
+    transition: all 0.5s ease-out;
+}
+.oe_product_cart .btn-default.btn-xs {
+    color: #000;
+    border: 1px solid #000;
+}
+/*02042019 changes*/
+.oe_product_cart .product_grid_qty p {
+    line-height: 16px !important;
+    margin-bottom:0px;
+    height:48px;
+}
+
+.oe_product div.oe_product_cart:hover .product_grid_qty {
+    /*display: inline-table;*/
+    visibility: visible;
+/*  top: 20px;*/
+}

@@ -12,7 +12,8 @@
     Theme Search bar product list
         """,
     'depends': [
-        'website_sale'
+        'website_sale',
+        'bista_website_sale_options'
     ],
     'data': [
         'view/assets.xml',

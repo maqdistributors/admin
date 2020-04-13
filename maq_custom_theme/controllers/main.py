@@ -3,10 +3,10 @@
 
 from odoo import http
 from odoo.http import request
-from odoo.addons.website_sale_options.controllers.main import WebsiteSaleOptions
+from odoo.addons.website_sale.controllers.main import WebsiteSale
 
 
-class WebsiteSaleOptions(WebsiteSaleOptions):
+class WebsiteSale(WebsiteSale):
 
     @http.route(['/shop/cart/update_option'], type='http', auth="public", methods=['POST'], website=True,
                 multilang=False)

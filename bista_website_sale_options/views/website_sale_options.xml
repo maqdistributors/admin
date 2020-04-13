@@ -1,27 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Replace the website_sale.js file with custom js file -->
-    <template id="assets_backend" name="website_sale_expand assets"
-              inherit_id="website_sale_options.assets_frontend">
-        <xpath
+     <!-- <template id="assets_backend" name="website_sale_expand assets"
+              inherit_id="website_sale_options.assets_frontend"> -->
+     <template id="assets_maq_website_sale_options_frontend" name="website_sale_expand assets"
+              inherit_id="website_sale.assets_frontend">
+        <!-- <xpath
                 expr="//script[contains(@src,'/website_sale_options/static/src/js/website_sale.js')]"
-                position="replace">
+                position="replace"> -->
+        <xpath expr="//script[last()]" position="after">
             <script type="text/javascript"
                     src="/bista_website_sale_options/static/src/js/website_sale.js"/>
         </xpath>
     </template>
     <!-- Load custom less file of the module -->
-    <template id="assets_maq_website_frontend" inherit_id="web.assets_frontend"
+    <template id="assets_maq_website_frontend" inherit_id="website_sale.assets_frontend"
               name="MAQ Website Assets">
         <xpath expr="//link[last()]" position="after">
             <link rel="stylesheet" type="text/less"
                   href="/bista_website_sale_options/static/src/less/maq_website.ui.component.less"/>
         </xpath>
     </template>
+
+    <template id="x_maq_style_edits_copy_1" inherit_id="web.assets_frontend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" type="text/less" href="/bista_website_sale_options/static/src/less/style.less"/>
+        </xpath>
+        <!-- <xpath expr="//script[last()]" position="after">
+            <script type="text/javascript" src="/bista_website_sale_options/static/src/js/website_sale_search.js"></script>
+        </xpath> -->
+    </template>
     <!-- Changes in website add to cart modal on modal-title, modal-body and 
         modal-footer
         While adding cart into show following confirmation pop view-->
-    <template id="bista_website_sale_modal" name="Bista Website Sale Modal"
+    <!-- <template id="bista_website_sale_modal" name="Bista Website Sale Modal"
               inherit_id="website_sale_options.modal">
         <xpath expr="//div[hasclass('modal-dialog')]/div[hasclass('modal-content')]/div[hasclass('modal-header')]/h4[hasclass('modal-title')]"
                position="replace">
@@ -58,9 +70,9 @@
                                     <span style='font-size: 20px;'>]</span>
                                     <span style='font-size: 20px;' t-field="product.name"/>
                                 </div>
-                                <!--                                 <div>
+                                                                <div>
                                                                     <span t-esc="product.description_sale"/>
-                                                                </div> -->
+                                                                </div>
                                 <div>
                                     <b>Quantity:-</b>
                                     <span t-esc="quantity"/>
@@ -69,13 +81,13 @@
                                 </div>
                                 <div groups="!ecommerce_category.group_hide_website_price">
                                     <b>Total:-</b>
-                                    <!-- <span class="text-danger oe_default_price oe_optional"
+                                    <span class="text-danger oe_default_price oe_optional"
                                           t-field="product.lst_price"
                                           t-options='{
                                                "widget": "monetary",
                                                "from_currency": product.currency_id,
                                                "display_currency": website.currency_id
-                                              }'/> -->
+                                              }'/>
                                     <span class="oe_price" style="white-space: nowrap;"
                                           t-field="product.website_price"
                                           t-options='{
@@ -103,7 +115,7 @@
                 </a>
             </div>
         </xpath>
-    </template>
+    </template> -->
     <!-- Improved product grid view on hover by showing price, adding message 
         for multiple variants and showing oe_website_spinner for adding quantity 
         and hiding product price on hover -->
@@ -138,12 +150,12 @@
             <div t-if="len(filterd_value_ids) == 1" class="css_quantity input-group oe_website_spinner product_grid_qty"
                  groups="!ecommerce_category.group_hide_website_price">
                 <a t-attf-href="#" class="mb8 input-group-addon js_add_cart_json hidden-xs">
-                    <i class="fa fa-minus"/>
+                    <i class="fa fa-minus mt-3"/>
                 </a>
                 <input type="text" class="js_quantity form-control quantity" data-min="1" min="1" name="add_qty"
                        value="1"/>
                 <a t-attf-href="#" class="mb8 input-group-addon float_left js_add_cart_json hidden-xs">
-                    <i class="fa fa-plus"/>
+                    <i class="fa fa-plus mt-3"/>
                 </a>
                 <br/>
             </div>
@@ -183,7 +195,27 @@
                 <input name="product_id" t-att-value="'0'" type="hidden"/>
             </t>
         </xpath>
-        <xpath expr="//div[hasclass('product_price')]/t[@t-if='len(product.product_variant_ids) &gt; 1']"
+        <xpath expr="//a[hasclass('a-submit')]" position="replace">
+            <t t-set="filterd_value_ids" t-value="product._get_published_product_ids()"/>
+            <t t-if="len(filterd_value_ids) &gt; 1">
+                <a class="btn btn-default btn-xs"
+                   t-att-href="keep('/shop/product/%s' % slug(product), page=(pager['page']['num'] if pager['page']['num']&gt;1 else None))">
+                    <span>Add To Cart</span>
+                </a>
+            </t>
+            <t t-if="len(filterd_value_ids) == 1">
+                <a class="btn btn-default btn-xs a-submit" id="add_to_cart_a_submit">
+                    <span>Add To Cart</span>
+                </a>
+            </t>
+            <t t-if="len(filterd_value_ids) &lt; 1">
+                <a class="btn btn-default btn-xs"
+                   t-att-href="keep('/shop/product/%s' % slug(product), page=(pager['page']['num'] if pager['page']['num']&gt;1 else None))">
+                    <span>Currently Out Of Stock</span>
+                </a>
+            </t>
+        </xpath>
+        <!-- <xpath expr="//div[hasclass('product_price')]/t[@t-if='len(product.product_variant_ids) &gt; 1']"
                position="replace">
             <t t-set="filterd_value_ids" t-value="product._get_published_product_ids()"/>
             <t t-if="len(filterd_value_ids) &gt; 1">
@@ -206,11 +238,12 @@
                     <span>Currently Out Of Stock</span>
                 </a>
             </t>
-        </xpath>
+        </xpath> -->
     </template>
 
     <!-- show message Currently Out of Stock in website Cart lines -->
     <template id="ecommerce_category.cart_lines_maqabim" inherit_id="website_sale.cart_lines">
+    <!-- <template id="cart_lines_website_sale_inherit" inherit_id="website_sale.cart_lines"> -->
         <xpath expr="//td[hasclass('td-product_name')]" position="replace">
             <td t-if="line.product_id.product_tmpl_id" class="td-product_name">
                 <div>
@@ -238,6 +271,109 @@
             </td>
         </xpath>
     </template>
+
+    <!-- Product grid view -->
+       <template id="bista_website_sale_products" inherit_id='website_sale.products' name="Products" priority="15">
+            <xpath expr="//*[contains(@id, 'products_grid')]//*[1]" position="before">
+                <t t-call="bista_website_sale_options.search"/>
+            </xpath>
+        </template>
+
+    <!-- Search template of theme loftspace sale -->
+    <template id="search" name="theme_loftspace_search">
+        <div class="row">
+            <div class="col-md-12">
+                <t t-if="not keep">
+                    <form action="/shop" method="get" class="pagination form-inline">
+                        <div class="input-group">
+                            <input name="search" class="search-query form-control" placeholder="Search..." type="text"/>
+                            <span class="input-group-btn">
+                                <a class="btn btn-default a-submit"><i class="fa fa-search"/></a>
+                            </span>
+                        </div>
+                    </form>
+                </t>
+                <t t-if="keep">
+                    <t t-call="website_sale.search">
+                        <t t-set="search_class">pagination form-inline col-md-12</t>
+                    </t>
+                </t>
+            </div>
+        </div>
+    </template>
+
+    <template id="custom_modal">
+	<div class="modal fade" id="add_reference_file_2" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				 <!-- <form action="/shop/cart/update_json" name="multi_form[]" method="post"
+					enctype="multipart/form-data" multiple="multiple"
+					data-editable-form="false"> -->
+					<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+					<h4 class="modal-title" id="myModalLabel">Product successfully added to your
+						shopping cart</h4>
+					<div class="modal-body">
+						<table>
+							<thead>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<div>
+											<span t-field="product.image_medium" t-options='{"widget": "image" }' />
+										</div>
+									</td>
+									<td>&#160;</td>
+									<td>&#160;</td>
+									<td>&#160;</td>
+									<td>&#160;</td>
+									<td>&#160;</td>
+									<td>&#160;</td>
+									<td>&#160;</td>
+									<td>
+										<div>
+											<span style='font-size: 20px;'>[</span>
+											<span style='font-size: 20px;' t-esc="product.default_code" />
+											<span style='font-size: 20px;'>]</span>
+											<span style='font-size: 20px;' t-field="product.name" />
+										</div>
+										<div>
+											<span t-esc="product.description_sale" />
+										</div>
+										<div>
+											<b>Quantity:-</b>
+											<span t-esc="quantity" />
+											<input style="border: none; border-color: transparent;"
+												type="hidden" data-min="1" name="add_qty" value="1"
+												readonly="readonly" />
+										</div>
+										<div groups="!ecommerce_category.group_hide_website_price">
+											<b>Total:-</b>
+											<span class="text-danger oe_default_price oe_optional"
+												t-field="product.lst_price"
+												t-options='{
+                                           "widget": "monetary",
+                                           "from_currency": product.currency_id,
+                                           "display_currency": website.currency_id
+                                          }' />
+											<span class="oe_price" style="white-space: nowrap;"
+												t-field="product.website_price"
+												t-options='{
+                                     "widget": "monetary",
+                                     "display_currency": website.currency_id
+                                  }' />
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				<!-- </form> -->
+			</div>
+		</div>
+	</div>
+</template>
 
 </odoo>
 

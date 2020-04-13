@@ -11,13 +11,13 @@ odoo.define('website_search.custom', function (require) {
                 'search_keyword':search_keyword
             }).then(function (data){
                 if(data){
-                    $('#algolia-autocomplete-container .aa-dropdown-menu').removeClass('hide');
+                    $('#algolia-autocomplete-container .aa-dropdown-menu').removeClass('d-none');
                     $('#algolia-autocomplete-container .aa-dropdown-menu').html(data);
                 }
             });
         }).blur(function(ev){
             setTimeout(function(){
-                $('#algolia-autocomplete-container .aa-dropdown-menu').addClass('hide');
+                $('#algolia-autocomplete-container .aa-dropdown-menu').addClass('d-none');
             }, 500);
         });
     });

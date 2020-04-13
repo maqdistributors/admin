@@ -7,14 +7,68 @@
             </attribute>
         </xpath>
     </template>
-    <template id="custom_product" inherit_id="website_sale.product">
-        <xpath expr="//div[hasclass('col-sm-7')]" position="attributes">
+    <!-- <template id="custom_product" inherit_id="website_sale.product">
+        <xpath expr="//div[@class='col-md-6']" position="attributes">
             <attribute name="class">col-sm-6 col-lg-6</attribute>
         </xpath>
         <xpath expr="//div[@id='product_details']" position="attributes">
             <attribute name="class">col-sm-6 col-lg-6</attribute>
         </xpath>
-    </template>
+    </template> -->
+    <!-- <template id="custom_product_variants_odoo12" inherit_id="website_sale.product_variants">
+        <xpath expr="//t[@t-if='len(product.product_variant_ids) &gt; 1']" position="replace">
+            <t t-if="len(product.product_variant_ids) &gt; 1">
+                <table class="table table-responsive">
+                    <thead>
+                        <tr>
+                          <th scope="col">Product Name</th>
+                          <th scope="col">Sku</th>
+                          <th scope="col">Price</th>
+                          <th scope="col">Qty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="product.product_variant_ids" t-as="variant_id">
+                            <t t-if="variant_id.is_product_variant_hide() == False">
+                            <tr t-att-id="variant_id.id" t-att-name="'attribute-%s-%s' % (product.id, variant_id.id)" class="variant_details">
+                                <td>
+                                    <label label-default="label-default">
+                                        <span name="product_name" t-esc="product.name + ' ' + variant_id.attribute_value_ids.name"/>
+                                    </label>
+                                </td>
+                                <td>
+                                    <span t-field="variant_id.default_code"/>
+                                </td>
+                                <td style="font-weight:600;">
+                                    <span t-field="variant_id.website_price"
+                                    t-options='{
+                                       "widget": "monetary",
+                                       "display_currency": product.currency_id,
+                                    }'/>
+                                </td>
+                                <td>
+                                    <t t-if="variant_id.is_product_variant_publish() == False">
+                                        <input type="number" class="form-control quantity" style="display:inline-block;width:50px;text-align:center;" data-min="0" t-att-name="variant_id.id" value="0" disabled="disabled"/>
+                                        <p style="display:inline-block;" class="text-danger">Currently Out of Stock</p>
+                                    </t>
+                                    <t t-else="">
+                                        <input type="number" class="form-control quantity" style="display:inline-block;width:50px;text-align:center;" data-min="0" t-att-name="variant_id.id" value="0"/>
+                                    </t>
+                                </td>
+                            </tr>
+                            </t>
+                        </t>
+                    </tbody>
+                </table>
+            </t>
+            <t t-else="">
+                <input type="hidden" class="product_id" name="product_id" t-att-value="product.product_variant_id.id if len(product.product_variant_ids) == 1 else '0'" />
+                <t t-call="website_sale.variants">
+                    <t t-set="ul_class" t-value="'nav-stacked'" />
+                </t>
+            </t>
+        </xpath>
+    </template> -->
     <template id="custom_product_variants" inherit_id="website_sale.product">
          <xpath expr="//t[@t-placeholder='select']" position="replace">
             <t t-if="len(product.product_variant_ids) &gt; 1">
@@ -58,8 +112,9 @@
                 </table>
             </t>
             <t t-else="">
-                <input type="hidden" class="product_id" name="product_id" t-att-value="product.product_variant_id.id if len(product.product_variant_ids) == 1 else '0'"/>
-                <t t-call="website_sale.variants">
+                <input type="hidden" class="product_id" name="product_id" t-att-value="product.product_variant_id.id if len(product.product_variant_ids) == 1 else '0'" />
+                <input type="hidden" class="product_template_id" name="product_template_id" t-att-value="product.id" />
+                <t t-call="sale.variants">
                     <t t-set="ul_class" t-value="'nav-stacked'"/>
                 </t>
             </t>

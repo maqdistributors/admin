@@ -5,9 +5,19 @@
 }
 
 .aa-dropdown-menu {
+  margin-top: -1px;
+  right: 0;
   z-index: 1000 !important;
+  border: 1px solid #bbb;
+  border-top: 3px solid #bbb;
   border-radius: 1px;
   background: #fff;
+  top: -8px;
+  position: absolute;
+  left: auto;
+  display: block;
+  right: 0px;
+  width: 80%;
 
   .left-border {
     border-left: 1px solid darken(#bbb, 6%);
@@ -72,10 +82,12 @@ a.row.search_product {
 .as-search {
   position: relative;
   top: 2px;
+  padding-right: 20px;
 
   .form-control {
     box-shadow: none;
     border-radius: 30px;
+    width: 270px;
     height: 45px;
     border: 1px solid darken(#bbb, 17%);
     padding: 7px 30px;
@@ -85,6 +97,8 @@ a.row.search_product {
   }
 
   .btn {
+    position: absolute;
+    right: 30px;
     top: 14px;
     box-shadow: none;
     background: none;
@@ -132,5 +146,6 @@ a.row.search_product {
 @media (max-width: 767px) {
   .aa-dropdown-menu {
     right: 10%;
+    top: -60px;
   }
 }
