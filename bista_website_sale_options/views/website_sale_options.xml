@@ -22,14 +22,14 @@
         </xpath>
     </template>
 
-    <template id="x_maq_style_edits_copy_1" inherit_id="web.assets_frontend">
-        <xpath expr="." position="inside">
+    <!-- <template id="x_maq_style_edits_copy_1" inherit_id="web.assets_frontend"> -->
+        <!-- <xpath expr="." position="inside">
             <link rel="stylesheet" type="text/less" href="/bista_website_sale_options/static/src/less/style.less"/>
-        </xpath>
+        </xpath> -->
         <!-- <xpath expr="//script[last()]" position="after">
             <script type="text/javascript" src="/bista_website_sale_options/static/src/js/website_sale_search.js"></script>
         </xpath> -->
-    </template>
+    <!-- </template> -->
     <!-- Changes in website add to cart modal on modal-title, modal-body and 
         modal-footer
         While adding cart into show following confirmation pop view-->
