@@ -24,11 +24,11 @@
 #         'maqabim_website_popup'
     ],
     "data": [
-        # 'security/ir.model.access.csv', Commented By bista
+        # 'security/ir.model.access.csv', #Commented By bista
         'views/product_sale_view_inherit.xml',
         'views/product_specification_views.xml',
         "views/website_sale_options.xml",
-        # "data/data.xml" Commented by Bista
+        # "data/data.xml" #Commented by Bista
     ],
     #    "qweb": [
     #        "static/src/xml/website_sale.xml",
