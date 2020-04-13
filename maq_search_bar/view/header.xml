@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <template id="products_inherit_search" inherit_id="theme_loftspace_sale.products">
+    <!-- <template id="products_inherit_search" inherit_id="theme_loftspace_sale.products">
         <xpath expr="//t[@t-call='theme_loftspace_sale.search']" position="replace">
             <div class="col-md-12">
                 <div class="as-search">
@@ -31,7 +31,7 @@
                 </div>
             </div>
         </xpath>
-    </template>
+    </template> -->
     <template id="product_search_inherit" inherit_id="website_sale.product">
         <xpath expr="//t[@t-call='website_sale.search']" position="replace"/>
         <xpath expr="//div[hasclass('row')]" position="before">
