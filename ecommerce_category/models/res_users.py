@@ -1,4 +1,4 @@
-# coding: utf-8
+    # coding: utf-8
 
 import logging
 
@@ -63,7 +63,7 @@ class ResUsers(models.Model):
                     if user and current_website_id:
                         try:
                             user_id = user.id
-                            user.sudo(user_id).check_credentials(password)
+                            user.sudo(user_id)._check_credentials(password)
                             user.sudo(user_id)._update_last_login()
                         except AccessDenied:
                             _logger.info('Multi-website login failed for db:%s login:%s website_id:%s', db, login, current_website_id)
