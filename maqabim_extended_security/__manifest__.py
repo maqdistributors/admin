@@ -11,7 +11,7 @@ Maqabim Distributors: Custom access rights
     'website': "https://www.odoo.com",
     'category': 'Custom Development',
     'version': '0.1',
-    'depends': ['point_of_sale', 'maqabim_sale', 'stock', 'website_multi', 'maqabim_purchase'],
+    'depends': ['point_of_sale', 'maqabim_sale', 'stock', 'website', 'maqabim_purchase'],
     'data': [
         'security/security_groups.xml',
         'security/ir.model.access.csv',
