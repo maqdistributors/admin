@@ -28,10 +28,10 @@ class WebsiteSale(WebsiteSale):
             redirect_url = '/web/login?redirect=%s'%(request.httprequest.url)
             if current_website.website_shop_login_redirect:
                 redirect_url = '%s?redirect=%s'%(current_website.website_shop_login_redirect, request.httprequest.url)
-            else:
-                # redirct user to /web/signup if b2c signup is enable
-                if current_website.website_auth_signup_uninvited == 'b2c':
-                    redirect_url = '/web/signup?redirect=%s'%(request.httprequest.url)
+            # else:
+            #     # redirct user to /web/signup if b2c signup is enable
+            #     if current_website.website_auth_signup_uninvited == 'b2c':
+            #         redirect_url = '/web/signup?redirect=%s'%(request.httprequest.url)
             return request.redirect(redirect_url)
         return super(WebsiteSale, self).product(product, category=category, search=search, **kwargs)
 
@@ -47,10 +47,10 @@ class WebsiteSale(WebsiteSale):
             redirect_url = '/web/login?redirect=%s'%(request.httprequest.url)
             if current_website.website_shop_login_redirect:
                 redirect_url = '%s?redirect=%s'%(current_website.website_shop_login_redirect, request.httprequest.url)
-            else:
-                # redirct user to /web/signup if b2c signup is enable
-                if current_website.website_auth_signup_uninvited == 'b2c':
-                    redirect_url = '/web/signup?redirect=%s'%(request.httprequest.url)
+            # else:
+            #     # redirct user to /web/signup if b2c signup is enable
+            #     if current_website.website_auth_signup_uninvited == 'b2c':
+            #         redirect_url = '/web/signup?redirect=%s'%(request.httprequest.url)
             return request.redirect(redirect_url)
 
         add_qty = int(post.get('add_qty', 1))

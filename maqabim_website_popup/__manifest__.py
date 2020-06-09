@@ -15,7 +15,7 @@ Maqabim Website Popup
 * This website may contain smoking and smoking alternative products.
     """,
     'category': 'Custom Development',
-    'depends': ['website', 'website_multi'],
+    'depends': ['website'],
     'data': [
         'views/website_template.xml',
     ],
