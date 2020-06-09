@@ -54,7 +54,7 @@
         </xpath>
     </template> -->
     <template id="confirmation_maqabim" inherit_id="website_sale.cart_summary">
-        <xpath expr="//td[@class='td-product_name']" position="replace">
+        <xpath expr="//td[hasclass('td-product_name')]" position="replace">
             <td class="td-product_name">
                 <div>
                     <a t-attf-href="/shop/product/#{ slug(line.product_id.product_tmpl_id) }">
