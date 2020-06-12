@@ -28,7 +28,8 @@ class CheckoutSkipPayment(WebsiteSale):
             return super().payment_confirmation(**post)
         order = request.env['sale.order'].sudo().browse(
             request.session.get('sale_last_order_id'))
-        order.action_confirm()
+#         Commented by bista to prevent sale order confirmation operation.
+#         order.action_confirm()
         if not order.force_quotation_send():
             return request.render(
                 'website_sale_checkout_skip_payment.confirmation_order_error')

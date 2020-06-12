@@ -4,7 +4,7 @@
         <xpath expr="//t[@t-call='theme_loftspace_sale.search']" position="replace"> -->
     <template id="products_inherit_search" inherit_id="bista_website_sale_options.bista_website_sale_products">
         <xpath expr="//t[@t-call='bista_website_sale_options.search']" position="replace">
-            <div class="col-md-12 mb32">
+            <div class="col-md-12">
                 <div class="as-search">
                     <form method="get" t-att-data-search-all="request.website.search_all_products"
                           t-att-action="keep('/shop'+ ('/category/'+slug(category)) if (category and not website.search_all_products) else None, search=0)">
@@ -24,7 +24,7 @@
                     </form>
                 </div>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12 mb32">
                 <div id="algolia-autocomplete-container"
                      style="position: relative;">
                     <span class="aa-dropdown-menu aa-with-products aa-with-0 d-none"
@@ -40,7 +40,7 @@
         <xpath expr="//t[@t-call='website_sale.search']" position="replace"/>
         <xpath expr="//div[hasclass('row')]" position="before">
             <div class="row">
-                <div class="col-md-12 mb32">
+                <div class="col-md-12">
                     <div class="as-search">
                         <form method="get" t-att-data-search-all="request.website.search_all_products"
                               t-att-action="keep('/shop'+ ('/category/'+slug(category)) if (category and not website.search_all_products) else None, search=0)">
@@ -61,7 +61,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12 mb32">
                 <div id="algolia-autocomplete-container"
                      style="position: relative;">
                     <span class="aa-dropdown-menu aa-with-products aa-with-0 d-none"
@@ -88,7 +88,7 @@
                              style="min-height: 0px;" t-foreach="product_ids" t-as="prod_id">
                             <a class="row search_product"
                                t-att-href="'/shop/product/%s' % slug(prod_id)" style="color:#000;">
-                                <div class="col-md-3 col-sm-3 col-xs-3 mb8 mt8">
+                                <div class="col-3 col-md-3 col-sm-3 col-xs-3 mb8 mt8">
                                     <!--<a itemprop="url"-->
                                     <!--t-att-href="'/wholesale/product/%s' % slug(prod_id)">-->
                                     <span itemprop="image"
@@ -98,7 +98,7 @@
                                           t-att-alt="prod_id.name"/>
                                     <!--</a>-->
                                 </div>
-                                <div class="col-md-9 col-sm-9 col-xs-9 mb8 mt8 prod_detail">
+                                <div class="col-9 col-md-9 col-sm-9 col-xs-9 mb8 mt8 prod_detail">
                                     <!--<a itemprop="url"-->
                                     <!--t-att-href="'/wholesale/product/%s' % slug(prod_id)">-->
                                     <strong>

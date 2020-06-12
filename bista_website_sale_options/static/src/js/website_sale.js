@@ -1,122 +1,61 @@
 odoo.define('bista_website_sale_options.website_sale_options', function(require) {
 "use strict";
-
 var ajax = require('web.ajax');
-require('web.dom_ready');
-var weContext = require("web_editor.context");
-require('website_sale.website_sale');
+var Dialog = require('web.Dialog');
+var weContext = require('web_editor.context');
+var core = require('web.core');
+var _t = core._t;
+var OptionalProductsModal = require('sale.OptionalProductsModal');
+//var sAnimations = require('website.content.snippets.animation');
+//require('website_sale.website_sale');
+//sAnimations.registry.WebsiteSaleOptions.include({
+//    read_events: {
+//        'click #add_to_cart, #products_grid .product_price .a-submit, click #add_to_cart_b': 'async _onClickAdd',
+//        'click #add_to_cart_b': 'async _onClickAdd',
+//    },
+//});
+//return sAnimations.registry.WebsiteSaleOptions;
+OptionalProductsModal.include({
+     /**
+     * @override
+     */
+    willStart: function () {
+        var self = this;
+        var product_id = self.rootProduct.product_id;
+        self.title = "Product successfully added to your shopping cart";
+        self.container[0].className = "css_options";
+        $(self.buttons[0])[0].classes = 'btn-primary hidden';
+        $(self.buttons[1])[0].classes = 'btn-secondary hidden';
+        var uri = this._getUri("/product_configurator/show_optional_products");
+        var getModalContent = ajax.jsonRpc(uri, 'call', {
+            product_id: self.rootProduct.product_id,
+            variant_values: self.rootProduct.variant_values,
+            pricelist_id: self.pricelistId || false,
+            add_qty: self.rootProduct.quantity,
+            kwargs: {
+                context: _.extend({
+                    'quantity': self.rootProduct.quantity
+                }, weContext.get()),
+            }
+        })
+        .then(function (modalContent) {
+            if (modalContent){
+                var $modalContent = $(modalContent);
+                $modalContent = self._postProcessContent($modalContent);
+                self.$content = $modalContent;
+            } else {
+                self.trigger('options_empty');
+                self.preventOpening = true;
+            }
+            setTimeout(function(){ $('.modal-footer button.btn-secondary').trigger('click'); }, 3000);
+            setTimeout(function(){self.container[0].className = "";}, 3000);
+        });
 
-$('.oe_website_sale #add_to_cart, .oe_website_sale #products_grid .a-submit')
-    .off('click')
-    .removeClass('a-submit')
-    .click(function (event) {
-        var $form = $(this).closest('form');
-        var quantity = parseFloat($form.find('input[name="add_qty"]').val() || 0);
-        var product_id = parseInt($form.find('input[type="hidden"][name="product_id"], input[type="radio"][name="product_id"]:checked').first().val(),10);
-        event.preventDefault();
-        ajax.jsonRpc("/shop/modal", 'call', {
-                'product_id': product_id,
-                'kwargs': {
-                   'context': _.extend({'quantity': quantity}, weContext.get())
-                },
-            }).then(function (modal) {
-                var $modal = $(modal);
-                setTimeout(function(){ $('.js_goto_shop').trigger('click'); }, 100);
-                setTimeout(function(){ $modal.modal('hide');}, 3000);
-
-                $modal.find('img:first').attr("src", "/web/image/product.product/" + product_id + "/image_medium");
-
-                // disable opacity on the <form> if currently active (in case the product is
-                // not published), as it interferes with bs modals
-                $form.addClass('css_options');
-
-                $modal.appendTo($form)
-                    .modal()
-                    .on('hidden.bs.modal', function () {
-                        $form.removeClass('css_options'); // possibly reactivate opacity (see above)
-                        $(this).remove();
-                    });
-
-                $modal.on('click', '.a-submit', function (ev) {
-                    var $a = $(this);
-                    $form.ajaxSubmit({
-                        url:  '/shop/cart/update_option',
-                        data: {lang: weContext.get().lang},
-                        success: function (quantity) {
-                            if (!$a.hasClass('js_goto_shop')) {
-                                window.location.pathname = window.location.pathname.replace(/shop([\/?].*)?$/, "shop/cart");
-                            }
-                            var $q = $(".my_cart_quantity");
-                            $q.parent().parent().removeClass("hidden", !quantity);
-                            $q.html(quantity).hide().fadeIn(600);
-                        }
-                    });
-                    // $modal.modal('hide');
-                    ev.preventDefault();
-                });
-               /* $('#add_to_cart_a_submit').on("click", function (e) {
-                    console.log("add to cart a submit");
-
-                    $.ajax({
-                            type: 'GET',
-                            url: '/save_billing_details_by_checkbox/',
-                            dataType: 'json',
-                            data: {
-                                "save_personal_details": $('#save-as-personal-details').prop('checked'),
-                            },
-                            success: function (result) {
-                                $("#billing-pfn").val(result['fname']);
-                                $("#billing-pln").val(result['lname']);
-                                $("#billing-bill-address").val(result['address']);
-
-                            }
-                        });
+        var parentInit = self._super.apply(self, arguments);
+        return $.when(getModalContent, parentInit);
+    },
+});
 
 
-                });*/
-                $modal.on('click', '.css_attribute_color input', function (event) {
-                    $modal.find('.css_attribute_color').removeClass("active");
-                    $modal.find('.css_attribute_color:has(input:checked)').addClass("active");
-                });
-
-                $modal.on("click", "a.js_add, a.js_remove", function (event) {
-                    event.preventDefault();
-                    var $parent = $(this).parents('.js_product:first');
-                    $parent.find("a.js_add, span.js_remove").toggleClass("hidden");
-                    $parent.find("input.js_optional_same_quantity").val( $(this).hasClass("js_add") ? 1 : 0 );
-                    $parent.find(".js_remove");
-                });
-
-                $modal.on("change", "input.js_quantity", function () {
-                    var qty = parseFloat($(this).val());
-                    if (qty === 1) {
-                        $(".js_remove .js_items").addClass("hidden");
-                        $(".js_remove .js_item").removeClass("hidden");
-                    } else {
-                        $(".js_remove .js_items").removeClass("hidden").text($(".js_remove .js_items:first").text().replace(/[0-9.,]+/, qty));
-                        $(".js_remove .js_item").addClass("hidden");
-                    }
-                });
-
-                $modal.find('input[name="add_qty"]').val(quantity).change();
-                $('.js_add_cart_variants').each(function () {
-                    $('input.js_variant_change, select.js_variant_change', this).first().trigger('change');
-                    });
-
-                    $modal.on("change", 'input[name="add_qty"]', function (event) {
-                        var product_id = $($modal.find('span.oe_price[data-product-id]')).first().data('product-id');
-                        var product_ids = [product_id];
-                        var $products_dom = [];
-                        $("ul.js_add_cart_variants[data-attribute_value_ids]").each(function(){
-                            var $el = $(this);
-                            $products_dom.push($el);
-                            _.each($el.data("attribute_value_ids"), function (values) {
-                                product_ids.push(values[0]);
-                            });
-                        });
-                });
-            });
-        return false;
-    });
 });
 

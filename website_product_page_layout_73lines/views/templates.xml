@@ -33,8 +33,8 @@
         <xpath expr="//section[@id='product_detail']" position="inside">
             <div id="product_description_reviews" class="mt8">
                 <ul class="nav nav-tabs">
-                    <li class="active" id="li-full-desc">
-                        <a href="#full-desc" data-toggle="tab">
+                    <li id="li-full-desc">
+                        <a class="active show" href="#full-desc" data-toggle="tab">
                             <strong>Description</strong>
                         </a>
                     </li>
@@ -48,7 +48,7 @@
                     </t>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane fade in active" id="full-desc">
+                    <div class="tab-pane fade in active show" id="full-desc">
                         <div itemprop="description" t-field="product.website_description"
                              class="oe_structure mt16" id="product_full_description"/>
                     </div>

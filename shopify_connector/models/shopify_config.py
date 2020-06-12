@@ -328,7 +328,10 @@ class ShopifyConfig(models.Model):
                 if options:
                     new_product.options = options
                 if variants:
-                    new_product.variants = variants
+                    product_variants = []
+                    for var in variants:
+                        product_variants.append(shopify.Variant(var))
+                    new_product.variants = product_variants
                 if images:
                     new_product.images = images
                 success = new_product.save()  # returns false if the record is invalid

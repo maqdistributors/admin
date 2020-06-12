@@ -2,22 +2,22 @@
 <odoo>
     <template id="products_inherit" inherit_id="website_sale.products">
         <xpath expr="//table" position="replace">
-            <table width="100%">
-            <tr t-foreach="bins" t-as="tr_product">
-                <t t-foreach="tr_product" t-as="td_product">
-                    <t t-if="td_product">
-                        <t t-set="product" t-value="td_product['product']"/>
-                        <div t-attf-class="oe_grid oe_product col-lg-3 col-md-4 col-sm-6">
-                            <div class="oe_product_cart"
-                                 t-att-data-publish="product.website_published and 'on' or 'off'">
-                                <t t-call="website_sale.products_item"/>
+            <div class="oe_products col-md-12 row">
+                <t t-foreach="bins" t-as="tr_product">
+                    <t t-foreach="tr_product" t-as="td_product">
+                        <t t-if="td_product">
+                            <t t-set="product" t-value="td_product['product']"/>
+                            <div t-attf-class="oe_grid oe_product col-lg-3 col-md-4 col-sm-6">
+                                <div class="oe_product_cart"
+                                     t-att-data-publish="product.website_published and 'on' or 'off'">
+                                    <t t-call="website_sale.products_item"/>
+                                </div>
                             </div>
-                        </div>
+                        </t>
+                        <div t-if="not td_product" class="oe-height-2"/>
                     </t>
-                    <div t-if="not td_product" class="oe-height-2"/>
                 </t>
-            </tr>
-        </table>
+            </div>
         </xpath>
     </template>
 
@@ -27,6 +27,35 @@
             <div class="mt16">
                 <t t-call="website_sale.payment_confirmation_status"/>
             </div>
+        </xpath>
+    </template>
+
+    <template id="option_collapse_categories_recursive1" name="Collapse Category Recursive">
+        <li class="nav-item">
+            <i t-if="categ.child_id" t-attf-class="text-primary fa #{'fa-chevron-down' if categ.id in parent_category_ids else 'fa-chevron-right'}"
+               t-attf-title="#{'Unfold' if categ.id in parent_category_ids else 'Fold'}"
+               t-attf-aria-label="#{'Unfold' if categ.id in parent_category_ids else 'Fold'}" role="img"/>
+            <a t-att-href="keep('/shop/category/' + slug(categ), category=0)" t-attf-class="nav-link#{' active' if categ.id == int(category or 0) else ''}" t-field="categ.name"></a>
+            <ul t-if="categ.child_id" class="nav nav-pills flex-column nav-hierarchy" t-att-style="'display:block;' if categ.id in parent_category_ids else 'display:none;'">
+                <t t-foreach="categ.child_id" t-as="categ">
+                    <t t-if="not search or categ.id in search_categories_ids">
+                        <t t-call="maq_custom_theme.option_collapse_categories_recursive1" />
+                    </t>
+                </t>
+            </ul>
+        </li>
+    </template>
+
+    <template id="option_collapse_products_categories1" name="Collapsible Category List" inherit_id="website_sale.products_categories" active="False" customize_show="True">
+        <xpath expr="//div[@id='products_grid_before']/ul" position="replace">
+            <ul class="nav nav-pills flex-column mt16" id="o_shop_collapse_category">
+                <li class="nav-item">
+                    <a t-att-href="keep('/shop',category=0)" t-attf-class="nav-link#{'' if category else ' active'} o_not_editable">All Products</a>
+                </li>
+                <t t-foreach="categories" t-as="categ">
+                    <t t-call="maq_custom_theme.option_collapse_categories_recursive1" />
+                </t>
+            </ul>
         </xpath>
     </template>
 </odoo>

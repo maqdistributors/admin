@@ -127,13 +127,26 @@ class Inventory(models.Model):
             domain = "location_id = %s " % locations.ids[0]
         else:
             domain = "location_id in %s " % (tuple(locations.ids),)
-
         if self.filter in ('suppliers'):
-            product_supplier_ids = product_supplierinfo_obj.search([
-                ('name', 'in', self.m_supplier_ids.ids),
-            ])
+            product_supplier_list = []
+            product_supplier_not_assigned_list = []
+#             product_supplier_ids = product_supplierinfo_obj.search([
+#                 ('name', 'in', self.m_supplier_ids.ids),
+#             ])
+        # Improve the supplier search code to prevent the supplier which is not assigned to any product.
+            for supp in self.m_supplier_ids:
+                product_supplier_search = product_supplierinfo_obj.search([
+                ('name', '=', supp.name)])
+                if not product_supplier_search:
+                    product_supplier_not_assigned_list.append(supp.name)
+                else:
+                    product_supplierinfo_obj |= product_supplierinfo_obj.search([
+                ('name', '=', supp.name)])
+            product_supplier_not_assigned = "'"+",".join(product_supplier_not_assigned_list)+ "'"
+            if product_supplier_not_assigned_list:
+                raise ValidationError("Products are not assigned to %s supplier/s! Kindly remove supplier/s to start inventory adjustment."%(product_supplier_not_assigned))
             supplier_ids = []
-            for supplier in product_supplier_ids:
+            for supplier in product_supplierinfo_obj:
                 start_date = False
                 end_date = False
                 if supplier.date_start:
@@ -159,7 +172,6 @@ class Inventory(models.Model):
                 WHERE %s
                 GROUP BY product_id, location_id""" % (domain)
             self.env.cr.execute(qry)
-
             for product_data in self.env.cr.dictfetchall():
                 for void_field in [item[0] for item in product_data.items() if item[1] is None]:
                     product_data[void_field] = False
