@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="bista_auto_pricelist_website_form_inherit_website_sale" model="ir.ui.view">
+            <field name="name">bista.website.form</field>
+            <field name="model">website</field>
+            <field name="inherit_id" ref="website.view_website_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="default_lang_id" position="after">
+                        <field name="website_auto_pricelist"/>
+<!--                        <field name="default_pricelist" attrs="{'invisible': [('website_auto_pricelist', '==', False)]}"/>-->
+                    </field>
+                </data>
+            </field>
+        </record>
+
+    </data>
+</odoo>

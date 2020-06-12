@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="bista_product_pricelist_view" model="ir.ui.view">
+            <field name="name">bista.product.pricelist.form</field>
+            <field name="model">product.pricelist</field>
+            <field name="inherit_id" ref="product.product_pricelist_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='toggle_active']" position="after">
+                    <div attrs="{'invisible': [('active_customer', '=', False)]}" style="display: inline-block;padding: 8px 10px;border-left: 1px solid #ccc;">
+                        <button name="toggle_active_customer" class="btn btn-success" string="All Customers" type="object"/>
+                    </div>
+                    <div attrs="{'invisible': [('active_customer', '=', True)]}" style="display: inline-block;padding: 8px 10px;border-left: 1px solid #ccc;">
+                        <button name="toggle_active_customer" class="btn btn-danger" string="All Customers" type="object"/>
+                    </div>
+                </xpath>
+                <field name="company_id" position="after">
+                    <field name="active_customer" invisible="1"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>
