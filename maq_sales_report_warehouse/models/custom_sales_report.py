@@ -261,14 +261,19 @@ class SalesReport(models.Model):
         Update a delivered qty based on warehouse_id
         """
         for rec in self:
+            tfr_to_shopify = 0
             delivered_qty = 0
             scrap_qty = 0
             return_qty = 0
-            if vals.get('warehouse_id') and vals.get('product_id') and vals.get('start_date') and vals.get('end_date'):
+            if vals.get('warehouse_id') and vals.get('product_id') and vals.get('start_date') and vals.get('end_date') and vals.get('cmpny_ids'):
                 warehouse_id = vals.get('warehouse_id')
                 product_id = vals.get('product_id')
                 start_date = vals.get('start_date')
                 end_date = vals.get('end_date')
+                company_ids = vals.get('cmpny_ids')
+                location_ids = []
+                for company in company_ids:
+                    location_ids.append(company.shopify_location_id.id)
                 qry = """SELECT pp.id as product_id
                                ,sm.m_warehouse_id as warehouse_id
                                ,SUM(sm.qty_done) as delivered_qty
@@ -328,7 +333,34 @@ class SalesReport(models.Model):
                     for res in result:
                         if warehouse_id == res['warehouse_id']:
                             scrap_qty = res['scrap_qty']
-            return delivered_qty, return_qty, scrap_qty
+
+                if len(location_ids) > 1:
+                    location_ids = tuple(location_ids)
+                    sub_qry = "sl.id in %s"%(location_ids)
+                elif len(location_ids) == 1:
+                    location = location_ids[0]
+                    sub_qry = "sl.id = %s"%(location)
+
+                qry = """SELECT pp.id as product_id
+                               ,sm.m_warehouse_id as warehouse_id
+                               ,SUM(sm.qty_done) as tfr_to_shopify
+                        FROM product_product pp
+                        LEFT JOIN stock_move_line sm ON (sm.product_id = pp.id)
+                        LEFT JOIN stock_location sl ON (sm.location_dest_id = sl.id)
+                        WHERE %s
+                              AND sm.state = 'done'
+                              AND sm.date BETWEEN '%s' and '%s'
+                              AND pp.id = %s
+                              AND sm.m_warehouse_id = %s
+                        GROUP BY 1,2""" % (sub_qry,start_date, end_date, product_id, warehouse_id)
+                self.env.cr.execute(qry)
+                result = self.env.cr.dictfetchall()
+
+                if result:
+                    for res in result:
+                        if warehouse_id == res['warehouse_id']:
+                            tfr_to_shopify = res['tfr_to_shopify']
+            return delivered_qty, return_qty, scrap_qty, tfr_to_shopify
 
 
     def _get_forecasted_qty(self,vals):
@@ -525,6 +557,7 @@ class SalesReport(models.Model):
             wr_house_data = []
             start_date = rec.m_sales_start_date
             end_date = rec.m_sales_end_date
+            cmpny_ids = rec.company_ids
             for wr_house in rec.m_warehouse_id:
                 location_list = []
                 locations = []
@@ -623,7 +656,7 @@ class SalesReport(models.Model):
                 _logger.info("Start updating delivered qty and forecasted qty")
                 for line_values in wr_house_data:
 #                     _logger.info("Start Calculating vendor_details")
-                    line_values.update({'start_date':start_date,'end_date':end_date})
+                    line_values.update({'start_date':start_date,'end_date':end_date, 'cmpny_ids': cmpny_ids})
                     vendors, vendor_details = self._get_vendor_details(line_values)
                     if vendors or vendor_details:
                         line_values.update({
@@ -641,10 +674,13 @@ class SalesReport(models.Model):
 
 #                     _logger.info("Start Calculating delivered_qty")
 #                     delivered_qty = self._get_delivered_qty(line_values)
-                    delivered_qty, return_qty, scrap_qty = self._get_delivered_qty(line_values)
-                    actual_delivered_qty = delivered_qty + scrap_qty - return_qty
+                    delivered_qty, return_qty, scrap_qty, tfr_to_shopify = self._get_delivered_qty(line_values)
+                    actual_delivered_qty = delivered_qty + scrap_qty + tfr_to_shopify - return_qty
+                    if line_values.get('cmpny_ids'):
+                        line_values.pop('cmpny_ids')
                     line_values.update({'delivered_qty':delivered_qty,
                                         'return_qty':return_qty, 'scrap_qty':scrap_qty,
+                                        'tfr_to_shopify': tfr_to_shopify,
                                         'actual_delivered_qty':actual_delivered_qty})
 #                     _logger.info("End Calculating delivered_qty")
 
@@ -806,6 +842,7 @@ class SalesReportLines(models.Model):
 #     sales_price = fields.Float(related='product_id.lst_price', string="Sale Price")
     sales_price = fields.Float(string="Sale Price")
 #     delivered_qty = fields.Float(string="Delivered Quantity", compute="_get_delivered_qty")
+    tfr_to_shopify = fields.Float(string="TFR to Shopify")
     delivered_qty = fields.Float(string="Delivered Quantity")
     scrap_qty = fields.Float(string="Scrap Quantity")
     return_qty = fields.Float(string="Return Quantity")
