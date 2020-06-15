@@ -40,8 +40,14 @@ class WebsiteURL(models.TransientModel):
 
         # todo jov this prevents closing of the popup, I remember
         # there being a better way to do this...
+
         return {
-            'type': 'true',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'website.urls.wizard',
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'res_id': self.wizard_id.id,
         }
 
     def _get_record(self):
