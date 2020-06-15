@@ -13,6 +13,7 @@ from odoo.addons.website.controllers.main import Website
 from odoo.addons.website_form.controllers.main import WebsiteForm
 from odoo.osv import expression
 from odoo.addons.website_sale.controllers.main import WebsiteSale, TableCompute
+from datetime import datetime, timedelta
 
 _logger = logging.getLogger(__name__)
 
@@ -94,24 +95,41 @@ class WebsiteSale(WebsiteSale):
             for pricelist_item in pricelist_items:
 
                 applied_on = pricelist_item.applied_on
+                date_start = pricelist_item.date_start
+                date_end = pricelist_item.date_end
+                date_start_date = datetime.now().date() - timedelta(days=100)
+                date_end_date = datetime.now().date() - timedelta(days=100)
+                if date_start and date_end:
+                    date_start_date = datetime.strptime(date_start, '%Y-%m-%d').date()
+                    date_end_date = datetime.strptime(date_end, '%Y-%m-%d').date()
 
                 if applied_on == '3_global':
-
-                    all_sale_product = True
+                    if (date_start_date == datetime.now().date() or date_start_date < datetime.now().date()) and (
+                            date_end_date == datetime.now().date() or date_end_date > datetime.now().date()):
+                        all_sale_product = True
+                    elif date_start == False and date_end == False:
+                        all_sale_product = True
 
                 elif applied_on == '1_product':
-
                     sale_product = pricelist_item.product_tmpl_id.id
-
-                    sale_product_id.append(sale_product)
+                    if (date_start_date == datetime.now().date() or date_start_date < datetime.now().date()) and (
+                            date_end_date == datetime.now().date() or date_end_date > datetime.now().date()):
+                        if pricelist_item.product_tmpl_id.list_price > pricelist_item.fixed_price:
+                            sale_product_id.append(sale_product)
+                    elif date_start == False and date_end == False:
+                        if pricelist_item.product_tmpl_id.list_price > pricelist_item.fixed_price:
+                            sale_product_id.append(sale_product)
 
                 elif applied_on == '0_product_variant':
 
                     sale_product = pricelist_item.product_id.product_tmpl_id.id
 
-                    sale_product_id.append(sale_product)
+                    if (date_start_date == datetime.now().date() or date_start_date < datetime.now().date()) and (
+                            date_end_date == datetime.now().date() or date_end_date > datetime.now().date()):
+                        sale_product_id.append(sale_product)
+                    elif date_start == False and date_end == False:
+                        sale_product_id.append(sale_product)
 
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>sale_product_id",sale_product_id)
 
         if all_sale_product == True:
             domain += [('public_categ_ids', 'child_of', [x.id for x in categs])]

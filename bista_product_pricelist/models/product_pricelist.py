@@ -12,8 +12,6 @@ class Pricelist(models.Model):
 
     _inherit = "product.pricelist"
 
-    active_customer = fields.Boolean(string="Customers Active", defualt=False, help="Apply for all current website customers")
-
     def _datetime_rule(self, product, item_ids):
 
         ppi_lists = []
@@ -112,10 +110,9 @@ class Pricelist(models.Model):
             results[product.id] = 0.0
             suitable_rule = False
 
-            if self.website_id.website_auto_pricelist == True:
-                ppi_items = self._datetime_rule(product, item_ids)
-                if ppi_items:
-                    items = self.env['product.pricelist.item'].browse(ppi_items)
+            ppi_items = self._datetime_rule(product, item_ids)
+            if ppi_items:
+                items = self.env['product.pricelist.item'].browse(ppi_items)
 
             # Final unit price is computed according to `qty` in the `qty_uom_id` UoM.
             # An intermediary unit price may be computed according to a different UoM, in
@@ -209,28 +206,3 @@ class Pricelist(models.Model):
 
             results[product.id] = (price, suitable_rule and suitable_rule.id or False)
         return results
-
-    @api.one
-    def toggle_active_customer(self):
-
-        if self.website_id.website_auto_pricelist == True:
-
-            website_id = self.website_id.id
-            company_id = self.company_id.id
-            Pricelist = self.env['product.pricelist']
-            customers = self.env['res.partner']
-            search_customers = customers.search([('company_id','=',company_id),('customer','=',True),('active','=', True),('parent_id','=',False)], limit=False)
-
-            search_pricelists = Pricelist.search([('website_id','=',website_id),('company_id','=',company_id)])
-
-            for search_pricelist in search_pricelists:
-                if search_pricelist.id == self.id:
-                    search_pricelist.active_customer = True
-                else:
-                    search_pricelist.active_customer = False
-
-            if self.active_customer == True:
-
-                for search_customer in search_customers:
-
-                    search_customer.update({'property_product_pricelist' : self.id})
