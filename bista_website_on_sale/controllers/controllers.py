@@ -105,9 +105,9 @@ class WebsiteSale(WebsiteSale):
 
                 if applied_on == '1_product':
                     sale_product = pricelist_item.product_tmpl_id.id
-                    if pricelist_item.min_quantity == 0 and pricelist_item.date_start == False and pricelist_item.date_end == False:
+                    if pricelist_item.min_quantity in [0,1] and pricelist_item.date_start == False and pricelist_item.date_end == False:
                         continue
-                    elif pricelist_item.min_quantity == 0 and pricelist_item.date_end:
+                    elif pricelist_item.min_quantity in [0,1] and pricelist_item.date_end:
                         if (date_start_date == datetime.now().date() or date_start_date < datetime.now().date()) and (
                                     date_end_date == datetime.now().date() or date_end_date > datetime.now().date()):
                             sale_product_id.append(sale_product)
