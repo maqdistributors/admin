@@ -36,7 +36,6 @@ class Product(models.Model):
             ppis = p.product_tmpl_id.item_ids
             sales_pricelist = False
             for ppi in ppis:
-                print(">>>>>>>>>>>>>>>>>>>>>>>>>>ppi", ppi.name, ppi.fixed_price)
                 if ppi.min_quantity == 0 and ppi.date_start == False and ppi.date_end == False and ppi.pricelist_id.id == pricelist.id:
                     sales_pricelist = ppi.fixed_price
 
