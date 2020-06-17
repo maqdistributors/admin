@@ -12,37 +12,6 @@ class Pricelist(models.Model):
 
     _inherit = "product.pricelist"
 
-    def _datetime_rule(self, product, item_ids):
-
-        ppi_lists = []
-        rule_item_ids = []
-        product_pricelist_items = product.item_ids
-        items = self.env['product.pricelist.item'].browse(item_ids)
-        for ppi in product_pricelist_items:
-            if ppi.id in item_ids:
-                ppi_lists.append(ppi.id)
-
-        if len(ppi_lists) > 1:
-            for ppi_id in ppi_lists:
-                ppi_item = self.env['product.pricelist.item'].browse(ppi_id)
-                if ppi_item in items:
-                    date_start = ppi_item.date_start
-                    date_end = ppi_item.date_end
-                    if date_start and date_end:
-                        date_start_date = datetime.strptime(ppi_item.date_start, '%Y-%m-%d').date()
-                        date_end_date = datetime.strptime(ppi_item.date_end, '%Y-%m-%d').date()
-                        if (date_start_date == datetime.now().date() or date_start_date < datetime.now().date()) and (
-                                date_end_date == datetime.now().date() or date_end_date > datetime.now().date()):
-                            print("ppi_item.fixed_price",ppi_item.fixed_price)
-                            rule_item_ids.append(ppi_item.id)
-                        elif date_start == None and date_end == None:
-                            rule_item_ids.append(ppi_item.id)
-        else:
-            for ppi_id in ppi_lists:
-                rule_item_ids.append(ppi_id)
-
-        return rule_item_ids
-
     @api.multi
     def _compute_price_rule(self, products_qty_partner, date=False, uom_id=False):
         """ Low-level method - Mono pricelist, multi products
@@ -100,7 +69,7 @@ class Pricelist(models.Model):
             'AND (item.pricelist_id = %s) '
             'AND (item.date_start IS NULL OR item.date_start<=%s) '
             'AND (item.date_end IS NULL OR item.date_end>=%s)'
-            'ORDER BY item.applied_on, item.min_quantity desc, categ.parent_left desc',
+            'ORDER BY item.applied_on, item.min_quantity desc, categ.parent_left desc, item.date_end asc, item.date_start asc',
             (prod_tmpl_ids, prod_ids, categ_ids, self.id, date, date))
 
         item_ids = [x[0] for x in self._cr.fetchall()]
@@ -109,10 +78,6 @@ class Pricelist(models.Model):
         for product, qty, partner in products_qty_partner:
             results[product.id] = 0.0
             suitable_rule = False
-
-            ppi_items = self._datetime_rule(product, item_ids)
-            if ppi_items:
-                items = self.env['product.pricelist.item'].browse(ppi_items)
 
             # Final unit price is computed according to `qty` in the `qty_uom_id` UoM.
             # An intermediary unit price may be computed according to a different UoM, in

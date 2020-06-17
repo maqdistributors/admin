@@ -23,7 +23,8 @@ PPR = 4   # Products Per Row
 class WebsiteSale(WebsiteSale):
 
     @http.route([
-        '/sale'
+        '/sale',
+        '/sale/page/<int:page>'
     ], type='http', auth="public", website=True)
     def sale(self, page=0, category=None, search='', ppg=False, **post):
         current_website = request.env['website'].get_current_website()
@@ -64,7 +65,7 @@ class WebsiteSale(WebsiteSale):
 
         request.context = dict(request.context, pricelist=pricelist.id, partner=request.env.user.partner_id)
 
-        url = "/shop"
+        url = "/sale"
         if search:
             post["search"] = search
         if attrib_list:
@@ -86,8 +87,6 @@ class WebsiteSale(WebsiteSale):
 
         sale_product = False
 
-        all_sale_product = False
-
         if pricelist:
 
             pricelist_items = pricelist.item_ids
@@ -99,42 +98,22 @@ class WebsiteSale(WebsiteSale):
                 date_end = pricelist_item.date_end
                 date_start_date = datetime.now().date() - timedelta(days=100)
                 date_end_date = datetime.now().date() - timedelta(days=100)
+
                 if date_start and date_end:
                     date_start_date = datetime.strptime(date_start, '%Y-%m-%d').date()
                     date_end_date = datetime.strptime(date_end, '%Y-%m-%d').date()
 
-                if applied_on == '3_global':
-                    if (date_start_date == datetime.now().date() or date_start_date < datetime.now().date()) and (
-                            date_end_date == datetime.now().date() or date_end_date > datetime.now().date()):
-                        all_sale_product = True
-                    elif date_start == False and date_end == False:
-                        all_sale_product = True
-
-                elif applied_on == '1_product':
+                if applied_on == '1_product':
                     sale_product = pricelist_item.product_tmpl_id.id
-                    if (date_start_date == datetime.now().date() or date_start_date < datetime.now().date()) and (
-                            date_end_date == datetime.now().date() or date_end_date > datetime.now().date()):
-                        if pricelist_item.product_tmpl_id.list_price > pricelist_item.fixed_price:
-                            sale_product_id.append(sale_product)
-                    elif date_start == False and date_end == False:
-                        if pricelist_item.product_tmpl_id.list_price > pricelist_item.fixed_price:
-                            sale_product_id.append(sale_product)
-
-                elif applied_on == '0_product_variant':
-
-                    sale_product = pricelist_item.product_id.product_tmpl_id.id
-
-                    if (date_start_date == datetime.now().date() or date_start_date < datetime.now().date()) and (
-                            date_end_date == datetime.now().date() or date_end_date > datetime.now().date()):
-                        sale_product_id.append(sale_product)
-                    elif date_start == False and date_end == False:
+                    if pricelist_item.min_quantity == 0 and pricelist_item.date_start == False and pricelist_item.date_end == False:
+                        continue
+                    else:
                         sale_product_id.append(sale_product)
 
+        domain += [('public_categ_ids','child_of', [x.id for x in categs]),('id', 'in', sale_product_id)]
 
-        if all_sale_product == True:
-            domain += [('public_categ_ids', 'child_of', [x.id for x in categs])]
-        else:
-            domain += [('public_categ_ids','child_of', [x.id for x in categs]),('id', 'in', sale_product_id)]
+
+        # domain += [('public_categ_ids', 'child_of', [x.id for x in categs])]
 
         product_count = Product.search_count(domain)
 

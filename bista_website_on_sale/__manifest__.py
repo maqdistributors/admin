@@ -15,10 +15,9 @@
         "website_sale",
         "product"
     ],
-    # "data": [
-    #     "views/website_views.xml",
-    #     "views/product_pricelist_views.xml",
-    # ],
+    "data": [
+        "views/website_sale.xml",
+    ],
     #    "qweb": [
     #        "static/src/xml/website_sale.xml",
     #    ],
