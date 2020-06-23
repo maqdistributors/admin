@@ -98,11 +98,38 @@ class WebsiteSale(WebsiteSale):
                 parent_category_ids.append(current_category.parent_id.id)
                 current_category = current_category.parent_id
 
-        domain += [('public_categ_ids','child_of', [x.id for x in categs])]
+        company_id = current_website.company_id.id
+        node_field = False
+        product_list = []
+        order = post.get('order')
 
-        product_count = Product.search_count(domain)
-        pager = request.website.pager(url=url, total=product_count, page=page, step=ppg, scope=7, url_args=post)
-        products = Product.search(domain, limit=ppg, offset=pager['offset'], order=self._get_search_order(post))
+        if order:
+
+            node = order.split(" ")
+
+            if node[0]:
+
+                node_field = node[0]
+
+        elif order == None:
+
+            post['order'] = "publish_date desc"
+            node_field = "publish_date"
+
+        if node_field == 'sales_pricelist' or node_field == 'publish_date':
+
+            product_list_values = self._company_dependent_order_by(company_id, Product, categs, domain, url, page, ppg, post)
+            product_list = product_list_values.get('product_list')
+            product_count = product_list_values.get('product_count')
+            pager = product_list_values.get('pager')
+
+        if len(product_list) > 0:
+            products = Product.browse(product_list)
+        else:
+            domain += [('public_categ_ids', 'child_of', [x.id for x in categs])]
+            product_count = Product.search_count(domain)
+            pager = request.website.pager(url=url, total=product_count, page=page, step=ppg, scope=7, url_args=post)
+            products = Product.search(domain, limit=ppg, offset=pager['offset'], order=self._get_search_order(post))
 
         ProductAttribute = request.env['product.attribute']
         if products:
@@ -132,3 +159,47 @@ class WebsiteSale(WebsiteSale):
         if category:
             values['main_object'] = category
         return request.render("website_sale.products", values)
+
+    def _company_dependent_order_by(self, company_id, Product, categs, domain, url, page, ppg, post):
+
+        ir_property = request.env['ir.property']
+        ir_property_ids = False
+        ir_domain = []
+
+        node = post.get('order').split(" ")
+        node_field = node[0]
+        node_order = node[1]
+
+        if node_field and node_order:
+
+            ir_domain += [('name', '=', node_field), ('company_id', '=', company_id)]
+
+            if node_field == "publish_date":
+                order = "value_datetime "+ str(node_order)
+            else:
+                order = "value_float " + str(node_order)
+
+            if categs:
+                domain += [('public_categ_ids', 'child_of', [x.id for x in categs])]
+                product_ids = Product.search(domain).ids
+
+            res_ids = []
+            for res_id in product_ids:
+                res_ids.append('product.template,' + str(res_id))
+
+            if len(res_ids) > 0:
+                ir_domain += [('res_id', 'in', res_ids)]
+
+            product_count = ir_property.search_count(ir_domain)
+            pager = request.website.pager(url=url, total=product_count, page=page, step=ppg, scope=7, url_args=post)
+            ir_property_ids = ir_property.search(ir_domain, limit=ppg, offset=pager['offset'], order=order)
+
+        product_list = []
+        if ir_property_ids:
+            for ir_property_id in ir_property_ids:
+                res_id = ir_property_id.res_id
+                res_val = res_id.split(',')
+                product_id = int(res_val[1])
+                product_list.append(product_id)
+
+        return {"product_list":product_list, "product_count":product_count, "pager":pager}

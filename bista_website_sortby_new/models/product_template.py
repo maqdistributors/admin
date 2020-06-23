@@ -13,7 +13,7 @@ _logger = logging.getLogger(__name__)
 class ProductTemplate(models.Model):
     _inherit='product.template'
 
-    publish_date = fields.Datetime('Publish Date')
+    publish_date = fields.Datetime('Publish Date', company_dependent=True)
 
     @api.multi
     def write(self, vals):

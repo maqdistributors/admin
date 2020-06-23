@@ -7,8 +7,8 @@
         <xpath expr="//t[@t-set='website_sale_sortable']"  position="replace">
             <t t-set="website_sale_sortable" t-value="[
                 (publish_date_desc_label, 'publish_date desc'),
-                (list_price_desc_label, 'list_price desc'),
-                (list_price_asc_label, 'list_price asc'),
+                (list_price_desc_label, 'sales_pricelist desc'),
+                (list_price_asc_label, 'sales_pricelist asc'),
                 (name_asc_label, 'name asc'),
                 (name_desc_label, 'name desc')
             ]"/>
