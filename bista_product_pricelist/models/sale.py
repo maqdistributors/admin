@@ -28,8 +28,6 @@ class SaleOrderLine(models.Model):
                     price, rule_id = pricelist_item.base_pricelist_id.with_context(uom=uom.id).get_product_price_rule(product, qty, self.order_id.partner_id)
                     pricelist_item = PricelistItem.browse(rule_id)
 
-
-
             if pricelist_item.base == 'standard_price':
                 field_name = 'standard_price'
             if pricelist_item.base == 'pricelist' and pricelist_item.base_pricelist_id:
@@ -37,6 +35,8 @@ class SaleOrderLine(models.Model):
                 product = product.with_context(pricelist=pricelist_item.base_pricelist_id.id)
                 product_currency = pricelist_item.base_pricelist_id.currency_id
             currency_id = pricelist_item.pricelist_id.currency_id
+        else:
+            pricelist_item = False
 
         product_currency = product_currency or(product.company_id and product.company_id.currency_id) or self.env.user.company_id.currency_id
         if not currency_id:
@@ -55,17 +55,18 @@ class SaleOrderLine(models.Model):
         else:
             uom_factor = 1.0
 
-        ppis = product.item_ids
         pu = False
         result = False
+        if pricelist_item:
+            ppis = product.item_ids
+            for ppi in ppis:
+                if ppi.min_quantity in [0, 1] and ppi.date_start == False and ppi.date_end == False:
+                    pu = ppi.fixed_price
 
-        for ppi in ppis:
-
-            if ppi.min_quantity in [0,1] and ppi.date_start == False and ppi.date_end == False:
-                pu = ppi.fixed_price
-
-        if pricelist_item.base == 'list_price' and pu and pricelist_item.pricelist_id.discount_policy == 'without_discount':
-            result = pu * uom_factor * cur_factor, currency_id.id
+            if pricelist_item.base == 'list_price' and pu and pricelist_item.pricelist_id.discount_policy == 'without_discount':
+                result = pu * uom_factor * cur_factor, currency_id.id
+            else:
+                result = product[field_name] * uom_factor * cur_factor, currency_id.id
         else:
             result = product[field_name] * uom_factor * cur_factor, currency_id.id
 

@@ -13,6 +13,7 @@ from odoo.addons.website.controllers.main import Website
 from odoo.addons.website_form.controllers.main import WebsiteForm
 from odoo.osv import expression
 from odoo.addons.website_sale.controllers.main import WebsiteSale, TableCompute
+from datetime import datetime, timedelta
 
 _logger = logging.getLogger(__name__)
 
@@ -21,27 +22,11 @@ PPR = 4   # Products Per Row
 
 class WebsiteSale(WebsiteSale):
 
-    @http.route(['/shop/product/<model("product.template"):product>'], type='http', auth="public", website=True)
-    def product(self, product, category='', search='', **kwargs):
-        current_website = request.env['website'].get_current_website()
-        if current_website.website_shop_login and (request.env.user._is_public() or request.env.user.id == request.website.user_id.id):
-            redirect_url = '/web/login?redirect=%s'%(request.httprequest.url)
-            if current_website.website_shop_login_redirect:
-                redirect_url = '%s?redirect=%s'%(current_website.website_shop_login_redirect, request.httprequest.url)
-            else:
-                # redirct user to /web/signup if b2c signup is enable
-                if current_website.website_auth_signup_uninvited == 'b2c':
-                    redirect_url = '/web/signup?redirect=%s'%(request.httprequest.url)
-            return request.redirect(redirect_url)
-        return super(WebsiteSale, self).product(product, category=category, search=search, **kwargs)
-
     @http.route([
-        '/shop',
-        '/shop/page/<int:page>',
-        '/shop/category/<model("product.public.category"):category>',
-        '/shop/category/<model("product.public.category"):category>/page/<int:page>'
+        '/stock',
+        '/stock/page/<int:page>'
     ], type='http', auth="public", website=True)
-    def shop(self, page=0, category=None, search='', ppg=False, **post):
+    def stock(self, page=0, category=None, search='', ppg=False, **post):
         current_website = request.env['website'].get_current_website()
         if current_website.website_shop_login and (request.env.user._is_public() or request.env.user.id == request.website.user_id.id):
             redirect_url = '/web/login?redirect=%s'%(request.httprequest.url)
@@ -74,13 +59,13 @@ class WebsiteSale(WebsiteSale):
 
         domain = self._get_search_domain(search, category, attrib_values)
 
-        keep = QueryURL('/shop', category=category and int(category), search=search, attrib=attrib_list, order=post.get('order'))
+        keep = QueryURL('/stock', category=category and int(category), search=search, attrib=attrib_list, order=post.get('order'))
 
         compute_currency, pricelist_context, pricelist = self._get_compute_currency_and_context()
 
         request.context = dict(request.context, pricelist=pricelist.id, partner=request.env.user.partner_id)
 
-        url = "/shop"
+        url = "/stock"
         if search:
             post["search"] = search
         if attrib_list:
@@ -91,18 +76,35 @@ class WebsiteSale(WebsiteSale):
 
         parent_category_ids = []
         if category:
-            url = "/shop/category/%s" % slug(category)
+            url = "/stock/category/%s" % slug(category)
             parent_category_ids = [category.id]
             current_category = category
             while current_category.parent_id:
                 parent_category_ids.append(current_category.parent_id.id)
                 current_category = current_category.parent_id
 
-        domain += [('public_categ_ids','child_of', [x.id for x in categs])]
+        ir_property = request.env['ir.property']
+        ir_domain = [('name', '=', 'bck_stock_date'), ('company_id', '=', current_website.company_id.id)]
+        order = "value_datetime desc"
 
-        product_count = Product.search_count(domain)
+        product_count = ir_property.search_count(ir_domain)
         pager = request.website.pager(url=url, total=product_count, page=page, step=ppg, scope=7, url_args=post)
-        products = Product.search(domain, limit=ppg, offset=pager['offset'], order=self._get_search_order(post))
+        ir_property_ids = ir_property.search(ir_domain, limit=ppg, offset=pager['offset'], order=order)
+
+        product_list = []
+        if ir_property_ids:
+            for ir_property_id in ir_property_ids:
+                res_id = ir_property_id.res_id
+                res_val = res_id.split(',')
+                product_id = int(res_val[1])
+                product_list.append(product_id)
+
+        products = Product.browse(product_list)
+
+        # domain += [('public_categ_ids', 'child_of', [x.id for x in categs])]
+        # product_count = Product.search_count(domain)
+        # pager = request.website.pager(url=url, total=product_count, page=page, step=ppg, scope=7, url_args=post)
+        # products = Product.search(domain, limit=ppg, offset=pager['offset'], order=self._get_search_order(post))
 
         ProductAttribute = request.env['product.attribute']
         if products:
