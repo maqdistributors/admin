@@ -357,8 +357,9 @@ class SalesReport(models.Model):
                 result = self.env.cr.dictfetchall()
 
                 if result:
+                    shopify_warehouse = self.env['stock.warehouse'].browse(warehouse_id).m_shopify_warehouse
                     for res in result:
-                        if warehouse_id == res['warehouse_id']:
+                        if warehouse_id == res['warehouse_id'] and not shopify_warehouse:
                             tfr_to_shopify = res['tfr_to_shopify']
             return delivered_qty, return_qty, scrap_qty, tfr_to_shopify
 
