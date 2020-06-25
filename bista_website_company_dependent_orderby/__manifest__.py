@@ -12,7 +12,7 @@
     'summary': """This module contains following features
                 1. Company dependent field sort by order for website.""",
     "depends": [
-        "website_sale"
+        "website_sale","ecommerce_category"
     ],
     # "data": [
     #     "views/website_sale.xml",
