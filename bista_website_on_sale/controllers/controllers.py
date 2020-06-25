@@ -230,6 +230,9 @@ class WebsiteSale(WebsiteSale):
                 res_id = ir_property_id.res_id
                 res_val = res_id.split(',')
                 product_id = int(res_val[1])
-                product_list.append(product_id)
+                product = Product.search(
+                    ['&', ('id', '=', product_id), '|', ('company_id', '=', False), ('company_id', '=', company_id)])
+                if product.id != False:
+                    product_list.append(product.id)
 
         return {"product_list":product_list, "product_count":product_count, "pager":pager}

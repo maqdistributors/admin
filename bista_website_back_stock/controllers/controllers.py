@@ -97,7 +97,10 @@ class WebsiteSale(WebsiteSale):
                 res_id = ir_property_id.res_id
                 res_val = res_id.split(',')
                 product_id = int(res_val[1])
-                product_list.append(product_id)
+                product = Product.search(
+                    ['&', ('id', '=', product_id), '|', ('company_id', '=', False), ('company_id', '=', current_website.company_id.id)])
+                if product.id != False:
+                    product_list.append(product.id)
 
         products = Product.browse(product_list)
 
