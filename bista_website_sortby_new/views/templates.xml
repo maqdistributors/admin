@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="bista_sort" name="Bista website sort new product feature" inherit_id="website_sale.sort">
+        <xpath expr="//t[@t-set='list_price_desc_label']"  position="before">
+            <t t-set="publish_date_desc_label">New Product</t>
+        </xpath>
+        <xpath expr="//t[@t-set='website_sale_sortable']"  position="replace">
+            <t t-set="website_sale_sortable" t-value="[
+                (publish_date_desc_label, 'publish_date desc'),
+                (list_price_desc_label, 'sales_pricelist desc'),
+                (list_price_asc_label, 'sales_pricelist asc'),
+                (name_asc_label, 'name asc'),
+                (name_desc_label, 'name desc')
+            ]"/>
+        </xpath>
+    </template>
+</odoo>
