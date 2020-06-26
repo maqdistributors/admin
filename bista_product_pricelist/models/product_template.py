@@ -40,7 +40,7 @@ class ProductTemplate(models.Model):
 
             for pricelist_item in pricelist_items:
 
-                if pricelist_item.id:
+                if type(pricelist_item) is not list:
 
                     if pricelist_item.min_quantity in [0, 1] and pricelist_item.date_start == False and pricelist_item.date_end == False:
                         fixed_price = pricelist_item.fixed_price
