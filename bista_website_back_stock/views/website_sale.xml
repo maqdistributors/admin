@@ -2,7 +2,10 @@
 <openerp>
     <data>
         <template id="bista_products_backinstock" inherit_id="website_sale.products_categories" name="Product Categories">
-            <xpath expr="//div[@id='products_grid_before']/ul" position="inside">
+            <xpath expr="//div[@id='products_grid_before']/ul/li" position="replace">
+                <li t-att-class=" '' if category else 'active' ">
+                    <a t-att-href="keep('/shop',category=0)" class="o_not_editable">Newest/All Products</a>
+                </li>
                 <li>
                     <a href="/stock">Back In Stock </a>
                 </li>

@@ -106,7 +106,7 @@ class WebsiteSale(WebsiteSale):
             product_count = product_list_values.get('product_count')
             pager = product_list_values.get('pager')
 
-        if len(product_list) > 0:
+        if len(product_list) > 0 and post.get('search') is None:
             products = Product.browse(product_list)
         else:
             domain += [('public_categ_ids', 'child_of', [x.id for x in categs])]
@@ -183,8 +183,6 @@ class WebsiteSale(WebsiteSale):
                 res_id = ir_property_id.res_id
                 res_val = res_id.split(',')
                 product_id = int(res_val[1])
-                product = Product.search(['&', ('id', '=', product_id), '|', ('company_id', '=', False), ('company_id', '=', company_id)])
-                if product.id != False:
-                    product_list.append(product.id)
+                product_list.append(product_id)
 
         return {"product_list": product_list, "product_count": product_count, "pager": pager}

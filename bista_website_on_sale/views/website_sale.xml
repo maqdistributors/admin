@@ -2,7 +2,7 @@
 <openerp>
     <data>
         <template id="bista_products_categories" inherit_id="website_sale.products_categories" name="Product Categories">
-            <xpath expr="//div[@id='products_grid_before']/ul" position="inside">
+            <xpath expr="//div[@id='products_grid_before']/ul/li" position="after">
                 <li>
                     <a href="/sale">Sale</a>
                 </li>

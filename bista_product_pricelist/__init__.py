@@ -12,7 +12,7 @@ def _update_sales_pricelist(cr, registry):
 
     env = api.Environment(cr, SUPERUSER_ID, {})
 
-    products = env['product.template'].search([])
+    products = env['product.template'].search([('sale_ok','=', True)])
 
     for product in products:
         product_vals = {}

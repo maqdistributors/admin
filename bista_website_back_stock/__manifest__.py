@@ -13,10 +13,12 @@
                 1. Display back in stock products.""",
     "depends": [
         "website_sale",
-        "product"
+        "product",
+        "bista_website_sortby_new"
     ],
     "data": [
         "views/website_sale.xml",
+        "views/product_template_views.xml",
     ],
     #    "qweb": [
     #        "static/src/xml/website_sale.xml",

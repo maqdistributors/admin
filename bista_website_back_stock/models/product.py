@@ -12,15 +12,23 @@ class Product(models.Model):
 
     @api.multi
     def write(self, vals):
-
-        is_website_publish = vals.get("is_website_publish")
         __last_update = vals.get("__last_update")
 
-        if is_website_publish:
-            self.product_tmpl_id.update({"bck_stock_date": None})
+        sale_ok = vals.get('sale_ok')
+        if sale_ok == True:
+            vals['is_website_publish'] = False
+        elif sale_ok is None:
+            sale_ok = self.product_tmpl_id.sale_ok
 
-        else:
+        is_website_publish = vals.get("is_website_publish")
+
+        if is_website_publish == True and sale_ok == True:
+            self.product_tmpl_id.update({"bck_stock_date": None})
+        elif is_website_publish == False and sale_ok == True:
             self.product_tmpl_id.update({"bck_stock_date": datetime.now()})
+        else:
+            self.product_tmpl_id.update({"bck_stock_date": None})
+            vals['is_website_publish'] = False
 
         result = super(Product, self).write(vals)
 

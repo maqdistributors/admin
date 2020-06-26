@@ -27,7 +27,7 @@ def _update_back_in_stock(cr, registry):
 
     if product_list:
 
-        products = product.search([('id','not in', product_list)])
+        products = product.search([('id','not in', product_list),('sale_ok','=', True)])
 
 
     if products:

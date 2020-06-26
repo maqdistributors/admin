@@ -21,18 +21,32 @@ class ProductTemplate(models.Model):
 
     @api.multi
     def write(self, vals):
-
+        ppi = self.env['product.pricelist.item']
         pricelist_items = vals.get('item_ids')
 
-        ppi = self.env['product.pricelist.item']
+        sale_ok = vals.get('sale_ok')
 
+        if sale_ok == True:
+            if pricelist_items == None:
+                pricelist_items = self.item_ids
+        if sale_ok is None:
+            sale_ok = self.sale_ok
+        if pricelist_items == None:
+
+            pricelist_items = self.item_ids
         # define search string
 
-        if pricelist_items is not None:
+        if pricelist_items is not None and sale_ok == True:
 
             for pricelist_item in pricelist_items:
 
-                if pricelist_item[2] is not False:
+                if pricelist_item.id:
+
+                    if pricelist_item.min_quantity in [0, 1] and pricelist_item.date_start == False and pricelist_item.date_end == False:
+                        fixed_price = pricelist_item.fixed_price
+                        vals.update({'sales_pricelist': fixed_price})
+
+                elif pricelist_item[2] is not False:
 
                     min_quantity = pricelist_item[2].get('min_quantity')
                     date_start = pricelist_item[2].get('date_start')
@@ -57,6 +71,8 @@ class ProductTemplate(models.Model):
                                 if fixed_price is None:
                                     fixed_price = ppi_item.fixed_price
                                 vals.update({'sales_pricelist': fixed_price})
+        else:
+            vals.update({'sales_pricelist': 0})
 
         result = super(ProductTemplate, self).write(vals)
 

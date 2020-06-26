@@ -97,17 +97,15 @@ class WebsiteSale(WebsiteSale):
                 res_id = ir_property_id.res_id
                 res_val = res_id.split(',')
                 product_id = int(res_val[1])
-                product = Product.search(
-                    ['&', ('id', '=', product_id), '|', ('company_id', '=', False), ('company_id', '=', current_website.company_id.id)])
-                if product.id != False:
-                    product_list.append(product.id)
+                product_list.append(product_id)
 
-        products = Product.browse(product_list)
-
-        # domain += [('public_categ_ids', 'child_of', [x.id for x in categs])]
-        # product_count = Product.search_count(domain)
-        # pager = request.website.pager(url=url, total=product_count, page=page, step=ppg, scope=7, url_args=post)
-        # products = Product.search(domain, limit=ppg, offset=pager['offset'], order=self._get_search_order(post))
+        if len(product_list) > 0 and post.get('search') is None:
+            products = Product.browse(product_list)
+        else:
+            domain += [('public_categ_ids', 'child_of', [x.id for x in categs])]
+            product_count = Product.search_count(domain)
+            pager = request.website.pager(url=url, total=product_count, page=page, step=ppg, scope=7, url_args=post)
+            products = Product.search(domain, limit=ppg, offset=pager['offset'], order=self._get_search_order(post))
 
         ProductAttribute = request.env['product.attribute']
         if products:

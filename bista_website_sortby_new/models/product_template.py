@@ -18,10 +18,24 @@ class ProductTemplate(models.Model):
     @api.multi
     def write(self, vals):
 
-        if vals.get('website_published') == True:
+        sale_ok = vals.get('sale_ok')
+        if sale_ok == True:
+            vals['website_published'] = True
+        elif sale_ok is None:
+            sale_ok =self.sale_ok
+
+        website_published = vals.get('website_published')
+
+        if website_published is None:
+
+            website_published = self.website_published
+
+        if website_published == True and sale_ok == True:
             vals['publish_date'] = datetime.now()
-        elif vals.get('website_published') == False:
+        elif website_published == False and sale_ok == True:
             vals['publish_date'] = self.create_date
+        else:
+            vals['publish_date'] = None
 
         result = super(ProductTemplate, self).write(vals)
 
