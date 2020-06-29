@@ -131,6 +131,7 @@ class WebsiteSale(WebsiteSale):
             'compute_currency': compute_currency,
             'keep': keep,
             'parent_category_ids': parent_category_ids,
+            'url': url,
         }
         if category:
             values['main_object'] = category

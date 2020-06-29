@@ -13,7 +13,8 @@
                 1. Discounted or on sale product displayed on the sale template.""",
     "depends": [
         "website_sale",
-        "product"
+        "product",
+        "bista_website_back_stock"
     ],
     "data": [
         "views/website_sale.xml",
