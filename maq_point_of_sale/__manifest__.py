@@ -5,7 +5,7 @@
     'version' : '11.0.1.0.0',
     'summary': 'Point of sale',
     'description': """
-    Point of Sale Custom code
+    Point of Sale Custom code to bring confirm alert dialog box.
     """,
     'category': 'POS',
     'website': 'https://www.bistasolutions.com/',
