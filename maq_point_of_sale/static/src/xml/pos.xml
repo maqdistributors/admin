@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+   <t t-name="CheckBoxPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup popup-checkbox">
+                <p class="title"><t t-esc=" widget.options.title || '' " /></p>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input type="checkbox" class="popup-checkbox"/>Yes
+                  </label>
+                </div>
+                <div class="footer">
+                    <div class="button confirm">
+                        Ok
+                    </div>
+                    <div class="button cancel">
+                        Cancel
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>
