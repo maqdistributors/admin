@@ -3,15 +3,6 @@ odoo.define('maq_point_of_sale.models', function (require) {
 
     var models = require('point_of_sale.models');
 
-    // var _super_posmodel = models.PosModel.prototype;
-    // models.PosModel = models.PosModel.extend({
-    //     initialize: function (session, attributes) {
-    //         var self = this;
-    //         models.load_fields('pos.order', ['customer_verified']);
-    //         _super_posmodel.initialize.apply(this, arguments);
-    //     },
-    // });
-    //
     models.load_fields("pos.order", ["customer_verified"]);
     var _super_order = models.Order.prototype;
     models.Order = models.Order.extend({

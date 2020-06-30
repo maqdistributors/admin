@@ -39,7 +39,13 @@ odoo.define('maq_point_of_sale.screens', function (require) {
                         },
                     });
                 } else {
-                    self.render_checkbox_popup();
+                    var config = self.pos.config.payment_confirmation_box;
+                    if (config === true) {
+                        self.render_checkbox_popup();
+                    } else {
+                        self.pos.get_order().customer_verified = false;
+                        self.gui.show_screen('payment');
+                    }
                 }
             });
             this.$('.set-customer').click(function () {
