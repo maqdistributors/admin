@@ -18,6 +18,27 @@
                     </div>
                 </div>
             </xpath>
+            <xpath expr="//div/div[@id='category_reference']" position="after">
+                <div class="col-12 col-lg-6 o_setting_box">
+                    <div class="o_setting_left_pane">
+                        <field name="limit_categories"/>
+                    </div>
+                    <div class="o_setting_right_pane">
+                        <label for="limit_categories"/>
+                        <div class="text-muted">
+                            Available Product Categories
+                        </div>
+                        <div class="content-group mt16" attrs="{'invisible': [('limit_categories', '=', False)]}">
+                            <field name="iface_available_categ_ids" widget="many2many_tags"/>
+                        </div>
+                        <div class="content-group mt16" attrs="{'invisible': [('limit_categories', '=', False)]}">
+                            <button name="%(point_of_sale.product_pos_category_action)d" icon="fa-arrow-right"
+                                    type="action"
+                                    string="PoS Product Categories" class="btn-link"/>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
         </field>
     </record>
 </odoo>

@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='session_id']" position="after">
-                <field name="customer_verified"/>
+                <field name="customer_verified" attrs="{'readonly': [('state','=','invoiced')]}"/>
             </xpath>
         </field>
     </record>

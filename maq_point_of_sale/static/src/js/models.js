@@ -3,7 +3,37 @@ odoo.define('maq_point_of_sale.models', function (require) {
 
     var models = require('point_of_sale.models');
 
-    models.load_fields("pos.order", ["customer_verified"]);
+    models.load_fields({model: "pos.order", fields: ["customer_verified"]});
+    var PosModelSuper = models.PosModel;
+    models.PosModel = models.PosModel.extend({
+        initialize: function () {
+            var self = this;
+            var pos_category_model = _.find(this.models, function (model) {
+                return model.model === "pos.category";
+            });
+            pos_category_model.domain = function (self) {
+                var domain = self.config.limit_categories && self.config.iface_available_categ_ids.length ? [['id', 'in', self.config.iface_available_categ_ids]] : [];
+                return domain;
+            };
+            var product_product_model = _.find(this.models, function (model) {
+                return model.model === "product.product";
+            });
+            product_product_model.domain = function (self) {
+                var domain = ['&', '&', ['sale_ok', '=', true], ['available_in_pos', '=', true], '|', ['company_id', '=', self.config.company_id[0]], ['company_id', '=', false]];
+                if (self.config.limit_categories && self.config.iface_available_categ_ids.length) {
+                    domain.unshift('&');
+                    domain.push(['pos_categ_id', 'in', self.config.iface_available_categ_ids]);
+                }
+                if (self.config.iface_tipproduct) {
+                    domain.unshift(['id', '=', self.config.tip_product_id[0]]);
+                    domain.unshift('|');
+                }
+                return domain;
+            };
+            PosModelSuper.prototype.initialize.apply(this, arguments);
+        },
+    });
+
     var _super_order = models.Order.prototype;
     models.Order = models.Order.extend({
         initialize: function (session, attributes) {
