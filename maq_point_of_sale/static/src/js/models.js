@@ -12,7 +12,7 @@ odoo.define('maq_point_of_sale.models', function (require) {
                 return model.model === "pos.category";
             });
             pos_category_model.domain = function (self) {
-                var domain = self.config.limit_categories && self.config.iface_available_categ_ids.length ? [['id', 'in', self.config.iface_available_categ_ids]] : [];
+                var domain = self.config.limit_categories && self.config.iface_available_categ_ids.length ? [['id', 'not in', self.config.iface_available_categ_ids]] : [];
                 return domain;
             };
             var product_product_model = _.find(this.models, function (model) {
@@ -22,7 +22,7 @@ odoo.define('maq_point_of_sale.models', function (require) {
                 var domain = ['&', '&', ['sale_ok', '=', true], ['available_in_pos', '=', true], '|', ['company_id', '=', self.config.company_id[0]], ['company_id', '=', false]];
                 if (self.config.limit_categories && self.config.iface_available_categ_ids.length) {
                     domain.unshift('&');
-                    domain.push(['pos_categ_id', 'in', self.config.iface_available_categ_ids]);
+                    domain.push(['pos_categ_id', 'not in', self.config.iface_available_categ_ids]);
                 }
                 if (self.config.iface_tipproduct) {
                     domain.unshift(['id', '=', self.config.tip_product_id[0]]);

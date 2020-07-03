@@ -13,7 +13,8 @@
     'data': [
         'views/assets.xml',
         'views/pos_config_view.xml',
-        'views/pos_order_view.xml'
+        'views/pos_order_view.xml',
+        'views/res_partner_view.xml',
     ],
     'demo': [
     ],

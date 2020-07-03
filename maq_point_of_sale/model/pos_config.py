@@ -22,7 +22,7 @@ class PosConfig(models.Model):
                                               help='Raise a warning for each POS transaction prior to moving to payment screen.',
                                               default=False)
     iface_available_categ_ids = fields.Many2many('pos.category', string='Available PoS Product Categories',
-                                                 help='The point of sale will only display products which are within one of the selected category trees. If no category is specified, all available products will be shown')
+                                                 help='The point of sale will not display products which are within one of the selected category trees. If no category is specified, all available products will be shown')
     limit_categories = fields.Boolean("Restrict Available Product Categories")
 
     @api.onchange('limit_categories', 'iface_available_categ_ids', 'iface_start_categ_id')

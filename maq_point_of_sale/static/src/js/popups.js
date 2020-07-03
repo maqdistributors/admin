@@ -17,8 +17,11 @@ odoo.define('maq_point_of_sale.popups', function (require) {
             }
         },
         click_confirm: function () {
+            var self = this;
             var value = this.$('input,textarea').is(":checked");
-            this.gui.close_popup();
+            if (value === true) {
+                self.gui.close_popup();
+            }
             if (this.options.confirm) {
                 this.options.confirm.call(this, value);
             }
