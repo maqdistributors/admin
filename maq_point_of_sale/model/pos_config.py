@@ -42,3 +42,43 @@ class PosConfig(models.Model):
             else:
                 config.selectable_categ_ids = self.env['pos.category'].search([])
 
+    @api.multi
+    def write(self, vals):
+        context_id = self._context.get("context_id", 0)
+        if context_id:
+            context_id = context_id.id
+        opened_session = self.mapped('session_ids').filtered(lambda s: s.state != 'closed' and s.id != context_id)
+        if opened_session and opened_session[0].exists():
+            raise UserError(
+                _('Unable to modify this PoS Configuration because there is an open PoS Session based on it.'))
+
+        result = super(PosConfig, self).write(vals)
+
+        self.sudo()._set_fiscal_position()
+        self.sudo()._check_modules_to_install()
+        self.sudo()._check_groups_implied()
+        return result
+
+    @api.multi
+    def open_session_cb(self):
+        """ new session button
+
+        create one if none exist
+        access cash control interface if enabled or start a session
+        """
+        self.ensure_one()
+        if not self.current_session_id:
+            current_session_id = self.env['pos.session'].create({
+                'user_id': self.env.uid,
+                'config_id': self.id
+            })
+            ctx = dict(self._context)
+            ctx['context_id'] = current_session_id
+            self.with_context(ctx).current_session_id = current_session_id
+            # self.current_session_id = current_session_id
+            if self.current_session_id.state == 'opened':
+                print("440")
+                return self.open_ui()
+            return self._open_session(self.current_session_id.id)
+        return self._open_session(self.current_session_id.id)
+

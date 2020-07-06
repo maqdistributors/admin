@@ -1,20 +1,21 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
-    'name' : 'MAQ Point of Sale',
-    'version' : '11.0.1.0.0',
+    'name': 'MAQ Point of Sale',
+    'version': '11.0.1.0.0',
     'summary': 'Point of sale',
     'description': """
     Point of Sale Custom code
     """,
     'category': 'POS',
     'website': 'https://www.bistasolutions.com/',
-    'depends' : ['point_of_sale'],
+    'depends': ['point_of_sale'],
     'data': [
+        'security/maq_security.xml',
+        'security/ir.model.access.csv',
         'views/assets.xml',
         'views/pos_config_view.xml',
         'views/pos_order_view.xml',
-        'views/res_partner_view.xml',
+        'views/res_users_view.xml',
     ],
     'demo': [
     ],
@@ -23,3 +24,4 @@
     'application': False,
     'auto_install': False,
 }
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
