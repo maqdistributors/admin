@@ -21,10 +21,10 @@ class ResUsers(models.Model):
     product_categ_ids = fields.Many2many('product.category', string='Restrict Internal Product Categories',
                                                  help='The sale order will not display products which are within one of the selected category trees. If no category is specified, all available sale order will be shown')
 
-    # @api.multi
-    # def write(self, vals):
-    #     res = super(ResUsers, self).write(vals)
-    #     myrule = self.env.ref('maq_point_of_sale.filter_user_product_category_allowed')
-    #     if myrule:
-    #         myrule.domain_force = myrule.domain_force
-    #     return res
+    @api.multi
+    def write(self, vals):
+        res = super(ResUsers, self).write(vals)
+        myrule = self.env.ref('maq_point_of_sale.filter_user_product_category_allowed')
+        if myrule:
+            myrule.domain_force = myrule.domain_force
+        return res
