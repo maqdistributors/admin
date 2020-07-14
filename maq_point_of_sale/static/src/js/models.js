@@ -1,9 +1,13 @@
 odoo.define('maq_point_of_sale.models', function (require) {
     "use strict";
 
+    var rpc = require("web.rpc");
     var models = require('point_of_sale.models');
 
-    models.load_fields({model: "pos.order", fields: ["customer_verified"]});
+    models.load_fields("res.users", ['product_categ_ids']);
+    models.load_fields("pos.order", ['customer_verified']);
+    models.load_fields('pos.config', ['limit_categories', 'iface_restrict_categ_ids', 'iface_available_child_categ_ids']);
+
     var PosModelSuper = models.PosModel;
     models.PosModel = models.PosModel.extend({
         initialize: function () {
@@ -12,25 +16,24 @@ odoo.define('maq_point_of_sale.models', function (require) {
                 return model.model === "pos.category";
             });
             pos_category_model.domain = function (self) {
-                var domain = self.config.limit_categories && self.config.iface_available_categ_ids.length ? [['id', 'not in', self.config.iface_available_categ_ids]] : [];
+                var domain = self.config.limit_categories && self.config.iface_restrict_categ_ids.length ? [['id', 'not in', self.config.iface_restrict_categ_ids]] : [];
                 return domain;
             };
-            var product_product_model = _.find(this.models, function (model) {
+            var prod_model = _.find(this.models, function (model) {
                 return model.model === "product.product";
             });
-            product_product_model.domain = function (self) {
-                var domain = ['&', '&', ['sale_ok', '=', true], ['available_in_pos', '=', true], '|', ['company_id', '=', self.config.company_id[0]], ['company_id', '=', false]];
-                if (self.config.limit_categories && self.config.iface_available_categ_ids.length) {
-                    domain.unshift('&');
-                    domain.push(['pos_categ_id', 'not in', self.config.iface_available_categ_ids]);
-                }
-                if (self.config.iface_tipproduct) {
-                    domain.unshift(['id', '=', self.config.tip_product_id[0]]);
-                    domain.unshift('|');
-                }
+            prod_model.domain = function (self) {
+                console.log("self.config",self.user.product_categ_ids);
+                var domain = self.user.product_categ_ids.length || self.config.iface_available_child_categ_ids.length ? [
+                    '|',
+                    ['pos_categ_id', '=', false],
+                    '&',
+                    ['pos_categ_id.id', 'not in', self.config.iface_available_child_categ_ids],
+                    ['pos_categ_id.id', 'not in', self.config.iface_restrict_categ_ids]] : [];
+
                 return domain;
             };
-            PosModelSuper.prototype.initialize.apply(this, arguments);
+            PosModelSuper.prototype.initialize.apply(self, arguments);
         },
     });
 
