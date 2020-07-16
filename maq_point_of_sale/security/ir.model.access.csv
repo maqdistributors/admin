@@ -1,2 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_product_template_restrict_category_manager,product.template restrict_category_manager,product.model_product_template,maq_point_of_sale.maq_restrict_product_category_manager,1,1,1,1

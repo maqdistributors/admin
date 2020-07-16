@@ -24,7 +24,7 @@ class ResUsers(models.Model):
     @api.multi
     def write(self, vals):
         res = super(ResUsers, self).write(vals)
-        myrule = self.env.ref('maq_point_of_sale.filter_user_product_category_allowed')
+        myrule = self.env.ref('maq_bista_internal_category_restrict.filter_user_product_category_allowed')
         if myrule:
             myrule.domain_force = myrule.domain_force
         return res
