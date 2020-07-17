@@ -54,7 +54,7 @@ odoo.define("pos_product_available_negative.pos", function (require) {
                                 this.gui.show_popup("alertMsg", {
                                     title: _t("STOCK CHECK WARNING"),
                                     body: _t('This product quantity may be unavailable'),
-                                    msg: _t('Please verity the product quantity available and notify a supervisor of any discrepancies.'),
+                                    msg: _t('Please verify the product quantity available and notify a supervisor of any discrepancies.'),
                                 });
                                 order.get_selected_orderline().notify_qty = true;
                             }
@@ -89,7 +89,7 @@ odoo.define("pos_product_available_negative.pos", function (require) {
                             self.gui.show_popup("alertMsg", {
                                 title: _t("STOCK CHECK WARNING"),
                                 body: _t('This product quantity may be unavailable'),
-                                msg: _t('Please verity the product quantity available and notify a supervisor of any discrepancies.'),
+                                msg: _t('Please verify the product quantity available and notify a supervisor of any discrepancies.'),
                             });
                             order.get_selected_orderline().notify_qty = true;
                         }
@@ -99,7 +99,7 @@ odoo.define("pos_product_available_negative.pos", function (require) {
                     self.gui.show_popup("alertMsg", {
                         title: _t("STOCK CHECK WARNING"),
                         body: _t('This product quantity may be unavailable'),
-                        msg: _t('Please verity the product quantity available and notify a supervisor of any discrepancies.'),
+                        msg: _t('Please verify the product quantity available and notify a supervisor of any discrepancies.'),
                     });
                 }
                 _.bind(click_product_handler_super, this)();
