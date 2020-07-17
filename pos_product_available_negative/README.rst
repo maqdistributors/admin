@@ -6,10 +6,8 @@
  POS: Out-of-stock orders
 ==========================
 
-The module depends on the pos_pin module. Before POS order validation the module checks whether the order contains
-products with no positive quantity. If it does then a cashier gets popup to select users. A sale is take place
-if the selected user has group which is specified in the POS config parameter "Negative Order Group". Otherwise
-the sale is rejected.
+The module depends on the pos_pin module.
+show popup when quantity is less then stock available for first time only.
 
 Credits
 =======

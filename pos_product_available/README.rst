@@ -7,6 +7,7 @@
 =======================
 
 Adds available quantity at products in POS
+show popup when quantity is less then stock available for first time only
 
 Credits
 =======

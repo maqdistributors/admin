@@ -19,13 +19,9 @@
             this.attr('t-if', "line.get_quantity_str() !== '1' || line.selected || line.get_product().qty_available lt line.quantity ");
         </t>
         <t t-jquery="t[t-esc='line.get_quantity_str()']" t-operation="after">
-            <t
-                t-if="widget.pos.config.show_qtys &amp;&amp; line.get_product().type == 'product'"
-            >
+            <t t-if="widget.pos.config.show_qtys &amp;&amp; line.get_product().type == 'product'">
                 <t t-set='qty_available' t-value='line.get_product().qty_available' />
-                (of <span
-                    t-attf-class="qty-info #{qty_available lt line.quantity ? 'not-available':''}"
-                >
+                (of <span t-attf-class="qty-info #{qty_available lt line.quantity ? 'not-available':''}">
                     <t t-esc="qty_available" />
                 </span>)
             </t>
