@@ -13,17 +13,6 @@ class PosConfig(models.Model):
     def _default_negative_stock_user(self):
         return self.env.ref("point_of_sale.group_pos_manager")
 
-    negative_order_group_id = fields.Many2one(
-        "res.groups",
-        string="Negative Order Group",
-        default=_default_negative_stock_user,
-        help="Group allows to sell products which are out of a stock.",
-    )
-    negative_order_manager_permission = fields.Boolean(
-        "Managers Permission",
-        help="Ask Managers Permission to proceed order with negative stock products",
-        default=True,
-    )
     negative_order_warning = fields.Boolean(
         "Show Warning",
         help="Show Warning on adding out of stock products",

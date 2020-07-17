@@ -8,6 +8,19 @@ odoo.define("pos_product_available_negative.pos", function (require) {
     var models = require("point_of_sale.models");
     var core = require("web.core");
     var _t = core._t;
+    var popups = require('point_of_sale.popups');
+    var gui = require('point_of_sale.gui');
+
+
+    var CustomMsgPopupWidget = popups.extend({
+        template: 'CustomMsgPopupWidget',
+        show: function (options) {
+            options = options || {};
+            this._super(options);
+            this.renderElement();
+        },
+    });
+    gui.define_popup({name: 'alertMsg', widget: CustomMsgPopupWidget});
 
     var _super_orderline = models.Orderline.prototype;
     models.Orderline = models.Orderline.extend({
@@ -38,10 +51,10 @@ odoo.define("pos_product_available_negative.pos", function (require) {
                         if (!order.get_selected_orderline().notify_qty) {
                             var qty_available = order.get_selected_orderline().product.qty_available;
                             if (val > qty_available) {
-                                this.gui.show_popup("alert", {
+                                this.gui.show_popup("alertMsg", {
                                     title: _t("STOCK CHECK WARNING"),
-                                    body: _t("This product quantity may be unavailable" +
-                                        "Please verity the product quantity available and notify a supervisor of any discrepancies."),
+                                    body: _t('This product quantity may be unavailable'),
+                                    msg: _t('Please verity the product quantity available and notify a supervisor of any discrepancies.'),
                                 });
                                 order.get_selected_orderline().notify_qty = true;
                             }
@@ -73,20 +86,20 @@ odoo.define("pos_product_available_negative.pos", function (require) {
                 if (order.get_selected_orderline()) {
                     if (!order.get_selected_orderline().notify_qty) {
                         if (order.get_selected_orderline().quantity + 1 > order.get_selected_orderline().product.qty_available) {
-                            self.gui.show_popup("alert", {
+                            self.gui.show_popup("alertMsg", {
                                 title: _t("STOCK CHECK WARNING"),
-                                body: _t("This product quantity may be unavailable" +
-                                    "Please verity the product quantity available and notify a supervisor of any discrepancies."),
+                                body: _t('This product quantity may be unavailable'),
+                                msg: _t('Please verity the product quantity available and notify a supervisor of any discrepancies.'),
                             });
                             order.get_selected_orderline().notify_qty = true;
                         }
                     }
                 }
                 if (product.type === "product" && product.qty_available <= 0) {
-                    self.gui.show_popup("alert", {
+                    self.gui.show_popup("alertMsg", {
                         title: _t("STOCK CHECK WARNING"),
-                        body: _t("This product quantity may be unavailable" +
-                            "Please verity the product quantity available and notify a supervisor of any discrepancies."),
+                        body: _t('This product quantity may be unavailable'),
+                        msg: _t('Please verity the product quantity available and notify a supervisor of any discrepancies.'),
                     });
                 }
                 _.bind(click_product_handler_super, this)();
