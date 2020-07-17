@@ -118,17 +118,6 @@ class WebsiteSale(WebsiteSale):
                     else:
                         sale_product_id.append(sale_product)
 
-        # domain += [('public_categ_ids','child_of', [x.id for x in categs]),('id', 'in', sale_product_id)]
-
-
-        # domain += [('public_categ_ids', 'child_of', [x.id for x in categs])]
-
-        # product_count = Product.search_count(domain)
-        #
-        # pager = request.website.pager(url=url, total=product_count, page=page, step=ppg, scope=7, url_args=post)
-        #
-        # products = Product.search(domain, limit=ppg, offset=pager['offset'], order=self._get_search_order(post))
-
         company_id = current_website.company_id.id
         node_field = False
         product_list = []
@@ -156,7 +145,7 @@ class WebsiteSale(WebsiteSale):
         if len(product_list) > 0 and post.get('search') is None:
             products = Product.browse(product_list)
         else:
-            domain += [('public_categ_ids', 'child_of', [x.id for x in categs]),('id', 'in', sale_product_id)]
+            domain += [('public_categ_ids', 'child_of', [x.id for x in categs])]
             product_count = Product.search_count(domain)
             pager = request.website.pager(url=url, total=product_count, page=page, step=ppg, scope=7, url_args=post)
             products = Product.search(domain, limit=ppg, offset=pager['offset'], order=self._get_search_order(post))
@@ -211,8 +200,10 @@ class WebsiteSale(WebsiteSale):
                 order = "value_float " + str(node_order)
 
             if categs:
-                domain += [('public_categ_ids', 'child_of', [x.id for x in categs]),('id', 'in', sale_product_id)]
-                product_ids = Product.search(domain).ids
+                domain += [('public_categ_ids', 'child_of', [x.id for x in categs])]
+                domain_id = [('id', 'in', sale_product_id)]
+                categs_domain = domain_id + domain
+                product_ids = Product.search(categs_domain).ids
 
             res_ids = []
             for res_id in product_ids:
