@@ -10,12 +10,9 @@
     'website': 'https://www.bistasolutions.com/',
     'depends': ['point_of_sale'],
     'data': [
-        'security/maq_security.xml',
-        'security/ir.model.access.csv',
         'views/assets.xml',
         'views/pos_config_view.xml',
         'views/pos_order_view.xml',
-        'views/res_users_view.xml',
     ],
     'demo': [
     ],

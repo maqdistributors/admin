@@ -29,11 +29,11 @@
                             Available Product Categories
                         </div>
                         <div class="content-group mt16" attrs="{'invisible': [('limit_categories', '=', False)]}">
-                            <field name="iface_restrict_categ_ids" widget="many2many_tags" domain="[('parent_id', '=', False)]"/>
+                            <field name="iface_restrict_categ_ids" widget="many2many_tags"/>
                         </div>
-                        <div class="content-group mt16" attrs="{'invisible': [('limit_categories', '=', False)]}">
+                        <!-- <div class="content-group mt16" attrs="{'invisible': [('limit_categories', '=', False)]}">
                             <field name="iface_available_child_categ_ids" widget="many2many_tags"/>
-                        </div>
+                        </div> -->
                         <div class="content-group mt16" attrs="{'invisible': [('limit_categories', '=', False)]}">
                             <button name="%(point_of_sale.product_pos_category_action)d" icon="fa-arrow-right"
                                     type="action"
