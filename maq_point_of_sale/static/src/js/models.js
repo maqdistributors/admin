@@ -23,15 +23,15 @@ odoo.define('maq_point_of_sale.models', function (require) {
                 return model.model === "product.product";
             });
             prod_model.domain = function (self) {
-                var domain = self.config.iface_available_child_categ_ids.length &&  self.config.iface_restrict_categ_ids ? [
-                    '&',
-                    ['&',['sale_ok','=',true],
-                    ['available_in_pos','=',true]],
-                    ['|',
+                var domain = self.config.iface_available_child_categ_ids.length ||  self.config.iface_restrict_categ_ids ? [
+                    '&','&',
+                    ['sale_ok','=',true],
+                    ['available_in_pos','=',true],
+                    '|',
                     ['pos_categ_id', '=', false],
                     '&',
                     ['pos_categ_id.id', 'not in', self.config.iface_available_child_categ_ids],
-                    ['pos_categ_id.id', 'not in', self.config.iface_restrict_categ_ids]]] : [];
+                    ['pos_categ_id.id', 'not in', self.config.iface_restrict_categ_ids]] : [];
 
                 return domain;
             };
