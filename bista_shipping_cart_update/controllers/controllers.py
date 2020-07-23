@@ -4,12 +4,14 @@ import logging
 from odoo import http, tools, _
 from odoo.http import request
 from odoo.addons.website_sale.controllers.main import WebsiteSale
+from datetime import datetime, timedelta
 
 _logger = logging.getLogger(__name__)
 
 class WebsiteSale(WebsiteSale):
 
     def recalculate_prices(self, order):
+        now = datetime.now()
         for line in order.mapped('order_line'):
             dict = line._convert_to_write(line.read()[0])
             if 'product_tmpl_id' in line._fields:
@@ -22,6 +24,9 @@ class WebsiteSale(WebsiteSale):
                 'price_unit': line2.price_unit,
                 'discount': line2.discount,
             })
+        order.write({
+            'date_order': now,
+        })
         return True
 
     @http.route(['/shop/cart'], type='http', auth="public", website=True)
