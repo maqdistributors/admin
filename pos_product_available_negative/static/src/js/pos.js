@@ -28,6 +28,11 @@ odoo.define("pos_product_available_negative.pos", function (require) {
             _super_orderline.initialize.apply(this, arguments);
             this.notify_qty = false;
         },
+        export_as_JSON: function () {
+            var json = _super_orderline.export_as_JSON.apply(this, arguments);
+            json.notify_qty = this.notify_qty
+            return json;
+        },
     });
 
     var _super_order = models.Order.prototype;
@@ -79,8 +84,8 @@ odoo.define("pos_product_available_negative.pos", function (require) {
                 }
             }
             if (to_merge_orderline) {
-                if (to_merge_orderline.product.type === "product") {
-                    if (!to_merge_orderline.notify_qty) {
+                if (!to_merge_orderline.notify_qty) {
+                    if (to_merge_orderline.product.type === "product") {
                         if (to_merge_orderline.quantity + 1 > line.product.qty_available) {
                             this.pos.gui.show_popup("alertMsg", {
                                 title: _t("STOCK CHECK WARNING"),
@@ -147,18 +152,6 @@ odoo.define("pos_product_available_negative.pos", function (require) {
             this.click_product_handler = function () {
                 var product = self.pos.db.get_product_by_id(this.dataset.productId);
                 var order = self.pos.get_order();
-                if (order.get_selected_orderline()) {
-                    if (!order.get_selected_orderline().notify_qty) {
-                        if (order.get_selected_orderline().quantity + 1 > order.get_selected_orderline().product.qty_available) {
-                            self.gui.show_popup("alertMsg", {
-                                title: _t("STOCK CHECK WARNING"),
-                                body: _t('This product quantity may be unavailable'),
-                                msg: _t('Please verify the product quantity available and notify a supervisor of any discrepancies.'),
-                            });
-                            order.get_selected_orderline().notify_qty = true;
-                        }
-                    }
-                }
                 if (product.type === "product" && product.qty_available <= 0) {
                     self.gui.show_popup("alertMsg", {
                         title: _t("STOCK CHECK WARNING"),
