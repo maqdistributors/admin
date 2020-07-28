@@ -47,23 +47,6 @@ class PosConfig(models.Model):
                 config.iface_available_child_categ_ids = [(6,0,child_categ_ids_list)]
 
     @api.multi
-    def write(self, vals):
-        context_id = self._context.get("context_id", 0)
-        if context_id:
-            context_id = context_id.id
-        opened_session = self.mapped('session_ids').filtered(lambda s: s.state != 'closed' and s.id != context_id)
-        if opened_session and opened_session[0].exists():
-            raise UserError(
-                _('Unable to modify this PoS Configuration because there is an open PoS Session based on it.'))
-
-        result = super(PosConfig, self).write(vals)
-
-        self.sudo()._set_fiscal_position()
-        self.sudo()._check_modules_to_install()
-        self.sudo()._check_groups_implied()
-        return result
-
-    @api.multi
     def open_session_cb(self):
         """ new session button
 
