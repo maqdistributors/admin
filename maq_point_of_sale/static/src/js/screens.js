@@ -35,7 +35,7 @@ odoo.define('maq_point_of_sale.screens', function (require) {
                         'title': _t('Empty Serial/Lot Number'),
                         'body': _t('One or more product(s) required serial/lot number.'),
                         confirm: function () {
-                            self.gui.show_screen('payment');
+                            self.render_checkbox_popup();
                         },
                     });
                 } else {
