@@ -23,10 +23,10 @@ odoo.define('maq_point_of_sale.models', function (require) {
                 return model.model === "product.product";
             });
             prod_model.domain = function (self) {
-                var domain = self.config.iface_available_child_categ_ids.length ||  self.config.iface_restrict_categ_ids ? [
-                    '&','&',
-                    ['sale_ok','=',true],
-                    ['available_in_pos','=',true],
+                var domain = self.config.iface_available_child_categ_ids.length || self.config.iface_restrict_categ_ids ? [
+                    '&', '&',
+                    ['sale_ok', '=', true],
+                    ['available_in_pos', '=', true],
                     '|',
                     ['pos_categ_id', '=', false],
                     '&',
@@ -35,13 +35,6 @@ odoo.define('maq_point_of_sale.models', function (require) {
 
                 return domain;
             };
-            // var product_pricelist_item_model = _.find(this.models, function (model) {
-            //     return model.model === "product.pricelist.item";
-            // });
-            // product_pricelist_item_model.domain = function (self) {
-            //     var domain = self.user.product_categ_ids ? [['pricelist_id', 'in', _.pluck(self.pricelists, 'id')],['product_id.categ_id.id', 'not in', self.user.product_categ_ids]] : [];
-            //     return domain;
-            // };
             PosModelSuper.prototype.initialize.apply(self, arguments);
         },
     });

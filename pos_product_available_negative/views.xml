@@ -23,14 +23,4 @@
             </xpath>
         </field>
     </record>
-    <record id="view_pos_product_available_negative_order_form" model="ir.ui.view">
-        <field name="name">pos.product.available.negative.order</field>
-        <field name="model">pos.order</field>
-        <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
-        <field name="arch" type="xml">
-            <field name="fiscal_position_id" position="after">
-                <field name="negative_stock_user_id"/>
-            </field>
-        </field>
-    </record>
 </odoo>
