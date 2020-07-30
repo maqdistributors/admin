@@ -12,6 +12,7 @@
     'depends': ['sale'],
     'data': [
         'security/internal_category_security.xml',
+        'views/assets.xml',
         'views/res_users_view.xml',
     ],
     'installable': True,
