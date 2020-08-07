@@ -4,7 +4,6 @@ odoo.define('maq_point_of_sale.models', function (require) {
     var rpc = require("web.rpc");
     var models = require('point_of_sale.models');
 
-    // models.load_fields("res.users", ['product_categ_ids']);
     models.load_fields("pos.order", ['customer_verified']);
     models.load_fields('pos.config', ['limit_categories', 'iface_restrict_categ_ids', 'iface_available_child_categ_ids']);
 

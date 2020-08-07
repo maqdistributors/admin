@@ -8,20 +8,6 @@ odoo.define('maq_point_of_sale.screens', function (require) {
     var ActionpadWidget = screen.ActionpadWidget;
 
     ActionpadWidget.include({
-        render_checkbox_popup: function () {
-            var self = this;
-            this.gui.show_popup('checkbox', {
-                'title': _t('Has this customers ID been verified ?'),
-                confirm: function () {
-                    var value = this.$('input,textarea').is(":checked");
-                    self.pos.get_order().customer_verified = value;
-                    if (value === true) {
-                        self.gui.show_screen('payment');
-                    }
-                    return false;
-                },
-            });
-        },
         renderElement: function () {
             var self = this;
             self._super();
@@ -35,16 +21,36 @@ odoo.define('maq_point_of_sale.screens', function (require) {
                         'title': _t('Empty Serial/Lot Number'),
                         'body': _t('One or more product(s) required serial/lot number.'),
                         confirm: function () {
-                            self.render_checkbox_popup();
+                            var config = self.pos.config.payment_confirmation_box;
+                            if (config === true) {
+                                this.gui.show_popup('checkbox', {
+                                    'title': _t('Has this customers ID been verified ?'),
+                                    confirm: function () {
+                                        var value = this.$('input,textarea').is(":checked");
+                                        self.pos.get_order().customer_verified = value;
+                                        if (value === true) {
+                                            self.gui.show_screen('payment');
+                                        }
+                                        return false;
+                                    },
+                                });
+                            }
                         },
                     });
                 } else {
                     var config = self.pos.config.payment_confirmation_box;
                     if (config === true) {
-                        self.render_checkbox_popup();
-                    } else {
-                        self.pos.get_order().customer_verified = false;
-                        self.gui.show_screen('payment');
+                        this.gui.show_popup('checkbox', {
+                            'title': _t('Has this customers ID been verified ?'),
+                            confirm: function () {
+                                var value = this.$('input,textarea').is(":checked");
+                                self.pos.get_order().customer_verified = value;
+                                if (value === true) {
+                                    self.gui.show_screen('payment');
+                                }
+                                return false;
+                            },
+                        });
                     }
                 }
             });
