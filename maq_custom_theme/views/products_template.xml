@@ -27,6 +27,13 @@
                 <t t-call="website_sale.payment_confirmation_status"/>
             </div>
         </xpath>
+        <xpath expr="//td[hasclass('td-price')]" position="replace">
+            <td class="td-price">
+                <span class="text-right">
+                    <div t-field="line.price_reduce_taxexcl" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: order.pricelist_id.currency_id}"/>
+                </span>
+            </td>
+        </xpath>
     </template>
 </odoo>
 
