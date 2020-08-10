@@ -8,6 +8,7 @@
             <xpath expr="//notebook/page[@name='general_information']/group/group[@name='group_standard_price']/field[@name='uom_po_id']"
                    position="after">
                 <field name="product_format"/>
+                <field name="product_format_uom_id"/>
                 <field name="reporting_weight"/>
                 <field name="equivalent_weight"/>
             </xpath>

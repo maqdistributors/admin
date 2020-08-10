@@ -34,7 +34,7 @@ odoo.define('maq_pos_calculator.screens', function (require) {
                                                 this.gui.show_popup("WarningalertMsg", {
                                                     title: _t("CANNABIS WEIGHT CHECK WARNING"),
                                                     body: _t('Your Cart Contain more then allowed Cannabis Weight'),
-                                                    msg: _t('Please Adjust your cart item to 36gm Cannabis Weight to process payment.'),
+                                                    msg: _t('Please Adjust your cart item to Cannabis Weight to process payment.'),
                                                 });
                                                 return false;
                                             }
@@ -49,7 +49,7 @@ odoo.define('maq_pos_calculator.screens', function (require) {
                                     this.gui.show_popup("WarningalertMsg", {
                                         title: _t("CANNABIS WEIGHT CHECK WARNING"),
                                         body: _t('Your Cart Contain more then allowed Cannabis Weight'),
-                                        msg: _t('Please Adjust your cart item to 36gm Cannabis Weight to process payment.'),
+                                        msg: _t('Please Adjust your cart item to Cannabis Weight to process payment.'),
                                     });
                                     return false;
                                 }else{
@@ -72,7 +72,7 @@ odoo.define('maq_pos_calculator.screens', function (require) {
                                         this.gui.show_popup("WarningalertMsg", {
                                             title: _t("CANNABIS WEIGHT CHECK WARNING"),
                                             body: _t('Your Cart Contain more then allowed Cannabis Weight'),
-                                            msg: _t('Please Adjust your cart item to 36gm Cannabis Weight to process payment.'),
+                                            msg: _t('Please Adjust your cart item to Cannabis Weight to process payment.'),
                                         });
                                         return false;
                                     }
@@ -84,12 +84,15 @@ odoo.define('maq_pos_calculator.screens', function (require) {
                     } else {
                         var order = self.pos.get_order();
                         if (order.ordered_cannabis > self.pos.config.cannabis_purchase_limit) {
-                            this.gui.show_popup("WarningalertMsg", {
+                            self.gui.show_popup("WarningalertMsg", {
                                 title: _t("CANNABIS WEIGHT CHECK WARNING"),
                                 body: _t('Your Cart Contain more then allowed Cannabis Weight'),
-                                msg: _t('Please Adjust your cart item to 36gm Cannabis Weight to process payment.'),
+                                msg: _t('Please Adjust your cart item to Cannabis Weight to process payment.'),
                             });
                             return false;
+                        }
+                        else{
+                            self.gui.show_screen('payment');
                         }
                     }
                 }

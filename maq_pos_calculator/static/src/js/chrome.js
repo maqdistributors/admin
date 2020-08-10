@@ -1,15 +1,13 @@
 odoo.define('maq_pos_calculator.chrome', function (require) {
     "use strict";
 
-    var core = require('web.core');
     var chrome = require('point_of_sale.chrome');
     var PosBaseWidget = require('point_of_sale.BaseWidget');
-    var _t = core._t;
 
     var OrderWeightWidget = PosBaseWidget.extend({
         template: 'OrderWeightWidget',
         init: function (parent, options) {
-            var self  = this;
+            var self = this;
             this._super(parent, options);
             this.pos.get('orders').bind('add remove change', this.change_selected_order, this);
             this.pos.bind('change:selectedOrder', this.change_selected_order, this);
@@ -18,14 +16,14 @@ odoo.define('maq_pos_calculator.chrome', function (require) {
             self.renderElement();
         },
         change_selected_order: function () {
-            var self  = this;
+            var self = this;
             if (self.pos.get_order()) {
                 self.bind_order_events();
                 self.renderElement();
             }
         },
         bind_order_events: function () {
-            var self  = this;
+            var self = this;
             var order = this.pos.get_order();
             order.unbind('change:client', this.renderElement, this);
             order.bind('change:client', this.renderElement, this);
@@ -44,6 +42,7 @@ odoo.define('maq_pos_calculator.chrome', function (require) {
         renderElement: function () {
             var self = this;
             self._super();
+            self.pos.purchase_weight_limit = self.pos.config.cannabis_purchase_limit.toFixed(3);
             var order = this.pos.get_order();
             if (!order) {
                 return;
@@ -62,7 +61,7 @@ odoo.define('maq_pos_calculator.chrome', function (require) {
             this.widgets.push({
                 'name': 'order_weight_details',
                 'widget': OrderWeightWidget,
-                'append': '.pos-rightheader'
+                'replace': '.placeholder-OrderWeightWidget'
             });
             this._super();
         },

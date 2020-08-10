@@ -35,12 +35,15 @@ odoo.define('maq_point_of_sale.screens', function (require) {
                                     },
                                 });
                             }
+                            else {
+                                self.gui.show_screen('payment');
+                            }
                         },
                     });
                 } else {
                     var config = self.pos.config.payment_confirmation_box;
                     if (config === true) {
-                        this.gui.show_popup('checkbox', {
+                        self.gui.show_popup('checkbox', {
                             'title': _t('Has this customers ID been verified ?'),
                             confirm: function () {
                                 var value = this.$('input,textarea').is(":checked");
@@ -51,6 +54,9 @@ odoo.define('maq_point_of_sale.screens', function (require) {
                                 return false;
                             },
                         });
+                    }
+                    else {
+                        self.gui.show_screen('payment');
                     }
                 }
             });

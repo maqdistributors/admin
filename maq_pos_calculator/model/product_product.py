@@ -13,3 +13,4 @@ class ProductProduct(models.Model):
     reporting_weight = fields.Float(string="Reporting Weight", digits=dp.get_precision('Weight Precision Three'))
     equivalent_weight = fields.Float(string="Cannabis Equivalent Weight",
                                      digits=dp.get_precision('Weight Precision Three'))
+    product_format_uom_id = fields.Many2one('product.uom', 'Product Format Unit of Measure')

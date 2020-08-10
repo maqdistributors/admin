@@ -7,7 +7,7 @@
          </span>
            (of
            <span class="purchase-limit-text">
-             <t t-esc="widget.pos.config.cannabis_purchase_limit"/>
+             <t t-esc="widget.pos.purchase_weight_limit"/>
                <sub> gm</sub>
         </span>
            )
@@ -28,5 +28,10 @@
                 </div>
             </div>
         </div>
+    </t>
+    <t t-extend="Chrome">
+        <t t-jquery=".pos-rightheader" t-operation="append">
+            <span class="placeholder-OrderWeightWidget"></span>
+        </t>
     </t>
 </templates>
