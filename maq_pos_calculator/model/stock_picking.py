@@ -17,9 +17,9 @@ class StockPicking(models.Model):
     @api.multi
     @api.depends('move_lines')
     def _compute_ordered_shipped_equivalent(self):
-        total_ordered_equivalent = 0.0
-        total_shipped_equivalent = 0.0
         for rec in self:
+            total_ordered_equivalent = 0.0
+            total_shipped_equivalent = 0.0
             for move_line in rec.move_lines:
                 if move_line.product_id.equivalent_weight > 0:
                     total_ordered_equivalent += move_line.product_id.equivalent_weight * move_line.product_uom_qty

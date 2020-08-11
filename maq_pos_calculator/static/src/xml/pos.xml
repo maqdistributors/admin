@@ -18,8 +18,8 @@
             <div class="popup popup-alert">
                 <p class="title"><t t-esc=" widget.options.title || '' " /></p>
                 <div class="body-container">
-                    <p class="body"><b><t t-esc=" widget.options.body || '' "/></b></p>
-                    <p class="body"><t t-esc=" widget.options.msg || '' "/></p>
+                    <p class="body-text-big"><b><t t-esc=" widget.options.body || '' "/></b></p>
+                    <p class="body-text-small"><t t-esc=" widget.options.msg || '' "/></p>
                 </div>
                 <div class="footer">
                     <div class="button confirm">

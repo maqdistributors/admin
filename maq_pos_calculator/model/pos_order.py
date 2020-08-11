@@ -15,8 +15,8 @@ class PosOrder(models.Model):
     @api.multi
     @api.depends('lines')
     def _compute_ordered_cannabis(self):
-        total_ordered_cannabis = 0.0
         for rec in self:
+            total_ordered_cannabis = 0.0
             for pos_order_line in rec.lines:
                 if pos_order_line.product_id.equivalent_weight > 0:
                     total_ordered_cannabis += pos_order_line.product_id.equivalent_weight * pos_order_line.qty

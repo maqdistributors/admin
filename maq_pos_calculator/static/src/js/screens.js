@@ -33,8 +33,12 @@ odoo.define('maq_pos_calculator.screens', function (require) {
                                             if (order.ordered_cannabis > self.pos.config.cannabis_purchase_limit) {
                                                 this.gui.show_popup("WarningalertMsg", {
                                                     title: _t("CANNABIS WEIGHT CHECK WARNING"),
-                                                    body: _t('Your Cart Contain more then allowed Cannabis Weight'),
-                                                    msg: _t('Please Adjust your cart item to Cannabis Weight to process payment.'),
+                                                    body: _t('The equivalency of the contents of \n' +
+                                                        'Cannabis Products in your cart \n' +
+                                                        'exceeds the customer\'s \n' +
+                                                        'Public Possession Limit.'),
+                                                    msg: _t('Please adjust the order accordingly \n' +
+                                                        'in order to process payment.'),
                                                 });
                                                 return false;
                                             }
@@ -48,11 +52,15 @@ odoo.define('maq_pos_calculator.screens', function (require) {
                                 if (order.ordered_cannabis > self.pos.config.cannabis_purchase_limit) {
                                     this.gui.show_popup("WarningalertMsg", {
                                         title: _t("CANNABIS WEIGHT CHECK WARNING"),
-                                        body: _t('Your Cart Contain more then allowed Cannabis Weight'),
-                                        msg: _t('Please Adjust your cart item to Cannabis Weight to process payment.'),
+                                        body: _t('The equivalency of the contents of \n' +
+                                            'Cannabis Products in your cart \n' +
+                                            'exceeds the customer\'s \n' +
+                                            'Public Possession Limit.'),
+                                        msg: _t('Please adjust the order accordingly \n' +
+                                            'in order to process payment.'),
                                     });
                                     return false;
-                                }else{
+                                } else {
                                     self.gui.show_screen('payment');
                                 }
                             }
@@ -71,8 +79,12 @@ odoo.define('maq_pos_calculator.screens', function (require) {
                                     if (order.ordered_cannabis > self.pos.config.cannabis_purchase_limit) {
                                         this.gui.show_popup("WarningalertMsg", {
                                             title: _t("CANNABIS WEIGHT CHECK WARNING"),
-                                            body: _t('Your Cart Contain more then allowed Cannabis Weight'),
-                                            msg: _t('Please Adjust your cart item to Cannabis Weight to process payment.'),
+                                            body: _t('The equivalency of the contents of \n' +
+                                                'Cannabis Products in your cart \n' +
+                                                'exceeds the customer\'s \n' +
+                                                'Public Possession Limit.'),
+                                            msg: _t('Please adjust the order accordingly \n' +
+                                                'in order to process payment.'),
                                         });
                                         return false;
                                     }
@@ -86,12 +98,15 @@ odoo.define('maq_pos_calculator.screens', function (require) {
                         if (order.ordered_cannabis > self.pos.config.cannabis_purchase_limit) {
                             self.gui.show_popup("WarningalertMsg", {
                                 title: _t("CANNABIS WEIGHT CHECK WARNING"),
-                                body: _t('Your Cart Contain more then allowed Cannabis Weight'),
-                                msg: _t('Please Adjust your cart item to Cannabis Weight to process payment.'),
+                                body: _t('The equivalency of the contents of \n' +
+                                    'Cannabis Products in your cart \n' +
+                                    'exceeds the customer\'s \n' +
+                                    'Public Possession Limit.'),
+                                msg: _t('Please adjust the order accordingly \n' +
+                                    'in order to process payment.'),
                             });
                             return false;
-                        }
-                        else{
+                        } else {
                             self.gui.show_screen('payment');
                         }
                     }
