@@ -1,17 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Bistasolutions. See LICENSE file for full copyright and licensing details.
 import logging
-from datetime import timedelta
-from functools import partial
-
-import psycopg2
-import pytz
-
 from odoo import api, fields, models, tools, _
-from odoo.tools import float_is_zero
-from odoo.exceptions import UserError
-from odoo.http import request
-from odoo.addons import decimal_precision as dp
 
 _logger = logging.getLogger(__name__)
 
@@ -22,11 +12,14 @@ class PosConfig(models.Model):
                                               help='Raise a warning for each POS transaction prior to moving to payment screen.',
                                               default=False)
     iface_restrict_categ_ids = fields.Many2many('pos.category', string='Restrict PoS Product Categories',
-                                                 help='The point of sale will not display products which are within one of the selected category trees. If no category is specified, all available products will be shown')
+                                                help='The point of sale will not display products which are within one of the selected category trees. If no category is specified, all available products will be shown')
     limit_categories = fields.Boolean("Restrict Available Product Categories")
 
-    iface_available_child_categ_ids = fields.Many2many('pos.category', string='Available PoS Product Child Categories', compute="_compute_iface_available_categ_ids",
-                                             help='The point of sale will not display products which are within one of the selected category trees. If no category is specified, all available products will be shown', stored=True)
+    iface_available_child_categ_ids = fields.Many2many('pos.category', string='Available PoS Product Child Categories',
+                                                       compute="_compute_iface_available_categ_ids",
+                                                       help='The point of sale will not display products which are within one of the selected category trees. If no category is specified, all available products will be shown',
+                                                       stored=True)
+
     @api.onchange('limit_categories', 'iface_restrict_categ_ids', 'iface_start_categ_id')
     def _onchange_limit_categories(self):
         res = {}
@@ -42,9 +35,9 @@ class PosConfig(models.Model):
         for config in self:
             if config.iface_restrict_categ_ids:
                 for categ in config.iface_restrict_categ_ids:
-                    child_categs.append(self.env['pos.category'].search([('id','child_of',[categ.id])]).ids)
+                    child_categs.append(self.env['pos.category'].search([('id', 'child_of', [categ.id])]).ids)
                 child_categ_ids_list = [item for sublist in child_categs for item in sublist]
-                config.iface_available_child_categ_ids = [(6,0,child_categ_ids_list)]
+                config.iface_available_child_categ_ids = [(6, 0, child_categ_ids_list)]
 
     @api.multi
     def open_session_cb(self):

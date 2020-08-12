@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+   <t t-name="OrderWeightWidget">
+       <div class="oe_status">
+         <span t-attf-class="purchase-limit-text #{widget.pos.get_order().ordered_cannabis gt widget.pos.config.cannabis_purchase_limit ? 'text-red':'text-green'}">
+             <t t-esc="widget.pos.get_order().ordered_cannabis"/>
+         </span>
+           (of
+           <span class="purchase-limit-text">
+             <t t-esc="widget.pos.purchase_weight_limit"/>
+               <sub> gm</sub>
+        </span>
+           )
+       </div>
+   </t>
+    <t t-name="CustomWarningMsgPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup popup-alert">
+                <p class="title"><t t-esc=" widget.options.title || '' " /></p>
+                <div class="body-container">
+                    <p class="body-text-big"><b><t t-esc=" widget.options.body || '' "/></b></p>
+                    <p class="body-text-small"><t t-esc=" widget.options.msg || '' "/></p>
+                </div>
+                <div class="footer">
+                    <div class="button confirm">
+                        Ok
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+    <t t-extend="Chrome">
+        <t t-jquery=".pos-rightheader" t-operation="append">
+            <span class="placeholder-OrderWeightWidget"></span>
+        </t>
+    </t>
+</templates>

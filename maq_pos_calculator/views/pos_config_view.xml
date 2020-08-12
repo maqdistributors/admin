@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="pos_config_view_form_inherit" model="ir.ui.view">
+        <field name="name">pos.config.form.view.inherit</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+        <field name="arch" type="xml">
+            <sheet position='inside'>
+                <group name="cannabis_purchase_group" string="Cannabis Purchase Limit" col="4">
+                    <field name='cannabis_purchase_limit'/>
+                </group>
+            </sheet>
+        </field>
+    </record>
+</odoo>
