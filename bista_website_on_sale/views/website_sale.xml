@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="bista_products_categories" inherit_id="bista_website_back_stock.bista_products_backinstock" name="Product Categories">
+            <xpath expr="//div[@id='products_grid_before']/ul/li[2]" position="after">
+                <li t-att-class=" 'active' if category is None and url == '/sale' else '' ">
+                    <a href="/sale">Sale</a>
+                </li>
+            </xpath>
+        </template>
+    </data>
+</openerp>

@@ -7,7 +7,7 @@
                 <t t-foreach="tr_product" t-as="td_product">
                     <t t-if="td_product">
                         <t t-set="product" t-value="td_product['product']"/>
-                        <div t-attf-class="oe_grid oe_product col-lg-3 col-md-4 col-sm-6">
+                        <div t-attf-class="oe_grid oe_product col-lg-3 col-md-4 col-sm-6 #{ td_product['class'] }">
                             <div class="oe_product_cart"
                                  t-att-data-publish="product.website_published and 'on' or 'off'">
                                 <t t-call="website_sale.products_item"/>
@@ -26,6 +26,13 @@
             <div class="mt16">
                 <t t-call="website_sale.payment_confirmation_status"/>
             </div>
+        </xpath>
+        <xpath expr="//td[hasclass('td-price')]" position="replace">
+            <td class="td-price">
+                <span class="text-right">
+                    <div t-field="line.price_reduce_taxexcl" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: order.pricelist_id.currency_id}"/>
+                </span>
+            </td>
         </xpath>
     </template>
 </odoo>
