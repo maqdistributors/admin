@@ -11,7 +11,7 @@
         </xpath>
     </template>
     <!-- Load custom less file of the module -->
-    <template id="assets_maq_website_frontend" inherit_id="web.assets_frontend"
+    <template id="assets_frontend" inherit_id="web.assets_frontend"
               name="MAQ Website Assets">
         <xpath expr="//link[last()]" position="after">
             <link rel="stylesheet" type="text/less"
@@ -109,6 +109,18 @@
         and hiding product price on hover -->
     <template id="maq_products_item_inherit" name="MAQ Product Items"
               inherit_id="website_sale.products_item">
+        <xpath expr="//div[hasclass('ribbon-wrapper')]" position="replace">
+            <t t-if="product.website_price_difference and website.get_current_pricelist().discount_policy=='without_discount'">
+               <div class="ribbon-wrapper active">
+                   <div class="ribbon btn btn-danger">On Sale</div>
+               </div>
+            </t>
+            <t t-else="">
+                <div class="ribbon-wrapper">
+                    <div class="ribbon btn btn-danger">Sale</div>
+                </div>
+            </t>
+        </xpath>
         <xpath expr="//div[hasclass('oe_product_image')]" position="replace">
             <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
             <div class="oe_product_image">
@@ -121,6 +133,11 @@
                           t-att-alt="product.name"/>
                     <div class="maq_middle">
                         <div class="maq_text" groups="!ecommerce_category.group_hide_website_price">
+                            <t t-if="product.website_price_difference and website.get_current_pricelist().discount_policy=='without_discount'">
+                                <del class="text-danger mr8" style="white-space: nowrap;"
+                                     t-esc="compute_currency(product.website_public_price)"
+                                     t-options="{'widget': 'monetary', 'display_currency': website.get_current_pricelist().currency_id, 'from_currency': website.currency_id}"/>
+                            </t>
                             <span t-esc="product.website_price"
                                   t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
                         </div>
@@ -157,7 +174,7 @@
         <xpath expr="//section/div[hasclass('product_price')]/b" position="replace">
             <b>
                 <t t-if="product.website_price_difference and website.get_current_pricelist().discount_policy=='without_discount'">
-                    <del class="text-danger mr8" style="white-space: nowrap;"
+                    <del class="maq_hide_span text-danger mr8" style="white-space: nowrap;"
                          t-esc="compute_currency(product.website_public_price)"
                          t-options="{'widget': 'monetary', 'display_currency': website.get_current_pricelist().currency_id, 'from_currency': website.currency_id}"/>
                 </t>
@@ -211,6 +228,15 @@
 
     <!-- show message Currently Out of Stock in website Cart lines -->
     <template id="ecommerce_category.cart_lines_maqabim" inherit_id="website_sale.cart_lines">
+        <xpath expr="//td[hasclass('td-price')]" position="replace">
+            <td class="text-center td-price" name="price">
+                <t t-if="(compute_currency(line.product_id.website_public_price) - line.price_reduce ) &gt; 0.01  and website.get_current_pricelist().discount_policy=='without_discount'">
+                    <del t-attf-class="#{'text-danger mr8'}" style="white-space: nowrap;" t-esc="compute_currency(line.product_id.website_public_price)" t-options="{'widget': 'monetary', 'display_currency': website.get_current_pricelist().currency_id, 'from_currency': website.currency_id}" />
+                </t>
+                <span t-field="line.price_reduce_taxexcl" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_sale_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" groups="sale.group_show_price_subtotal" />
+                <span t-field="line.price_reduce_taxinc" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'from_currency': website_sale_order.pricelist_id.currency_id, 'display_currency': website.currency_id}" groups="sale.group_show_price_total" />
+            </td>
+        </xpath>
         <xpath expr="//td[hasclass('td-product_name')]" position="replace">
             <td t-if="line.product_id.product_tmpl_id" class="td-product_name">
                 <div>
