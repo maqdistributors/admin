@@ -18,8 +18,8 @@ class WebsiteSale(WebsiteSale):
                 dict['product_tmpl_id'] = line.product_tmpl_id
             line2 = request.env['sale.order.line'].new(dict)
             # we make this to isolate changed values:
-            line2.product_uom_change()
-            line2._onchange_discount()
+            line2.sudo().product_uom_change()
+            line2.sudo()._onchange_discount()
             line.write({
                 'price_unit': line2.price_unit,
                 'discount': line2.discount,
