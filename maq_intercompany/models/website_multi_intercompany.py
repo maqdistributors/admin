@@ -21,7 +21,7 @@ class WebsitePublishedWizard(models.TransientModel):
         return res
 
 class WebsitePublishedMixin(models.AbstractModel):
-    _inherit = 'website.published.mixin'
+    _inherit = 'website.published.multi.mixin'
 
     @api.multi
     def _compute_website_published(self):

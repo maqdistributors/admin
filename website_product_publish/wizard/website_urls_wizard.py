@@ -40,7 +40,6 @@ class WebsiteURL(models.TransientModel):
 
         # todo jov this prevents closing of the popup, I remember
         # there being a better way to do this...
-
         return {
             'view_type': 'form',
             'view_mode': 'form',
@@ -67,7 +66,7 @@ class WebsitePublishedWizard(models.TransientModel):
     def create(self, vals):
         res = super(WebsitePublishedWizard, self).create(vals)
 
-        for website in self.env['website'].search([]):
+        for website in self.env['website'].search([('company_id','=', self.env.user.company_id.id)]):
             # todo jov fix port somehow
             self.env['website.url'].create({
                 'wizard_id': res.id,

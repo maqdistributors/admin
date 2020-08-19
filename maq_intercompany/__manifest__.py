@@ -37,7 +37,7 @@ Update a view as per company restrictions and make fields to be company dependen
     """,
     'depends': [
         #'stock','product', 'website_multi', 'website_sale', 'ecommerce_category', 'sale_coupon',
-        'stock','product', 'website_sale', 'ecommerce_category', 'sale_coupon',
+        'stock','product', 'website_sale', 'ecommerce_category', 'sale_coupon', 'website_product_publish',
         'calendar'
     ],
     'data': [

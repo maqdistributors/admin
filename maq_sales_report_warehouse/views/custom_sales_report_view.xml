@@ -138,6 +138,7 @@
                                             <field name="product_id"/>
                                             <field name="sales_price"/>
                                             <field name="warehouse_id"/>
+                                            <field name="tfr_to_shopify"/>
                                             <field name="delivered_qty"/>
                                             <field name="scrap_qty"/>
                                             <field name="return_qty"/>

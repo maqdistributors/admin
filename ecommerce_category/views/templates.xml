@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="products_item_maqabim" inherit_id="website_sale.products_item">
-        <xpath expr="//a[@itemprop='name']" position="attributes">
-            <attribute name="t-att-content">product.display_name</attribute>
-            <attribute name="t-field">product.display_name</attribute>
-        </xpath>
-    </template>
+<!--    <template id="products_item_maqabim" inherit_id="website_sale.products_item">-->
+<!--        <xpath expr="//a[@itemprop='name']" position="attributes">-->
+<!--            <attribute name="t-att-content">product.display_name</attribute>-->
+<!--            <attribute name="t-field">product.display_name</attribute>-->
+<!--        </xpath>-->
+<!--    </template>-->
     <template id="product_maqabim" inherit_id="website_sale.product">
         <xpath expr="//h1[@itemprop='name']" position="attributes">
             <attribute name="t-field">product.display_name</attribute>
