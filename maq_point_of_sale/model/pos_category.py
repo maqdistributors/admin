@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 # Part of Bistasolutions. See LICENSE file for full copyright and licensing details.
+import logging
 from odoo.osv import expression
 from odoo import api, fields, models, tools, _
+
+_logger = logging.getLogger(__name__)
 
 
 class PosCategory(models.Model):
