@@ -9,8 +9,6 @@
                 <sheet string="Dynamic Bypass Record Rule">
                     <group>
                         <field name="model_id" options="{'no_create_edit':1}" required="1" class="oe_inline"/>
-                        <field name="dy_user_ids" options="{'no_create_edit':1}" required="1" class="oe_inline" widget="many2many_tags"/>
-                        <field name="dy_user_id" options="{'no_create_edit':1}" class="oe_inline"/>
                     </group>
                     <notebook>
                         <page string="Relational Models">
