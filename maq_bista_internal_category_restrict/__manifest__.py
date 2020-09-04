@@ -9,7 +9,7 @@
     """,
     'category': 'Sales',
     'website': 'https://www.bistasolutions.com/',
-    'depends': ['sale'],
+    'depends': ['sale', 'dynamic_bypass_record_rule'],
     'data': [
         'security/internal_category_security.xml',
         'views/assets.xml',

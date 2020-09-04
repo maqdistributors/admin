@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form view of dynamic bypass rule -->
+    <record id="dynamic_bypass_rule_form_view" model="ir.ui.view">
+        <field name="name">dynamic.bypass.rule.form.view</field>
+        <field name="model">dynamic.bypass.record.rule</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet string="Dynamic Bypass Record Rule">
+                    <group>
+                        <field name="model_id" options="{'no_create_edit':1}" required="1" class="oe_inline"/>
+                        <field name="dy_user_ids" options="{'no_create_edit':1}" required="1" class="oe_inline" widget="many2many_tags"/>
+                        <field name="dy_user_id" options="{'no_create_edit':1}" class="oe_inline"/>
+                    </group>
+                    <notebook>
+                        <page string="Relational Models">
+                            <field name="model_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree view of dynamic bypass rule -->
+    <record id="dynamic_bypass_rule_tree_view" model="ir.ui.view">
+        <field name="name">dynamic.bypass.rule.tree.view</field>
+        <field name="model">dynamic.bypass.record.rule</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="model_id"/>
+                <field name="model_ids"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search view of dynamic bypass rule -->
+    <record id="dynamic_bypass_rule_search_view" model="ir.ui.view">
+        <field name="name">dynamic.bypass.rule.search.view</field>
+        <field name="model">dynamic.bypass.record.rule</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="model_id"/>
+                <field name="model_ids"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action for dynamic bypass rule -->
+    <record id="action_dynamic_bypass_rule" model="ir.actions.act_window">
+        <field name="name">Bypass Record Rule</field>
+        <field name="res_model">dynamic.bypass.record.rule</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu of the dynamic bypass rule -->
+    <menuitem id="menu_dynamic_bypass_rule" action="action_dynamic_bypass_rule" parent="base.menu_security"/>
+
+</odoo>

@@ -16,7 +16,7 @@ class pos_config(models.Model):
 
     @api.model
     def get_order_detail(self, order_id):
-        pos_order = self.env['pos.order'].browse(order_id)
+        pos_order = self.env['pos.order'].sudo().browse(order_id)
         payment_lines = []
         change = 0
         for i in pos_order.statement_ids:
