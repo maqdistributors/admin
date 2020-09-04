@@ -18,6 +18,6 @@ class PosOrder(models.Model):
         for rec in self:
             total_ordered_cannabis = 0.0
             for pos_order_line in rec.lines:
-                if pos_order_line.product_id.equivalent_weight > 0:
-                    total_ordered_cannabis += pos_order_line.product_id.equivalent_weight * pos_order_line.qty
+                if pos_order_line.sudo().product_id.equivalent_weight > 0:
+                    total_ordered_cannabis += pos_order_line.sudo().product_id.equivalent_weight * pos_order_line.sudo().qty
             rec.ordered_cannabis = total_ordered_cannabis
