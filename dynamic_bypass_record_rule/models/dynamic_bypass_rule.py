@@ -37,7 +37,7 @@ class IrRule(models.Model):
         if active_model and self._uid in active_model:
             rule_obj = self.env['dynamic.bypass.record.rule']
             rule = rule_obj.sudo().search([('model_id.model', '=', active_model[self._uid])], limit=1)
-            bypass_models = [x.model.encode('UTF-8') for x in rule.model_ids if rule]
+            bypass_models = [x.model for x in rule.model_ids if rule]
             if model_name in bypass_models:
                 return [], [], ['"' + self.pool[model_name]._table + '"']
         return res
