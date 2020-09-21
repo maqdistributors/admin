@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Added website description field in notes page of notebook -->
+        <!-- <record id="product_website_specification_inherit" model="ir.ui.view">
+            <field name="name">product.website.specification.inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[@name='notes']/group[@name='warning']" position="after">
+                    <group>
+                        <field name='website_description' groups='website.group_website_designer'/>
+                    </group>
+                </xpath>
+            </field>
+        </record> -->
+
+        <record id="product_template_website_specification_inherit" model="ir.ui.view">
+            <field name="name">product.template.website.specification.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page name="website_specification_description" string="Website description">
+                        <group name='website_description' string="Description for the Website">
+                            <field name='website_description' nolabel="1" groups='website.group_website_designer'/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="product_template_specification_view" model="ir.ui.view">
+            <field name="name">product.template.specification.view</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page name="specification" string="Specifications">
+                        <field name="m_product_specification_ids" widget="one2many_list" context="{'show_attribute': False}">
+                            <tree string="Variants" editable="bottom">
+                                <field name="product_specification_id"/>
+                                <field name="value_ids" widget="many2many_tags" options="{'no_create_edit': True}" domain="[('specification_id', '=', product_specification_id)]" />
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Added Website comment field field in sale order -->
+        <!-- <record id="sale_website_comment_inherit" model="ir.ui.view">
+            <field name="name">sale.website.comment.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[2]" position="inside">
+                    <group>
+                        <field name="m_website_comment" />
+                    </group>
+                </xpath>
+            </field>
+        </record> -->
+
+    </data>
+</odoo>
+

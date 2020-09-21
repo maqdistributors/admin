@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Pos Cansh box IN-->
+        <record model="ir.ui.view" id="custom_cash_box_in_form">
+            <field name="name">custom_cash_box_in</field>
+            <field name="model">custom.cash.box.in</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="cashbox_lines_ids" nolabel="1">
+                            <tree editable="bottom">
+                                <field name="coin_value"/>
+                                <field name="number"/>
+                                <field name="subtotal" sum="Total"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="ref"/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Confirm" name="run" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window 
+            name="Put Money In"
+            res_model="custom.cash.box.in"
+            src_model="pos.session"
+            view_mode="form"
+            target="new"
+            key2="client_action_multi"
+            id="point_of_sale.action_pos_box_in" />
+
+        <record model="ir.ui.view" id="custom_cash_box_out_form">
+            <field name="name">custom_cash_box_out</field>
+            <field name="model">custom.cash.box.out</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="cashbox_lines_ids" nolabel="1">
+                            <tree editable="bottom">
+                                <field name="coin_value"/>
+                                <field name="number"/>
+                                <field name="subtotal" sum="Total"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="ref"/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Confirm" name="run" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window 
+            name="Take Money Out"
+            res_model="custom.cash.box.out"
+            src_model="pos.session"
+            view_mode="form"
+            target="new"
+            key2="client_action_multi"
+            id="point_of_sale.action_pos_box_out" />
+</odoo>
+

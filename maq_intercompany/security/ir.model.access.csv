@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+website_sale.access_product_style,product.style.public,website_sale.model_product_style,,1,1,1,1
+access_product_template_website_description_portal_user,access.product.template.website_description.portal.user,maq_intercompany.model_product_template_website_description,base.group_portal,1,0,0,0
+access_product_template_website_description_employee,access.product.template.website_description.employee,maq_intercompany.model_product_template_website_description,base.group_user,1,0,0,0
+access_product_template_website_description_website_editor,access.product.template.website_description.website.editor,maq_intercompany.model_product_template_website_description,website.group_website_designer,1,1,1,1

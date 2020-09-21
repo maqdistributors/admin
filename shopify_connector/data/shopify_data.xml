@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Migration for "project_service_profiling". Can be skipped if that module is not in use. -->
+        <function model="res.company" name="_update_shopify_information"/>
+
+    </data>
+</odoo>

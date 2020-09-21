@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_lot_label_wizard" model="ir.ui.view">
+            <field name="name">view.lot.label.wizard</field>
+            <field name="model">lot.label.report.wizard</field>
+            <field name="arch" type="xml">
+            <form string="Lot Label Report">
+                <group string="Select Report Formats">
+                    <field name="label_formats" widget="radio"/>
+                    <field name="label_type" invisible="1"/>
+                </group>
+                <groups string="Products">
+                    <field name="product_lot_label_ids" nolabel="1">
+                        <tree editable="top" create="0" delete="0">
+                            <field name="product_id" readonly="True" force_save="1"/>
+                            <field name="wizard_id" invisible="1"/>
+                            <field name="lot_ids" widget="many2many_tags" attrs="{'column_invisible': [('parent.label_type','=','production')]}" domain="[('product_id','=', product_id)]" options="{'no_create_edit': True}"/>
+                            <field name="lot_id" attrs="{'column_invisible': [('parent.label_type','=','product')]}" domain="[('product_id','=', product_id)]" options="{'no_create_edit': True, 'no_open': True}"/>
+                            <field name="print_qty"/>
+                        </tree>
+                    </field>
+                </groups>
+                <footer>
+                    <button name="print_lot_report" string="Print" type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-default"/>
+                </footer>
+            </form>
+            </field>
+        </record>
+
+        <act_window id="action_stock_production_lot_label_report"
+            multi="False"
+            key2="client_action_multi"
+            name="Print Custom LOT Labels"
+            res_model="lot.label.report.wizard"
+            src_model="stock.production.lot"
+            view_mode="form"
+            context="{'default_label_type': 'production'}"
+            target="new"
+            view_type="form" />
+
+        <act_window id="action_product_variant_lot_label_report"
+            multi="False"
+            key2="client_action_multi"
+            name="Print Custom LOT Labels"
+            res_model="lot.label.report.wizard"
+            src_model="product.product"
+            view_mode="form"
+            context="{'default_label_type': 'product'}"
+            target="new"
+            view_type="form" />
+    </data>
+</odoo>

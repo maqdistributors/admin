@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Replace the website_sale.js file with custom js file -->
+    <template id="assets_maq_website_sale_options_frontend" name="website_sale_expand assets"
+              inherit_id="website_sale.assets_frontend">
+        <xpath expr="//script[last()]" position="after">
+            <script type="text/javascript" src="/bista_website_sale_options/static/src/js/website_sale.js"/>
+        </xpath>
+    </template>
+    <!-- Load custom less file of the module -->
+    <template id="assets_frontend" inherit_id="website.assets_frontend"
+              name="MAQ Website Assets">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" type="text/less"
+                  href="/bista_website_sale_options/static/src/less/maq_website.ui.component.less"/>
+            <link rel="stylesheet" type="text/less"
+                  href="/bista_website_sale_options/static/src/less/s_big_picture_text.less"/>
+        </xpath>
+    </template>
+
+    <!-- Improved product grid view on hover by showing price, adding message 
+        for multiple variants and showing oe_website_spinner for adding quantity 
+        and hiding product price on hover -->
+
+    <template id="maq_products_item_inherit" name="MAQ Product Items"
+              inherit_id="website_sale.products_item">
+        <xpath expr="//div[hasclass('ribbon-wrapper')]" position="replace">
+            <t t-if="product.website_price_difference and website.get_current_pricelist().discount_policy=='without_discount'">
+                <div class="ribbon-wrapper active">
+                    <div class="ribbon btn btn-danger">On Sale</div>
+                </div>
+            </t>
+            <t t-else="">
+                <div class="ribbon-wrapper">
+                    <div class="ribbon btn btn-danger">Sale</div>
+                </div>
+            </t>
+        </xpath>
+        <xpath expr="//div[hasclass('oe_product_image')]" position="replace">
+            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+            <div class="oe_product_image">
+                <a itemprop="url"
+                   t-att-href="keep('/shop/product/%s' % slug(product), page=(pager['page']['num'] if pager['page']['num']&gt;1 else None))">
+                    <span itemprop="image"
+                          t-attf-content="{{request.httprequest.url_root}}web/image/product.template/{{product.id}}/image"
+                          t-field="product.image"
+                          t-options="{'widget': 'image', 'resize': None if product_image_big else '300x300', 'zoom': 'image'}"
+                          t-att-alt="product.name"/>
+                    <div class="maq_middle">
+                        <div class="maq_text" groups="!ecommerce_category.group_hide_website_price">
+                            <t t-if="product.website_price_difference and website.get_current_pricelist().discount_policy=='without_discount'">
+                                <del class="text-danger mr8" style="white-space: nowrap;"
+                                     t-esc="compute_currency(product.website_public_price)"
+                                     t-options="{'widget': 'monetary', 'display_currency': website.get_current_pricelist().currency_id, 'from_currency': website.currency_id}"/>
+                            </t>
+                            <span t-esc="product.website_price"
+                                  t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </xpath>
+        <xpath expr="//div[hasclass('product_price')]" position="before">
+            <t t-set="filterd_value_ids" t-value="product._get_published_product_ids()"/>
+            <t t-if="len(filterd_value_ids) &gt; 1">
+                <div class="product_grid_qty">
+                    <p>Multiple options available please select an option on product page</p>
+                </div>
+            </t>
+            <div t-if="len(filterd_value_ids) == 1" class="css_quantity input-group oe_website_spinner product_grid_qty"
+                 groups="!ecommerce_category.group_hide_website_price">
+                <a t-attf-href="#" class="mb8 input-group-addon js_add_cart_json hidden-xs">
+                    <i class="fa fa-minus"/>
+                </a>
+                <input type="text" class="js_quantity form-control quantity" data-min="1" min="1" name="add_qty"
+                       value="1"/>
+                <a t-attf-href="#" class="mb8 input-group-addon float_left js_add_cart_json hidden-xs">
+                    <i class="fa fa-plus"/>
+                </a>
+                <br/>
+            </div>
+            <t t-elif="len(filterd_value_ids) &lt; 1">
+                <div class="product_grid_qty">
+                    <p class="invisible">No options available please go to product page by click add to cart</p>
+                </div>
+            </t>
+        </xpath>
+        <xpath expr="//section/div[hasclass('product_price')]/b" position="replace">
+            <b>
+                <t t-if="product.website_price_difference and website.get_current_pricelist().discount_policy=='without_discount'">
+                    <del class="text-danger mr8" style="white-space: nowrap;"
+                         t-esc="compute_currency(product.website_public_price)"
+                         t-options="{'widget': 'monetary', 'display_currency': website.get_current_pricelist().currency_id, 'from_currency': website.currency_id}"/>
+                </t>
+                <span class="maq_hide_span" t-esc="product.website_price"
+                      t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                <span class="maq_hide_span" itemprop="price" style="display:none;" t-esc="product.website_price"/>
+                <span class="maq_hide_span" itemprop="priceCurrency" style="display:none;"
+                      t-esc="website.currency_id.name"/>
+            </b>
+            <br/>
+        </xpath>
+    </template>
+
+    <!-- Override products_add_to_cart from website sale
+    Replace add to cart icon with add to cart button in product sale section
+    -->
+    <template id="products_add_to_cart_inherit" inherit_id="website_sale.products_add_to_cart">
+        <xpath expr="//input[@name='product_id']" position="replace">
+            <t t-if="len(product._get_published_product_ids()) &gt; 0">
+                <input name="product_id" t-att-value="product._get_published_product_ids()[0]" type="hidden"/>
+            </t>
+            <t t-if="len(product._get_published_product_ids()) == 0">
+                <input name="product_id" t-att-value="'0'" type="hidden"/>
+            </t>
+        </xpath>
+        <xpath expr="//a[hasclass('a-submit')]" position="replace">
+            <t t-set="filterd_value_ids" t-value="product._get_published_product_ids()"/>
+            <t t-if="len(filterd_value_ids) &gt; 1">
+                <a class="btn btn-default btn-xs"
+                   t-att-href="keep('/shop/product/%s' % slug(product), page=(pager['page']['num'] if pager['page']['num']&gt;1 else None))">
+                    <span>Add To Cart</span>
+                </a>
+            </t>
+            <t t-if="len(filterd_value_ids) == 1">
+                <a class="btn btn-default btn-xs a-submit" id="add_to_cart_a_submit">
+                    <span>Add To Cart</span>
+                </a>
+            </t>
+            <t t-if="len(filterd_value_ids) &lt; 1">
+                <a class="btn btn-default btn-xs"
+                   t-att-href="keep('/shop/product/%s' % slug(product), page=(pager['page']['num'] if pager['page']['num']&gt;1 else None))">
+                    <span>Currently
+                        <br/>
+                        Out Of Stock
+                    </span>
+                </a>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- show message Currently Out of Stock in website Cart lines -->
+    <template id="ecommerce_category.cart_lines_maqabim" inherit_id="website_sale.cart_lines">
+        <xpath expr="//td[hasclass('td-price')]" position="replace">
+            <td class="text-center td-price" name="price">
+                <t t-if="(compute_currency(line.product_id.website_public_price) - line.price_reduce ) &gt; 0.01  and website.get_current_pricelist().discount_policy=='without_discount'">
+                    <del t-attf-class="#{'text-danger mr8'}" style="white-space: nowrap;"
+                         t-esc="compute_currency(line.product_id.website_public_price)"
+                         t-options="{'widget': 'monetary', 'display_currency': website.get_current_pricelist().currency_id, 'from_currency': website.currency_id}"/>
+                </t>
+                <span t-field="line.price_reduce_taxexcl" style="white-space: nowrap;"
+                      t-options="{'widget': 'monetary', 'from_currency': website_sale_order.pricelist_id.currency_id, 'display_currency': website.currency_id}"
+                      groups="sale.group_show_price_subtotal"/>
+                <span t-field="line.price_reduce_taxinc" style="white-space: nowrap;"
+                      t-options="{'widget': 'monetary', 'from_currency': website_sale_order.pricelist_id.currency_id, 'display_currency': website.currency_id}"
+                      groups="sale.group_show_price_total"/>
+            </td>
+        </xpath>
+        <xpath expr="//td[hasclass('td-product_name')]" position="replace">
+            <td t-if="line.product_id.product_tmpl_id" class="td-product_name">
+                <div>
+                    <a t-attf-href="/shop/product/#{ slug(line.product_id.product_tmpl_id) }">
+                        <strong t-esc="line.product_id.display_name"/>
+                    </a>
+                </div>
+                <t t-if="line.product_id.is_product_variant_publish() == False">
+                    <p style="display:inline-block;" class="text-danger">Currently Out of Stock</p>
+                </t>
+                <div class="text-muted hidden-xs small">
+                    <t t-foreach="line.name.splitlines()[1:]" t-as="name_line">
+                        <span>
+                            <t t-esc="name_line"/>
+                        </span>
+                        <br/>
+                    </t>
+                </div>
+                <a href="#" class="js_delete_product hidden-xs no-decoration">
+                    <small>
+                        <i class="fa fa-trash-o"/>
+                        Remove
+                    </small>
+                </a>
+            </td>
+        </xpath>
+    </template>
+
+    <!-- Product grid view -->
+    <template id="bista_website_sale_products" inherit_id='website_sale.products' name="Products" priority="15">
+        <xpath expr="//*[contains(@id, 'products_grid')]//*[1]" position="before">
+            <t t-call="bista_website_sale_options.search"/>
+        </xpath>
+    </template>
+
+    <!-- Search template of theme loftspace sale -->
+    <template id="search" name="theme_loftspace_search">
+        <div class="row">
+            <div class="col-md-12">
+                <t t-if="not keep">
+                    <form action="/shop" method="get" class="pagination form-inline">
+                        <div class="input-group">
+                            <input name="search" class="search-query form-control" placeholder="Search..." type="text"/>
+                            <span class="input-group-btn">
+                                <a class="btn btn-default a-submit">
+                                    <i class="fa fa-search"/>
+                                </a>
+                            </span>
+                        </div>
+                    </form>
+                </t>
+                <t t-if="keep">
+                    <t t-call="website_sale.search">
+                        <t t-set="search_class">pagination form-inline col-md-12</t>
+                    </t>
+                </t>
+            </div>
+        </div>
+    </template>
+    <template id="bista_product_configurator_configure_optional_products"
+              inherit_id='sale.product_configurator_configure_optional_products' name="Bista Products Configurator">
+        <xpath expr="//table" position="replace">
+            <table>
+                <thead>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div>
+                                <span t-field="product.image_medium" t-options='{"widget": "image" }'/>
+                            </div>
+                        </td>
+                        <td>&#160;</td>
+                        <td>&#160;</td>
+                        <td>&#160;</td>
+                        <td>&#160;</td>
+                        <td>&#160;</td>
+                        <td>&#160;</td>
+                        <td>&#160;</td>
+                        <td>
+                            <div>
+                                <span style='font-size: 20px;'>[</span>
+                                <span style='font-size: 20px;' t-esc="product.default_code"/>
+                                <span style='font-size: 20px;'>]</span>
+                                <span style='font-size: 20px;' t-field="product.name"/>
+                            </div>
+                            <div>
+                                <span t-esc="product.description_sale"/>
+                            </div>
+                            <div>
+                                <b>Quantity:-</b>
+                                <span t-esc="quantity"/>
+                                <input style="border: none; border-color: transparent;"
+                                       type="text" data-min="1" name="add_qty" t-att-value="add_qty or 1"
+                                       readonly="readonly"/>
+                            </div>
+                            <t t-if="website.currency_id">
+                                <div groups="!ecommerce_category.group_hide_website_price">
+                                    <b>Total:-</b>
+                                    <span class="oe_price" style="white-space: nowrap;"
+                                          t-esc="product.website_price * (add_qty or 1)"
+                                          t-options='{
+                                         "widget": "monetary",
+                                         "display_currency": website.currency_id
+                                      }'/>
+                                </div>
+                            </t>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="modal-footer d-none">
+                <button class="btn btn-secondary a-submit js_goto_shop invisible">
+                    <i class="fa fa-chevron-left"/>
+                    <span class="hidden-xs">Continue Shopping</span>
+                    <span class="visible-xs-inline">Continue</span>
+                </button>
+                <a class="btn btn-primary pull-right a-submit invisible">
+                    <i class="fa fa-shopping-cart fa-fw"/>
+                    <span class="hidden-xs">Proceed to Checkout</span>
+                    <span class="visible-xs-inline">Checkout</span>
+                </a>
+            </div>
+        </xpath>
+    </template>
+    <template id="cart_button" inherit_id="website_sale.cart"
+              customize_show="True" name="Cart Button">
+        <xpath expr="//a[@href='/shop']" position="replace">
+            <a role="button" href="/shop" class="btn btn-secondary mb32 d-none d-xl-inline-block">
+                <span class="fa fa-long-arrow-left"/>
+                <span class="hidden-xs">Continue Shopping</span>
+                <span class="visible-xs-inline">Continue</span>
+            </a>
+        </xpath>
+        <xpath expr="//a[@href='/shop/checkout?express=1']" position="replace">
+            <a role="button" t-if="website_sale_order and website_sale_order.website_order_line"
+               class="btn btn-primary float-right d-none d-xl-inline-block" href="/shop/checkout?express=1">
+                <span class="hidden-xs">Process Checkout</span>
+                <span class="visible-xs-inline">Process Checkout</span>
+                <span class="fa fa-long-arrow-right"/>
+            </a>
+        </xpath>
+    </template>
+    <template id="bista_website_portal" inherit_id='portal.portal_layout' name="Bista Portal Layout">
+        <xpath expr="//div[hasclass('row','justify-content-between','mt-4')]/div[@t-attf-class='col-12 col-md col-lg-6']"
+               position="attributes">
+            <attribute name="t-attf-class">
+                col-12 col-md col-lg-8
+            </attribute>
+        </xpath>
+    </template>
+
+</odoo>
+

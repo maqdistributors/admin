@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bista_product_template_only_form_view_stock" model="ir.ui.view">
+        <field name="name">bista.product.template.product.form.sortby</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="bista_website_sortby_new.bista_product_template_only_form_view_sortby"/>
+        <field name="arch" type="xml">
+            <field name="publish_date" position="after">
+                <field name="bck_stock_date"/>
+            </field>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_shopify_prod_tags_form" model='ir.ui.view'>
+            <field name="name">view.shopify.prod.tags.form</field>
+            <field name="model">shopify.prod.tags</field>
+            <field name="arch" type="xml">
+                <form name="shopify_prod_tags">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-check">
+                                <field name="active" widget="boolean_button" options='{"terminology": "active"}'/>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="color"/>
+                            </group>
+                            <group>
+                                <field name="is_province"/>
+                                <field name="shopify_config_ids" widget="many2many_tags" options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_shopify_prod_tags_tree" model="ir.ui.view">
+            <field name="name">view.shopify.prod.tags.tree</field>
+            <field name="model">shopify.prod.tags</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="color"/>
+                    <field name="shopify_config_ids" widget="many2many_tags"/>
+                    <field name="is_province"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_shopify_prod_tags_search" model="ir.ui.view">
+            <field name="name">view.shopify.prod.tags.search</field>
+            <field name="model">shopify.prod.tags</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="color"/>
+                    <filter string="Province" name="is_province_filter" domain="[('is_province','=',True)]"/>
+                    <filter string="Active" name="active_filter" domain="[('active','=',True)]"/>
+                    <filter string="Inactive" name="inactive_filter" domain="[('active','=',False)]"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_shopify_prod_tags" model="ir.actions.act_window">
+            <field name="name">Shopify Product Tags</field>
+            <field name="res_model">shopify.prod.tags</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="shopify_connector.view_shopify_prod_tags_search"/>
+        </record>
+    </data>
+</odoo>

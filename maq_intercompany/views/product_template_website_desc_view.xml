@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+         <record id="view_product_template_website_description_form" model="ir.ui.view">
+            <field name="name">view.product.template.website.description.form</field>
+            <field name="model">product.template.website.description</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="product_tmpl_id"/>
+                            </group>
+                            <group>
+                                <field name="company_id"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="website_description"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+       <record id="view_product_template_website_description_tree" model="ir.ui.view">
+            <field name="name">view.product.template.website.description.tree</field>
+            <field name="model">product.template.website.description</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="product_tmpl_id"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_product_template_website_description" model="ir.actions.act_window">
+            <field name="name">Product Website Descriptions</field>
+            <field name="res_model">product.template.website.description</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="tree_view_id" ref="maq_intercompany.view_product_template_website_description_tree"/>
+        </record>
+
+        <menuitem id="menu_product_website_desc" string="Product Website Descriptions"
+            action="maq_intercompany.action_product_template_website_description" parent="stock.menu_stock_warehouse_mgmt"
+            groups="base.group_erp_manager"
+            sequence="12"/>
+    </data>
+</odoo>

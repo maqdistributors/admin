@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<record id="purchase_order_form_inherit_maqabim_extended_security" model="ir.ui.view">
+	    <field name="name">PO Form for Purchase > Restricted User</field>
+	    <field name="model">purchase.order</field>
+	    <field name="inherit_id" ref="purchase.purchase_order_form"/>
+	    <field name="groups_id" eval="[(4, ref('maqabim_extended_security.group_purchase_restricted_user'))]"/>
+	    <field name="arch" type="xml">
+			<form position="replace">
+				<form string="Purchase Order" create="0">
+			    <header>
+			        <button name="action_rfq_send" states="draft" string="Send RFQ by Email" type="object" context="{'send_rfq':True}" class="oe_highlight" invisible="1"/>
+			        <button name="action_rfq_send" states="sent" string="Re-Send RFQ by Email" type="object" context="{'send_rfq':True}" invisible="1"/>
+			        <button name="print_quotation" string="Print RFQ" type="object" states="draft" class="oe_highlight" groups="base.group_user" invisible="1" />
+			        <button name="print_quotation" string="Print RFQ" type="object" states="sent" groups="base.group_user" invisible="1" />
+			        <button name="button_confirm" type="object" states="draft" string="Confirm Order" id="draft_confirm"/>
+			        <button name="button_confirm" type="object" string="Confirm Order" class="oe_highlight" id="bid_confirm" invisible="1" />
+			        <button name="button_approve" type="object" states="to approve" string="Approve Order" class="oe_highlight" groups="purchase.group_purchase_manager" />
+			        <button name="action_rfq_send" states="purchase" string="Send PO by Email" type="object" context="{'send_rfq':False}" invisible="1"/>
+			        <field name="is_shipped" invisible="1"/>
+			        <button name="action_view_picking" string="Receive Products" class="oe_highlight" type="object" attrs="{'invisible': ['|', '|' , ('is_shipped', '=', True), ('state','not in', ('purchase','done')), ('picking_count', '=', 0)]}" />
+			        <button name="button_draft" states="cancel" string="Set to Draft" type="object" />
+			        <button name="button_cancel" states="draft,to approve,sent,purchase" string="Cancel" type="object" />
+			        <button name="button_done" type="object" string="Lock" states="purchase" />
+			        <button name="button_unlock" type="object" string="Unlock" states="done" groups="purchase.group_purchase_manager" />
+			        <field name="state" widget="statusbar" statusbar_visible="draft,sent,purchase" readonly="1" />
+			    </header>
+			    <sheet>
+			        <div class="oe_button_box" name="button_box">
+			            <button type="object" name="action_view_picking" class="oe_stat_button" icon="fa-truck" attrs="{'invisible':[('state', 'in', ('draft','sent','to approve')),('picking_ids','=',[])]}">
+			                <field name="picking_count" widget="statinfo" string="Shipment" help="Incoming Shipments" />
+			                <field name="picking_ids" invisible="1" />
+			            </button>
+			            <button type="object" name="action_view_invoice" class="oe_stat_button" icon="fa-pencil-square-o" invisible="1">
+			                <field name="invoice_count" widget="statinfo" string="Vendor Bills" />
+			                <field name="invoice_ids" invisible="1" />
+			            </button>
+			        </div>
+			        <div class="oe_title">
+			            <label string="Request for Quotation " attrs="{'invisible': [('state','not in',('draft','sent','bid'))]}" />
+			            <label string="Purchase Order " attrs="{'invisible': [('state','in',('draft','sent','bid'))]}" />
+			            <h1>
+			                <field name="name" readonly="1" />
+			            </h1>
+			        </div>
+			        <group>
+			            <group>
+			                <field name="partner_id" context="{'search_default_supplier':1, 'default_supplier':1, 'default_customer':0}" domain="[('supplier','=',True)]" options="{'no_open': True}" />
+			                <field name="partner_ref" />
+			                <field name="currency_id" groups="base.group_multi_currency" />
+			                <field name="is_shipped" invisible="1" />
+			            </group>
+			            <group>
+			                <field name="date_order" />
+			                <field name="origin" attrs="{'invisible': [('origin','=',False)]}" />
+			                <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}" />
+			            </group>
+			        </group>
+			        <notebook>
+			            <page string="Products">
+			                <field name="order_line" attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}">
+			                    <tree string="Purchase Order Lines" editable="bottom">
+			                        <field name="currency_id" invisible="1" />
+			                        <field name="state" invisible="1" />
+			                        <field name="sequence" widget="handle" />
+			                        <field name="product_id" attrs="{'readonly': [('state', 'in', ('purchase', 'to approve','done', 'cancel'))]}" context="{'partner_id':parent.partner_id, 'quantity':product_qty,'uom':product_uom, 'company_id': parent.company_id}" force_save="1" />
+			                        <field name="name" />
+			                        <field name="move_dest_ids" invisible="1" />
+			                        <field name="date_planned" />
+			                        <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}" />
+			                        <field name="account_analytic_id" context="{'default_partner_id':parent.partner_id}" groups="purchase.group_analytic_accounting" />
+			                        <field name="analytic_tag_ids" groups="purchase.group_analytic_accounting" widget="many2many_tags" options="{'color_field': 'color'}" />
+			                        <field name="product_qty"/>
+			                        <field name="print_qty"/>
+			                        <field name="qty_received" invisible="not context.get('show_purchase', True)" />
+			                        <field name="qty_invoiced" invisible="not context.get('show_purchase', True)" />
+			                        <field name="product_uom" groups="product.group_uom" attrs="{'readonly': [('state', 'in', ('purchase', 'done', 'cancel'))]}" force_save="1" />
+			                        <field name="price_unit" invisible="1" />
+			                        <field name="taxes_id" widget="many2many_tags" domain="[('type_tax_use','=','purchase')]" context="{'default_type_tax_use': 'purchase'}" options="{'no_create': True}" />
+			                        <field name="price_subtotal" widget="monetary" invisible="1" />
+			                    </tree>
+			                    <form string="Purchase Order Line">
+			                        <sheet>
+			                            <group>
+			                                <group>
+			                                    <field name="product_id" context="{'partner_id': parent.partner_id}" />
+			                                    <label for="product_qty" />
+			                                    <div>
+			                                        <field name="product_qty" class="oe_inline" />
+			                                        <span class="oe_inline"> </span>
+			                                        <field name="product_uom" groups="product.group_uom" class="oe_inline" />
+			                                    </div>
+			                                    <field name="price_unit" invisible="1" />
+			                                </group>
+			                                <group>
+			                                    <field name="taxes_id" widget="many2many_tags" domain="[('type_tax_use', '=', 'purchase')]" options="{'no_create': True}" />
+			                                    <field name="date_planned" widget="date" />
+			                                    <field name="account_analytic_id" colspan="2" groups="purchase.group_analytic_accounting" />
+			                                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}" />
+			                                </group>
+			                            </group>
+			                            <notebook>
+			                                <page string="Notes">
+			                                    <field name="name" />
+			                                </page>
+			                                <page string="Invoices and Incoming Shipments">
+			                                    <field name="invoice_lines" />
+			                                    <field name="move_ids" />
+			                                </page>
+			                            </notebook>
+			                        </sheet>
+			                    </form>
+			                </field>
+			                <group class="oe_subtotal_footer oe_right" invisible="1">
+			                    <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}" />
+			                    <field name="amount_tax" widget="monetary" options="{'currency_field': 'currency_id'}" />
+			                    <div class="oe_subtotal_footer_separator oe_inline">
+			                        <label for="amount_total" />
+			                    </div>
+			                    <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}" invisible="1" />
+			                </group>
+			                <field name="notes" class="oe_inline" placeholder="Define your terms and conditions ..." />
+			                <div class="oe_clear" />
+			            </page>
+			            <page string="Deliveries &amp; Invoices">
+			                <group>
+			                    <group>
+			                        <label for="date_planned" />
+			                        <div>
+			                            <field name="date_planned" required="1" attrs="{'readonly': [('state', 'not in', ('draft', 'sent'))]}" />
+			                            <button name="action_set_date_planned" type="object" states="draft,sent" string="Set date to all order lines" help="This changes the scheduled date of all order lines to the given date" class="fa fa-calendar o_icon_button oe_edit_only" />
+			                        </div>
+			                        <field name="picking_type_id" domain="[('code','=','incoming')]" options="{'no_create': True}" groups="stock.group_stock_multi_locations" />
+			                        <field name="dest_address_id" groups="stock.group_stock_multi_locations" attrs="{'invisible': [('default_location_dest_id_usage', '!=', 'customer')], 'required': [('default_location_dest_id_usage', '=', 'customer')]}" />
+			                        <field name="default_location_dest_id_usage" invisible="1" />
+			                        <field name="incoterm_id" />
+			                    </group>
+			                    <group>
+			                        <field name="invoice_status" />
+			                        <field name="payment_term_id" options="{'no_open': True, 'no_create': True}" attrs="{'readonly': ['|', ('invoice_status','=', 'invoiced'), ('state', '=', 'done')]}" />
+			                        <field name="fiscal_position_id" options="{'no_create': True}" attrs="{'readonly': ['|', ('invoice_status','=', 'invoiced'), ('state', '=', 'done')]}" />
+			                        <field name="date_approve" groups="base.group_no_one" />
+			                    </group>
+			                </group>
+			            </page>
+			        </notebook>
+			    </sheet>
+				</form>
+			</form>
+	    </field>
+	</record>
+    <data noupdate="1">
+	    <record id="purchase.action_report_purchase_order" model="ir.actions.report">
+	        <field name="groups_id" eval="[(4, ref('purchase.group_purchase_user')), (4, ref('purchase.group_purchase_manager'))]"/>
+	    </record>
+	    <record id="purchase.report_purchase_quotation" model="ir.actions.report">
+	        <field name="groups_id" eval="[(4, ref('purchase.group_purchase_user')), (4, ref('purchase.group_purchase_manager'))]"/>
+	    </record>
+	    <record id="purchase.purchase_form_action" model="ir.actions.act_window">
+	    	<field name="groups_id" eval="[(4, ref('purchase.group_purchase_user')), (4, ref('purchase.group_purchase_user'))]"/>
+	    </record>
+	    <record id="purchase.purchase_rfq" model="ir.actions.act_window">
+	    	<field name="groups_id" eval="[(4, ref('purchase.group_purchase_user')), (4, ref('purchase.group_purchase_user'))]"/>
+	    </record>
+	</data>
+	<record id="purchase_oder_tree_inherit_maqabim_extended_securiy" model="ir.ui.view">
+		<field name="name">Hide price info for Restricted Purchase user</field>
+		<field name="model">purchase.order</field>
+		<field name="inherit_id" ref="purchase.purchase_order_tree"/>
+		<field name="groups_id"  eval="[(4, ref('maqabim_extended_security.group_purchase_restricted_user'))]"/>
+		<field name="arch" type="xml">
+			<tree position="replace">
+				<tree decoration-bf="message_unread==True" decoration-muted="state=='cancel'" decoration-info="state in ('wait','confirmed')" string="Purchase Order">
+                    <field name="message_unread" invisible="1"/>
+                    <field name="name" string="Reference"/>
+                    <field name="date_order" />
+                    <field name="partner_id"/>
+                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                    <field name="date_planned" invisible="context.get('quotation_only', False)"/>
+                    <field name="origin"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="state"/>
+                    <field name="invoice_status" attrs="{'column_invisible': [('parent.state', 'not in', ('purchase', 'done'))]}"/>
+                </tree>
+			</tree>
+		</field>
+	</record>
+    <record id="purchase_rfq_restrict" model="ir.actions.act_window">
+        <field name="name">Requests for Quotation</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.order</field>
+        <field name="context">{'search_default_todo':1, 'show_purchase': False}</field>
+        <field name="domain">[('state','in',('draft','sent','bid','cancel', 'confirmed'))]</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="purchase.view_purchase_order_filter"/>
+        <field name="groups_id" eval="[(4, ref('maqabim_extended_security.group_purchase_restricted_user'))]"/>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to create a request for quotation.
+          </p><p>
+            The quotation contains the history of the discussion/negotiation
+            you had with your vendor. Once confirmed, a request for
+            quotation is converted into a purchase order.
+          </p><p>
+            Most propositions of purchase orders are created automatically
+            by Odoo based on inventory needs.
+          </p>
+        </field>
+    </record>
+    <record id="purchase_form_action_restrict" model="ir.actions.act_window">
+        <field name="name">Purchase Orders</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_todo':1, 'show_purchase': True}</field>
+        <field name="domain">[('state','not in',('draft','sent','bid','confirmed'))]</field>
+        <field name="search_view_id" ref="purchase.view_purchase_order_filter"/>
+        <field name="groups_id" eval="[(4, ref('maqabim_extended_security.group_purchase_restricted_user'))]"/>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to create a quotation that will be converted into a purchase order. 
+          </p><p>
+            Use this menu to search within your purchase orders by
+            references, vendor, products, etc. For each purchase order,
+            you can track the related discussion with the vendor, control
+            the products received and control the vendor bills.
+          </p>
+        </field>
+    </record>
+    <menuitem action="purchase.purchase_rfq" id="purchase.menu_purchase_rfq"
+            parent="purchase.menu_procurement_management"
+            sequence="0" groups="purchase.group_purchase_user,purchase.group_purchase_manager"/>
+	<menuitem action="purchase.purchase_form_action" id="purchase.menu_purchase_form_action" parent="purchase.menu_procurement_management" sequence="6" groups="purchase.group_purchase_user,purchase.group_purchase_manager"/>
+	<menuitem action="purchase_form_action_restrict" id="menu_purchase_form_action_rrestrict" parent="purchase.menu_procurement_management" groups="maqabim_extended_security.group_purchase_restricted_user" sequence="6"/>
+	<menuitem action="purchase_rfq_restrict" id="menu_purchase_rfq_restrict"
+            parent="purchase.menu_procurement_management"
+            sequence="0" groups="maqabim_extended_security.group_purchase_restricted_user"/>
+
+</odoo>

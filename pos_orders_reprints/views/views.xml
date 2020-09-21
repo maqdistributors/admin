@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_pos_config_form">
+            <field name="name">pos.config.form.view</field>
+            <field name="model">pos.config</field>
+            <field name="inherit_id" ref="pos_orders_lists.pos_config_view_form_pos_sale" />
+            <field name="arch" type="xml">
+                <group name="pos_oreder" position="inside">
+                    <field name='pos_order_reprint' />
+                </group>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Add follwoing selection in inventory adjustment
+            1. Select suppliers
+            2. Product Reference
+            3. Website Product Category
+        -->
+        <record id="stock_inventory_form_inherit" model="ir.ui.view">
+            <field name="name">stock.inventory.form.inherit</field>
+            <field name="model">stock.inventory</field>
+            <field name="inherit_id" ref="stock.view_inventory_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="/form/sheet/group/group[2]" position="inside">
+                    <field name="m_supplier_ids" widget="many2many_tags" options="{'no_create': True,'no_create_edit': True, 'no_open': True}" domain="[('supplier', '=', True)]" attrs="{'invisible': [('filter', 'in', ('category', 'none', 'owner', 'product_owner','lot','pack','partial', 'product', 'reference', 'web_categ'))], 'required' : [('filter', 'in', ('suppliers'))], 'readonly' : [('state','not in', ('draft'))]}"/>
+                    <field name="m_internal_reference" attrs="{'invisible': [('filter', 'in', ('category', 'none', 'owner', 'product_owner','lot','pack','partial', 'product', 'suppliers', 'web_categ'))], 'required' : [('filter', 'in', ('reference'))], 'readonly' : [('state','not in', ('draft'))]}"/>
+                    <field name="m_website_category_ids" widget="many2many_tags" attrs="{'invisible': [('filter', 'in', ('category', 'none', 'owner', 'product_owner','lot','pack','partial', 'product', 'suppliers', 'reference'))], 'required' : [('filter', 'in', ('web_categ'))], 'readonly' : [('state','not in', ('draft'))]}"/>
+                </xpath>
+                <!-- 1.98 Add a new button and state for Ready for approval in Inventory Adjustment so Manager can only validate inventory -->
+                <xpath expr="/form/header" position="inside">
+                    <button name="action_approved" string="Approve Inventory" states="waiting_approval" class="oe_highlight" type="object" groups="stock.group_stock_manager,maq_inventory.maq_inventory_adjustment_manager"/>
+                    <button name="action_approval" string="Ready for Approval" states="confirm" class="oe_highlight" type="object"/>
+                </xpath>
+                <xpath expr="/form/header/button[4]" position="replace">
+                    <button name="action_cancel_draft" states="approved,waiting_approval" string="Cancel Inventory" type="object" groups="stock.group_stock_manager,maq_inventory.maq_inventory_adjustment_manager"/>
+                    <button name="action_cancel_user_draft" states="confirm" string="Cancel Inventory" type="object"/>
+                </xpath>
+                <xpath expr="/form/header/button[@name='action_validate']" position="replace">
+                    <button name="action_validate" states="approved" string="Validate Inventory" type="object" class="oe_highlight" groups="stock.group_stock_manager,maq_inventory.maq_inventory_adjustment_manager"/>
+                </xpath>
+                <xpath expr="/form/header/field[@name='state']" position="replace">
+                    <field name="state" widget="statusbar" statusbar_visible="draft,waiting_approval,approved,confirm,done"/>
+                </xpath>
+                <xpath expr="/form/sheet/group/group[2]/field[@name='date']" position="after">
+                    <field name="approve_id"/>
+                    <field name="approve_date"/>
+                </xpath>
+
+                <!-- Changes suggested by client in inventory adjustment for manager and user to improve the flow-->
+                <xpath expr="/form/sheet/notebook/page[1]/field[@name='line_ids']/tree/field[@name='product_qty']" position="replace">
+                    <field name="product_qty" string="Real Quantity" groups="!maq_inventory.maq_inventory_adjustment_manager" attrs="{'readonly': [('state','=','waiting_approval')]}"/>
+                    <field name="product_qty" string="Real Quantity" groups="maq_inventory.maq_inventory_adjustment_manager"/>
+                </xpath>
+                <xpath expr="/form/sheet/notebook/page[1]/field[@name='line_ids']/tree/field[@name='product_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state','=','waiting_approval')]}</attribute>
+                </xpath>
+                <xpath expr="/form/sheet/notebook/page[1]/field[@name='line_ids']/tree/field[@name='product_uom_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state','=','waiting_approval')]}</attribute>
+                </xpath>
+                <xpath expr="/form/sheet/notebook/page[1]/field[@name='line_ids']/tree/field[@name='location_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state','=','waiting_approval')]}</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+

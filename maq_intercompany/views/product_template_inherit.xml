@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- The following form is defined to hide oe_chatter for normal user -->
+    <record id="product_template_form_view_chatter_inherit" model="ir.ui.view">
+        <field name="name">product.template.form.view.chatter.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="groups_id" eval="[(4,ref('base.group_user'))]"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/div[hasclass('oe_chatter')]" position="replace">
+            </xpath>
+            <xpath expr="//form/sheet/notebook" position="inside">
+                <page string="Website Descriptions">
+                    <group>
+                        <field name="website_description_ids" nolabel="1" context="{'default_product_tmpl_id': active_id}">
+                            <tree>
+                                <field name="product_tmpl_id" invisible="1" readonly="1"/>
+                                <field name="company_id"/>
+                            </tree>
+                            <form>
+                                <group>
+                                    <group>
+                                        <field name="company_id"/>
+                                    </group>
+                                    <group>
+                                        <field name="product_tmpl_id" readonly="1" invisible="1"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <field name="website_description"/>
+                                </group>
+                            </form>
+                            </field>
+                        </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    <!-- The following form is defined to show the oe_chatter who has Admin > Settings Rights -->
+    <record id="product_template_form_view_chatter_2_inherit" model="ir.ui.view">
+        <field name="name">product.template.form.view.chatter.2.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="groups_id" eval="[(4,ref('maq_intercompany.maq_product_chatter_manager'))]"/>
+        <field name="arch" type="xml">
+             <xpath expr="//form/sheet" position="after">
+                 <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+             </xpath>
+        </field>
+    </record>
+    <!-- The following field is replaced in kanban view against the lst_price field. -->
+    <record id="product_template_kanban_view_maq_inherit" model="ir.ui.view">
+        <field name="name">product.template.kanban.view.maq.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_kanban_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban/templates/t/div/div[@class='oe_kanban_details']/ul/li/field[@name='lst_price']" position="replace">
+                <field name="list_price" widget="monetary" options="{'currency_field': 'currency_id', 'field_digits': True}"></field>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

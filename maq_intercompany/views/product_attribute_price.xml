@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="product_attribute_extra_view_tree" model="ir.ui.view">
+            <field name="name">product.attribute.extra.view.tree</field>
+            <field name="model">product.attribute.price</field>
+            <field name="arch" type="xml">
+                <tree string="ProductAttributePrice" editable="bottom">
+                    <field name="product_tmpl_id"/>
+                    <field name="value_id"/>
+                    <field name="price_extra"/>
+                    <field name="product_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_attribute_extra_view_search" model="ir.ui.view">
+            <field name="name">product.attribute.extra.view.search</field>
+            <field name="model">product.attribute.price</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="product_tmpl_id"/>
+                    <field name="value_id"/>
+                    <!-- <field name="price_extra"/> -->
+                    <!-- <field name="product_id"/> -->
+                    <group>
+                        <filter name="group_product_tmpl_id" string="Product Template" context="{'group_by':'product_tmpl_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_product_attribute_price" model="ir.actions.act_window">
+            <field name="name">Product Attribute Price</field>
+            <field name="res_model">product.attribute.price</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="tree_view_id" ref="maq_intercompany.product_attribute_extra_view_tree"/>
+            <field name="search_view_id" ref="maq_intercompany.product_attribute_extra_view_search"/>
+        </record>
+
+        <menuitem id="menu_product_attribute_price" string="Product Attribute Price"
+            action="maq_intercompany.action_product_attribute_price" parent="stock.menu_stock_warehouse_mgmt"
+            groups="base.group_erp_manager"
+            sequence="6"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Added Admin groups in pos config kanban view of pos config -->
+       <!--  <record id="view_pos_config_kanban_inherit" model="ir.ui.view">
+            <field name="name">view.pos.config.kanban.inherit</field>
+            <field name="model">pos.config</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_config_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[contains(@class, 'o_kanban_primary_left')]/button[3]" position="attributes">
+                    <attribute name='groups'>maq_pos.group_pos_access_manager</attribute>
+                </xpath>
+                <xpath expr="//div[contains(@class, 'o_kanban_primary_left')]/button[@name='open_session_cb']" position="attributes">
+                    <attribute name='groups'>maq_pos.group_pos_access_manager</attribute>
+                </xpath>
+            </field>
+        </record> -->
+        
+        <!-- Added Admin groups in pos session form view -->
+        <record id="view_pos_session_form_inherit" model="ir.ui.view">
+            <field name="name">view.pos.session.form.inherit</field>
+            <field name="model">pos.session</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_session_form"/>
+            <field name="arch" type="xml">
+                <!--<xpath expr="//header/button[5]" position="attributes">
+                    <attribute name='groups'>maq_pos.group_pos_access_manager</attribute>
+                </xpath>
+                <xpath expr="//sheet/div[@class='oe_button_box']/button[@name='%(point_of_sale.action_pos_box_in)d']" position="attributes">
+                    <attribute name="groups">maq_pos.group_pos_access_manager</attribute>
+                </xpath>
+                <xpath expr="//sheet/div[@class='oe_button_box']/button[@name='%(point_of_sale.action_pos_box_out)d']" position="attributes">
+                    <attribute name="groups">maq_pos.group_pos_access_manager</attribute>
+                </xpath>
+                <xpath expr="//sheet/div[@class='oe_button_box']/button[3]" position="attributes">
+                    <attribute name="groups">maq_pos.group_pos_access_manager</attribute>
+                </xpath>
+                <xpath expr="//sheet/div[@class='oe_button_box']/button[4]" position="attributes">
+                    <attribute name="groups">maq_pos.group_pos_access_manager</attribute>
+                </xpath> -->
+                <!-- Access Rights for pos session header buttons, End of Session and Validate Closing and Post Entries-->
+                <xpath expr="//header/button[3]" position="attributes">
+                    <attribute name='groups'>maq_pos.group_pos_access_session</attribute>
+                </xpath>
+                <xpath expr="//header/button[4]" position="attributes">
+                    <attribute name='groups'>maq_pos.group_pos_access_session</attribute>
+                </xpath>
+                <!-- Access rights to hide and show Amount in Transactions in Summary by Payment Methods in POS Sessions -->
+                <!-- <xpath expr="//separator" position="attributes">
+                    <attribute name="groups">maq_pos.group_pos_access_manager</attribute>
+                </xpath> -->
+                <xpath expr="//field[@name='statement_ids']/tree/field[@name='balance_start']" position="attributes">
+                    <attribute name="groups">maq_pos.group_pos_access_manager</attribute>
+                </xpath>
+                <xpath expr="//field[@name='statement_ids']/tree/field[@name='total_entry_encoding']" position="attributes">
+                    <attribute name="groups">maq_pos.group_pos_access_manager</attribute>
+                </xpath>
+                <xpath expr="//field[@name='statement_ids']/tree/field[@name='balance_end_real']" position="attributes">
+                    <attribute name="groups">maq_pos.group_pos_access_manager</attribute>
+                </xpath>
+                <xpath expr="//field[@name='statement_ids']/tree/field[@name='difference']" position="attributes">
+                    <attribute name="groups">maq_pos.group_pos_access_manager</attribute>
+                </xpath>
+                <xpath expr="//field[@name='statement_ids']/tree/field[@name='state']" position="attributes">
+                    <attribute name="groups">maq_pos.group_pos_access_manager</attribute>
+                </xpath>
+
+                <xpath expr="//sheet/group/div[1]" position="replace">
+                    <div attrs="{'invisible' : [('cash_control', '=', False)]}">
+                        <group class="oe_subtotal_footer oe_right">
+                            <field name="cash_register_balance_start" readonly="1" string="Opening Balance" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <label groups="maq_pos.group_pos_access_manager" for="cash_register_total_entry_encoding" attrs="{'invisible' : [('state', '=', 'opening_control')]}" string="+ Transactions" class="oe_force_bold oe_opening_total"/>
+                            <field groups="maq_pos.group_pos_access_manager" name="cash_register_total_entry_encoding" nolabel="1" attrs="{'invisible' : [('state', '=', 'opening_control')]}" class="oe_bold oe_pos_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <label groups="maq_pos.group_pos_access_manager" for="cash_register_balance_end" attrs="{'invisible' : [('state', '=', 'opening_control')]}" string="= Theoretical Closing Balance" class="oe_force_bold oe_opening_total"/>
+                            <field groups="maq_pos.group_pos_access_manager" name="cash_register_balance_end" nolabel="1" attrs="{'invisible' : [('state', '=', 'opening_control')]}" class="oe_bold oe_pos_total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        </group>
+                        <div class="oe_clear"/>
+                        <div attrs="{'invisible' : ['|', ('cash_journal_id', '=', False), ('state', '!=', 'opening_control')]}" class="oe_view_nocontent" groups="point_of_sale.group_pos_manager,maq_pos.group_pos_access_manager">
+                            <p class="oe_view_nocontent_create">
+                            You can define another list of available currencies on the
+                            <i>Cash Registers</i> tab of the <b><field name="cash_journal_id" class="oe_inline"/></b>
+                            payment method.
+                            </p>
+                        </div>
+                    </div>
+                </xpath>
+                <xpath expr="//sheet/group/div[2]" position="attributes">
+                    <attribute name="groups">maq_pos.group_pos_access_manager</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+

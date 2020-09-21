@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sales_report_manager,sales.report.manager,model_sales_report,stock.group_stock_manager,1,1,1,0
+access_sales_report_user,sales.report.user,model_sales_report,base.group_user,1,0,0,0
+access_group_sales_report_manager,sales.group.report.manager,model_sales_report,maq_sales_report_warehouse.group_sales_report_manager,1,1,1,1
+
+access_group_sales_report_admin,sales.group.report.admin,model_sales_report,base.group_system,1,1,1,1
+access_group_sales_report_lines_admin,sales.group.report.lines.admin,model_sales_report_lines,base.group_system,1,1,1,1
+access_sales_report_lines_manager,sales.report.lines.manager,model_sales_report_lines,stock.group_stock_manager,1,1,1,1
+access_sales_report_lines_user,sales.report.lines.user,model_sales_report_lines,base.group_user,1,0,0,0
+access_group_sales_report_lines_manager,sales.group.report.lines.manager,model_sales_report_lines,maq_sales_report_warehouse.group_sales_report_manager,1,1,1,1
+

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="assets" inherit_id="point_of_sale.assets">
+          <xpath expr="." position="inside">
+              <script type="text/javascript" src="/pos_orders_lists/static/src/js/pos.js"></script>
+          </xpath>
+        </template>
+        <record id="pos_config_view_form_pos_sale" model="ir.ui.view"> 
+            <field name="name">pos.config.form.pos.sale</field>
+            <field name="model">pos.config</field>
+            <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+            <field name="arch" type="xml">
+                <sheet position='inside'>
+                    <group name="pos_oreder" string="Pos Order" col="4">
+                        <field name='allow_load_orders' />
+                        <field name="wv_order_date"/>
+                        <field name="wv_lodad_config"  widget='many2many_tags'/>
+                    </group>
+                </sheet>
+            </field>
+        </record>
+    </data>
+</openerp>

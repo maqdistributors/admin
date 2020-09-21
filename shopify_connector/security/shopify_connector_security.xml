@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.module.category" id="module_category_odoo_connector">
+            <field name="name">Odoo Connector</field>
+            <field name="description">Helps you manage Odoo connector information.</field>
+            <field name="sequence">51</field>
+        </record>
+
+        <!-- add applications to groups -->
+
+        <record model="res.groups" id="group_shopify_admin">
+            <field name="name">Shopify Admin</field>
+            <field name="category_id" ref="module_category_odoo_connector"/>
+        </record>
+
+        <record model="res.groups" id="group_shopify_manager">
+            <field name="name">Shopify Manager</field>
+            <field name="category_id" ref="module_category_odoo_connector"/>
+        </record>
+
+        <record model="res.groups" id="group_shopify_user">
+            <field name="name">Shopify User</field>
+            <field name="category_id" ref="module_category_odoo_connector"/>
+        </record>
+
+        <record id="maq_shopify_prod_tags_rule" model="ir.rule">
+            <field name="name">Shopify Prod. Tags Rule</field>
+            <field name="model_id" ref="shopify_connector.model_shopify_prod_tags"/>
+            <field eval="1" name="global"/>
+            <field name="domain_force">[('shopify_config_ids.company_ids','in',user.company_ids.ids)]</field>
+        </record>
+
+        <record id="maq_shopify_config_rule" model="ir.rule">
+            <field name="name">Shopify Config rule</field>
+            <field name="model_id" ref="shopify_connector.model_shopify_config"/>
+            <field eval="1" name="global"/>
+            <field name="domain_force">[('company_ids','in',user.company_ids.ids)]</field>
+            <field name="perm_read">True</field>
+            <field name="perm_create">False</field>
+            <field name="perm_write">False</field>
+            <field name="perm_unlink">False</field>
+        </record>
+
+        <record id="maq_shopify_product_template_rule" model="ir.rule">
+            <field name="name">Shopify Product Template Config Rule</field>
+            <field name="model_id" ref="shopify_connector.model_shopify_product_template"/>
+            <field eval="1" name="global"/>
+            <field name="domain_force">[('shopify_config_id.company_ids','in',user.company_ids.ids)]</field>
+            <field name="perm_read">True</field>
+            <field name="perm_create">False</field>
+            <field name="perm_write">False</field>
+            <field name="perm_unlink">False</field>
+        </record>
+
+        <record id="maq_shopify_product_variants_rule" model="ir.rule">
+            <field name="name">Shopify Product Variants Config Rule</field>
+            <field name="model_id" ref="shopify_connector.model_shopify_product_product"/>
+            <field eval="1" name="global"/>
+            <field name="domain_force">[('shopify_config_id.company_ids','in',user.company_ids.ids)]</field>
+            <field name="perm_read">True</field>
+            <field name="perm_create">False</field>
+            <field name="perm_write">False</field>
+            <field name="perm_unlink">False</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Added Admin groups in pos config kanban view of pos config -->
+        <!-- Access rights for opening session in POS -->
+        <record id="view_pos_config_kanban_inherit" model="ir.ui.view">
+            <field name="name">view.pos.config.kanban.inherit</field>
+            <field name="model">pos.config</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_config_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[contains(@class, 'o_kanban_primary_left')]/button[3]" position="attributes">
+                    <attribute name='groups'>maq_pos.group_pos_access_session</attribute>
+                </xpath>
+                <xpath expr="//div[contains(@class, 'o_kanban_primary_left')]/button[@name='open_session_cb']" position="attributes">
+                    <attribute name='groups'>maq_pos.group_pos_access_session</attribute>
+                </xpath>
+                <xpath expr="//div[contains(@class, 'o_kanban_primary_right')]/div[2]" position="attributes">
+                    <attribute name='groups'>maq_pos.group_pos_access_manager</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+

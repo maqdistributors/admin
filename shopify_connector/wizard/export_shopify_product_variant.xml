@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Export Shopify Product Variant -->
+        <record id="export_shopify_product_variant_view" model="ir.ui.view">
+            <field name="name">export.shopify.product.variant.view</field>
+            <field name="model">export.shopify.variant</field>
+            <field name="arch" type="xml">
+                <form string="Shopify Product Variant Export">
+                    <span>Do you want to export the selected variants on shopify?</span>
+                    <footer>
+                        <button string="Export" name="export_shopify_product_variant" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action to add the Menu on the Action Menu List which appears on Selection of single or multiple product templates -->
+        <act_window id="shopify_product_variant_export_action"
+            name="Export Shopify Variant"
+            src_model="shopify.product.product"
+            res_model="export.shopify.variant"
+            view_type="form" view_mode="form"
+            key2="client_action_multi" target="new"
+            groups="base.group_user"/>
+
+    </data>
+</odoo>

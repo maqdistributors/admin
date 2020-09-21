@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="shopify_menu_root" name="Shopify"
+            web_icon="shopify_connector,static/description/icon.png"
+            groups="shopify_connector.group_shopify_admin,shopify_connector.group_shopify_manager,shopify_connector.group_shopify_user"
+            sequence="41"/>
+
+        <menuitem id="shopify_master_data_menu" name="Master Data"
+            parent="shopify_connector.shopify_menu_root"
+            groups="shopify_connector.group_shopify_admin,shopify_connector.group_shopify_manager"
+            sequence="1"/>
+
+        <menuitem id="shopify_operations_menu" name="Operations"
+            parent="shopify_connector.shopify_menu_root"
+            groups="shopify_connector.group_shopify_admin,shopify_connector.group_shopify_manager,shopify_connector.group_shopify_user"
+            sequence="2"/>
+
+        <menuitem id="shopify_configuration_menu" name="Configuration"
+            parent="shopify_connector.shopify_menu_root"
+            groups="shopify_connector.group_shopify_admin"
+            sequence="3"/>
+
+        <menuitem id="shopify_config_menu" name="Shopify Config."
+            parent="shopify_connector.shopify_configuration_menu"
+            action="shopify_connector.action_shopify_config"
+            groups="shopify_connector.group_shopify_admin"
+            sequence="1"/>
+        <menuitem id="shopify_locations_menu" name="Shopify Locations"
+            parent="shopify_connector.shopify_configuration_menu"
+            action="shopify_connector.action_shopify_locations"
+            groups="shopify_connector.group_shopify_admin"
+            sequence="2"/>
+
+
+        <!-- <menuitem id="shopify_images_menu" name="Images"
+            parent="shopify_connector.shopify_master_data_menu"
+            action="shopify_connector.action_shopify_images"
+            sequence="1"/> -->
+        <menuitem id="shopify_metafields_menu" name="Metafields"
+            parent="shopify_connector.shopify_master_data_menu"
+            action="shopify_connector.action_shopify_metafields"
+            sequence="1"/>
+        <menuitem id="shopify_prod_tags_menu" name="Product Tags"
+            parent="shopify_connector.shopify_master_data_menu"
+            action="shopify_connector.action_shopify_prod_tags"
+            sequence="2"/>
+        <menuitem id="shopify_product_type_menu" name="Product Type"
+            parent="shopify_connector.shopify_master_data_menu"
+            action="shopify_connector.action_shopify_product_type"
+            sequence="3"/>
+        <menuitem id="shopify_vendor_menu" name="Vendor"
+            parent="shopify_connector.shopify_master_data_menu"
+            action="shopify_connector.action_shopify_vendor"
+            sequence="4"/>
+        <menuitem id="shopify_product_variants_menu" name="Shopify Product Variants"
+            parent="shopify_connector.shopify_master_data_menu"
+            action="shopify_connector.action_shopify_product_product"
+            sequence="5"/>
+        <menuitem id="shopify_product_templates_menu" name="Shopify Product Templates"
+            parent="shopify_connector.shopify_master_data_menu"
+            action="shopify_connector.action_shopify_product_template"
+            sequence="6"/>
+        <menuitem id="shopify_order_error_log_menu" name="Shopify Order Error Log"
+            parent="shopify_connector.shopify_master_data_menu"
+            action="shopify_connector.action_shopify_order_error_log"
+            sequence="7"/>
+
+
+        <menuitem id="shopify_product_template_operation_action_menu" name="Products"
+            parent="shopify_connector.shopify_operations_menu"
+            action="shopify_connector.maq_product_template_shopify_action"
+            sequence="1"/>
+        <menuitem id="shopify_product_product_operation_action_menu" name="Product Variants"
+            parent="shopify_connector.shopify_operations_menu"
+            action="shopify_connector.maq_product_product_shopify_action"
+            sequence="2"/>
+        <menuitem id="shopify_sale_order_operation_action_menu" name="Sale Order"
+            parent="shopify_connector.shopify_operations_menu"
+            action="shopify_connector.maq_sale_order_shopify_operation_action"
+            sequence="3"/>
+        <menuitem id="shopify_stock_move_line_operation_action_menu" name="Product Moves"
+            parent="shopify_connector.shopify_operations_menu"
+            action="shopify_connector.stock_move_line_shopify_action"
+            sequence="4"/>
+        
+    </data>
+</odoo>

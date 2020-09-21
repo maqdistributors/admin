@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-extend="ProductCategoriesWidget">
+        <t t-jquery=".searchbox" t-operation="before">
+            <div class="search_in_ddl_div">
+                <select name="search_in" class="search_in">
+                    <option value="internal_reference">Internal Reference</option>
+                    <option value="name">Name</option>
+                    <option value="category">Category</option>
+                    <option value="barcode">Barcode</option>
+                </select>
+            </div>
+        </t>
+    </t>
+
+    <t t-extend="Product">
+        <t t-jquery=".product-name" t-operation="inner">
+            <t t-if="product.display_name">
+                <t t-esc="product.display_name"/>
+            </t>
+            <t t-if="product.default_code">
+                <br/><t t-esc="product.default_code"/>
+            </t>
+            <t t-if="product.pos_categ_id and product.pos_categ_id[1]">
+                <br/><t t-esc="product.pos_categ_id[1]"/>
+            </t>
+            <t t-if="product.barcode">
+                <br/><t t-esc="product.barcode"/>
+            </t>
+        </t>
+    </t>
+</templates>

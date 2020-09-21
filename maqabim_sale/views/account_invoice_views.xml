@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<record id="account_view_invoice_form_inherit_maqabim_sale" model="ir.ui.view">
+	    <field name="name">account.view.invoice.form.maqabim_sale</field>
+	    <field name="model">account.invoice</field>
+	    <field name="inherit_id" ref="account.invoice_form"/>
+	    <field name="arch" type="xml">
+	    	<xpath expr="//field[@name='invoice_line_ids']/tree//field[@name='quantity']" position="before">
+	    		<field name="ordered_qty"/>
+                <field name="back_order_qty"/>
+	    	</xpath>
+	    	<xpath expr="//field[@name='invoice_line_ids']/tree//field[@name='quantity']" position="attributes">
+	    		<attribute name="string">Invoiced Qty</attribute>
+	    	</xpath>
+	    </field>
+	</record>
+	<record id="account_invoice_line_form_inherit_maqabim_sale" model="ir.ui.view">
+	    <field name="name">account.invoice.line.form.inherit.maqabim.sale</field>
+	    <field name="model">account.invoice.line</field>
+	    <field name="inherit_id" ref="account.view_invoice_line_form"/>
+	    <field name="arch" type="xml">
+	    	<xpath expr="//label[@for='quantity']" position="before">
+	    		<label for="ordered_qty"/>
+	    		<div>
+	    			<field name="ordered_qty" class="oe_inline"/>
+                    <field name="uom_id" class="oe_inline" groups="product.group_uom"/>
+	    		</div>
+                <label for="back_order_qty"/>
+                <div>
+                    <field name="back_order_qty" class="oe_inline"/>
+                    <field name="uom_id" class="oe_inline" groups="product.group_uom"/>
+                </div>
+	    	</xpath>
+	    </field>
+	</record>
+</odoo>
+

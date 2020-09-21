@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Add new group company admin manager -->
+        <record id="maq_company_admin_manager" model="res.groups">
+            <field name="name">Company Field Admin Manager</field>
+            <field name="category_id" ref="base.module_category_usability"/>
+        </record>
+        <!-- Added a new group product chatter manager -->
+        <record id="maq_product_chatter_manager" model="res.groups">
+            <field name="name">Product Chatter Manager</field>
+            <field name="category_id" ref="base.module_category_usability"/>
+        </record>
+        <!-- Added the access rule for Ecommerce category field so company can see their own categories -->
+        <!-- <record id="ecommerce_category_product_rule" model="ir.rule">
+            <field name="name">Ecommerce Category Product Rule</field>
+            <field ref="website_sale.model_product_public_category" name="model_id"/>
+            <field eval="1" name="global"/>
+            <field name="domain_force">['|',('m_company_id','=',user.company_id.id),('m_company_id','=',False)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record> -->
+        <!-- Stock Move Line Record rule -->
+        <record id="stock_move_line_intercompany_rule" model="ir.rule">
+            <field name="name">Stock Move Line(Product Moves) Intercompany Rule</field>
+            <field ref="stock.model_stock_move_line" name="model_id"/>
+            <field eval="1" name="global"/>
+            <field name="domain_force">['|', '|',
+                               ('location_id.company_id.id', 'in', user.company_ids.ids),
+                               ('location_id.company_id.id', '=', None),
+                               '|', ('location_dest_id.company_id.id', 'in', user.company_ids.ids),
+                               ('location_dest_id.company_id.id', '=', None)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+        <!-- (29) Stock Scrap Intercompany record rule -->
+        <record id="stock_scrap_intercompany_rule" model="ir.rule">
+            <field name="name">Stock Move Line Intercompany Rule</field>
+            <field ref="stock.model_stock_scrap" name="model_id"/>
+            <field eval="1" name="global"/>
+            <field name="domain_force">['|',
+            ('location_id.company_id.id', 'in', user.company_ids.ids),
+            ('location_id.company_id.id', '=', None)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+        <!-- Intercompany rule for product.style object -->
+        <record id="product_style_intercompany_rule" model="ir.rule">
+            <field name="name">Product Style Intercompany Rule</field>
+            <field ref="website_sale.model_product_style" name="model_id"/>
+            <field eval="1" name="global"/>
+            <field name="domain_force">['|',
+            ('company_id', '=', user.company_id.id),
+            ('company_id', '=', None)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+        <!-- Intercompany rule for product.product-->
+        <record id="product_variant_intercompany_rule" model="ir.rule">
+            <field name="name">Product Variant Intercompany Rule</field>
+            <field ref="product.model_product_product" name="model_id"/>
+            <field eval="1" name="global"/>
+            <!-- <field name="domain_force">['|',
+            ('company_id.id', '=', user.company_id.id),
+            ('company_id.id', '=', False)]</field> -->
+            <field name="domain_force">['|',
+            ('company_id','=',user.company_id.id),
+            ('company_id','=',None)]</field>
+        </record>
+        <!-- Intercompany rule for product.template.website.description -->
+        <record id="product_template_website_description_intercompany_rule" model="ir.rule">
+            <field name="name">Product Template Website Description Intercompany Rule</field>
+            <field ref="maq_intercompany.model_product_template_website_description" name="model_id"/>
+            <field eval="1" name="global"/>
+            <field name="domain_force">['|', ('company_id.id', 'in', user.company_ids.ids), ('company_id.id', '=', None)]</field>
+        </record>
+
+        <!-- Add custom function for company erp manager rule -->
+        <function model="ir.rule" name="company_erp_manager" />
+    </data>
+</odoo>

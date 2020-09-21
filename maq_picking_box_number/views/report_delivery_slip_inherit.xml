@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Added box number field in delivery slip report for stock move and stock move lines tables-->
+        <template id="report_deliveryslipinherit" inherit_id='stock.report_delivery_document'>
+            <xpath expr="//div[hasclass('page')]/table[2]/thead/tr" position="inside">
+                <th><strong>Box Number</strong></th>
+            </xpath>
+            <xpath expr="//div[hasclass('page')]/table[2]/tbody/tr" position="inside">
+                <td>
+                    <span t-field="move.m_box_number"/>
+                </td>
+            </xpath>
+            <xpath expr="//div[hasclass('page')]/table[3]/thead/tr" position="inside">
+                <th><strong>Box Number</strong></th>
+            </xpath>
+            <xpath expr="//div[hasclass('page')]/table[3]/tbody/tr" position="inside">
+                <td>
+                    <span t-field="move_line.move_id.m_box_number"/>
+                </td>
+            </xpath>
+        </template>
+</odoo>
+

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-extend="PosTicket">
+        <t t-jquery="t[t-if='receipt.header']" t-operation='after'>
+            <t t-if="receipt.order_name">
+                <b><div>Return Order <t t-esc="receipt.order_name"/></div></b>
+            </t>
+        </t>
+    </t>
+    <t t-extend="WVOrderLine">
+        <t t-jquery=".view_order" t-operation='after'>
+            <t t-if="widget.pos.config.allow_order_return">
+                <td class="view_order"><button class="wv_return_button" t-att-data-id='order.id'><i class="fa fa-sign-out" aria-hidden="true"></i> Return</button></td>
+            </t>
+        </t>
+    </t>
+    <t t-extend="OrderListScreenWidget">
+        <t t-jquery=".view_order_h" t-operation='after'>
+            <th></th>
+        </t>
+    </t>
+    <t t-name="PosOrderReturnWidget">
+        <div class="modal-dialog">
+            <div class="popup" style="height: 537px;width: 963px;">
+                <div class="content-container ">
+                    <table width="100%" style="margin: 25px;font-size: 12px;text-align: left;">
+                        <tr>
+                            <td>Order Ref :</td><td><t t-esc="widget.options.order_name"/></td>
+                            <td>Order Date :</td><td><t t-esc="widget.options.date_order"/></td>
+                        </tr>
+                        <tr>
+                            <td>Session :</td><td><t t-esc="widget.options.session_id"/></td>
+                            <td>Customer :</td><td><t t-esc="widget.options.customer_name"/></td>
+                        </tr> 
+                    </table>
+                    <div style="height: 402px;overflow: scroll;">
+                        <table width="width: 100%;" style="margin: 0px 25px;font-size: 12px;text-align: left;">
+                            <t t-if="widget.options.order_line">
+                                <tr style="background: #6EC89B;font-size: 15px;">
+                                    <th style="width:10%;padding: 10px;">Image</th>
+                                    <th style="width:20%;">Product</th>
+                                    <th style="width:10%;">Quantity</th>
+                                    <th style="width:10%;">Returned Qty</th>
+                                    <th style="width:10%">Price</th>
+                                    <th style="width:10%">Discount(%)</th>
+                                    <th style="width:10%">Return Qty</th>
+                                    <th style="width:10%;">Subtotal</th>
+                                </tr>
+                                <t t-foreach="widget.options.order_line" t-as="order_line">
+                                    <tr>
+                                        <td><img t-attf-src="/web/image/product.product/#{order_line.product_id}/image_medium" width="50px"/></td>
+                                        <td><t t-esc="order_line.product_name"/></td>
+                                        <td><t t-esc="order_line.qty"/></td>
+                                        <td><t t-esc="order_line.returned_qty"/></td>
+                                        <td><t t-esc="order_line.price_unit"/></td>
+                                        <td><t t-esc="order_line.discount"/></td>
+                                        <td>
+                                            <t t-if="! order_line.is_not_returnable">
+                                                <input type="text" style="min-height: 29px;height: 29px;" value="0" class="return_product_qty" t-att-data-product-id="order_line.product_id" t-att-data-discount="order_line.discount" t-att-data-qty="order_line.qty" t-att-data-line_id="order_line.line_id" t-att-data-price_unit="order_line.price_unit"/>
+                                            </t> 
+                                            <t t-if="order_line.is_not_returnable">
+                                                <div style="background: blue;font-size: 12px;color: white;padding: 8px;">
+                                                    Not Returnable
+                                                </div>
+                                            </t>
+                                        </td>
+                                        <td><t t-esc="widget.format_currency_no_symbol(order_line.price_subtotal_incl)"/></td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </table>
+                    </div>
+                </div>
+                <div class="footer">
+                    <!-- <div class="button return_all_order_button" t-att-data-order_id="widget.options.order_id"  t-att-data-order_name="widget.options.order_name">
+                        Return All
+                    </div> -->
+                    <div class="button return_order_button" t-att-data-order_id="widget.options.order_id"  t-att-data-order_name="widget.options.order_name">
+                        Return
+                    </div>
+                    <div class="button cancel">
+                        Cancel 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

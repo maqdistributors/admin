@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inherit sale order form view to set cost price field in sale order line -->
+        <record id="view_sale_order_order_line_tree_inherit" model="ir.ui.view">
+            <field name="name">view.sale.order.order.line.tree.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']/tree/field[@name='product_uom']" position="after">
+                    <field name="m_cost_price" groups="sales_team.group_sale_manager"/>
+                </xpath>
+            </field>
+        </record>
+        <!-- Inherit Sale Margin order line view and added custom cost price field -->
+        <record id="view_sale_order_order_line_form_inherit" model="ir.ui.view">
+            <field name="name">view.sale.order.order.line.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_margin.sale_margin_sale_order_line"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='purchase_price']" position="replace">
+                    <field name="m_cost_price" groups="sales_team.group_sale_manager"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+

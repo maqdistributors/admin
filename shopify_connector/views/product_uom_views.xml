@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_uom_uom_shopify_inherit" model="ir.ui.view">
+            <field name="name">view.uom.uom.shopify.inherit</field>
+            <field name="model">uom.uom</field>
+            <field name="inherit_id" ref="uom.product_uom_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="/form/group" position="inside">
+                    <group string="Shopify">
+                        <field name="is_shopify_uom"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

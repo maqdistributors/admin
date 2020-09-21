@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="products_item_maqabim_hp" inherit_id="website_sale.products_item">
+        <xpath expr="//div[hasclass('product_price')]" position="attributes">
+            <attribute name="groups">!ecommerce_category.group_hide_website_price</attribute>
+        </xpath>
+    </template>
+
+    <template id="product_price_maqabim_hp" inherit_id="website_sale.product_price">
+        <xpath expr="//div[hasclass('product_price')]" position="attributes">
+            <attribute name="groups">!ecommerce_category.group_hide_website_price</attribute>
+        </xpath>
+    </template>
+
+    <template id="cart_lines_maqabim_hp" inherit_id="website_sale.cart_lines">
+        <xpath expr="//td[@name='price']" position="attributes">
+            <attribute name="groups">!ecommerce_category.group_hide_website_price</attribute>
+        </xpath>
+        <xpath expr="//th[hasclass('td-price')]" position="attributes">
+            <attribute name="groups">!ecommerce_category.group_hide_website_price</attribute>
+        </xpath>
+    </template>
+
+    <template id="total_maqabim_hp" inherit_id="website_sale.total">
+        <xpath expr="//div[@id='cart_total']" position="attributes">
+            <attribute name="groups">!ecommerce_category.group_hide_website_price</attribute>
+        </xpath>
+    </template>
+
+    <template id="cart_maqabim_hp" inherit_id="website_sale.cart">
+        <xpath expr="//a[@t-if='website_sale_order and website_sale_order.website_order_line']" position="attributes">
+            <attribute name="groups">!ecommerce_category.group_hide_website_price</attribute>
+        </xpath>
+    </template>
+</odoo>

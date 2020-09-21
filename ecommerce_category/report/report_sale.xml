@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="report_saleorder_document_maqabim" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//t[@t-as='page']/table/thead/tr" position="replace">
+            <tr>
+                <th>Description</th>
+                <th class="text-right">Ordered</th>
+                <th class="text-right">Delivered</th>
+                <th class="text-right">Invoiced</th>
+                <th class="text-right">Unit Price</th>
+                <th t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">Disc.(%)</th>
+                <th class="text-right">Taxes</th>
+                <th class="text-right" groups="sale.group_show_price_subtotal">Amount</th>
+                <th class="text-right price_tax_included" groups="sale.group_show_price_total">Total Price</th>
+            </tr>
+        </xpath>
+        <xpath expr="//span[@t-field='l.product_uom_qty']/.." position="after">
+            <td class="text-right">
+                <span t-field="l.qty_delivered"/>
+                <span t-field="l.product_uom" groups="product.group_uom"/>
+            </td>
+            <td class="text-right">
+                <span t-field="l.qty_invoiced"/>
+                <span t-field="l.product_uom" groups="product.group_uom"/>
+            </td>
+        </xpath>
+    </template>
+
+</odoo>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Update Shopify Product Variant -->
+        <record id="shopify_product_variant_view" model="ir.ui.view">
+            <field name="name">shopify.product.variant.view</field>
+            <field name="model">update.shopify.variant</field>
+            <field name="arch" type="xml">
+                <form string="Shopify Product Template Variant">
+                    <span>Do you want to update the selected product variants on shopify?</span>
+                    <footer>
+                        <button string="Update" name="update_shopify_product_variant" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action to add the Menu on the Action Menu List which appears on Selection of single or multiple product templates -->
+        <act_window id="shopify_product_variant_update_action"
+            name="Update Shopify Product Variant"
+            src_model="shopify.product.product"
+            res_model="update.shopify.variant"
+            view_type="form" view_mode="form"
+            key2="client_action_multi" target="new"
+            groups="base.group_user"/>
+
+    </data>
+</odoo>

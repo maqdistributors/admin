@@ -1,0 +1,82 @@
+@color_1: black;
+@color_2: white;
+@background_color_1: white;
+@background_color_2: black;
+@border_color_1: black;
+@border_bottom_color_1: black;
+
+html[data-website-id="1"] {
+    * {
+        div#footer {
+            background-color: @background_color_1 !important;
+        }
+        div#footer {
+            * {
+                color: @color_1 !important;
+            }
+        }
+        li#my_cart {
+            * {
+                color: @color_1 !important;
+            }
+        }
+        div.dropdown_sorty_by {
+            * {
+                color: @color_1 !important;
+            }
+        }
+        ul#top_menu {
+            * {
+                color: @color_1 !important;
+            }
+        }
+        button.oe_search_button {
+            * {
+                color: @color_1 !important;
+            }
+        }
+        a {
+            >span.fa-shopping-cart {
+                color: @color_1 !important;
+            }
+        }
+        div#products_grid_before {
+            >ul {
+                >li.active {
+                    >a {
+                        background-color: @background_color_2 !important;
+                        color: @color_2 !important;
+                    }
+                }
+            }
+        }
+        #products_grid {
+            .pagination {
+                >.active {
+                    >a {
+                        border-bottom-color: @border_bottom_color_1 !important;
+                        color: @color_1 !important;
+                    }
+                }
+            }
+        }
+        #products_grid_before {
+            background-color: @background_color_1 !important;
+            color: @color_1 !important;
+            * {
+                background-color: @background_color_1 !important;
+                color: @color_1 !important;
+            }
+        }
+        .input-group {
+            border-bottom-color: @border_bottom_color_1 !important;
+        }
+        &::placeholder {
+            color: @color_1 !important;
+        }
+        .btn-primary {
+            border-color: @border_color_1 !important;
+            color: @color_1 !important;
+        }
+    }
+}

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="partner_comment_assets_frontend" inherit_id="website.assets_frontend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/maq_partner_order_comment/static/src/js/website_partner_order_comment.js"></script>
+            </xpath>
+        </template>
+        <template id="partner_order_comment" inherit_id="website_sale.cart"
+            customize_show="True" name="Customer Order Comment">
+            <xpath expr="//div[hasclass('clearfix')]" position="before">
+                <div id="show_partner_comment" t-if="website_sale_order and website_sale_order.website_order_line" t-attf-class="form-group col-lg-6 partner_textarea_comment">
+                    <label t-if="website_sale_order.website_order_line" class="control-label" for="partner_comment">Customer Order Comment</label>
+                    <textarea t-if="website_sale_order.website_order_line" rows="3" id="partner_comment"
+                        t-esc="website_sale_order.partner_comment or ''"
+                        name="partner_comment_on_website" class="form-control"/>
+                </div>
+            </xpath>
+        </template>
+
+        <template id="confirm_order_in_address" inherit_id="website_sale.checkout" customize_show="True"
+            name="Sale Order Address">
+            <xpath
+                expr="//div[@id='wrap']/div[hasclass('oe_website_sale')]/div[hasclass('row')]/div[hasclass('oe_cart')]/div[last()]"
+                position="before">
+                <h2 class="mb8 mt8">Confirm Order</h2>
+                <table class="table table-striped table-condensed" id="cart_products"
+                    t-if="website_sale_order and website_sale_order.website_order_line">
+                    <thead>
+                        <tr>
+                            <th class='td-img'>Product</th>
+                            <th></th>
+                            <th class='td-qty'>Quantity</th>
+                            <th class='text-center td-price'>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="website_sale_order.website_order_line" t-as="line">
+                            <td class='' colspan="2" t-if="not line.product_id.product_tmpl_id"></td>
+                            <td class='td-img' t-if="line.product_id.product_tmpl_id">
+                                <a t-attf-href="/shop/product/#{ slug(line.product_id.product_tmpl_id) }">
+                                    <span t-field="line.product_id.image_small"
+                                        t-options="{'widget': 'image', 'class': 'img-rounded'}" />
+                                </a>
+                            </td>
+                            <td class='td-product_name' t-if="line.product_id.product_tmpl_id">
+                                <div>
+                                    <strong
+                                        t-field="line.product_id.with_context(display_default_code=False).display_name" />
+                                </div>
+                                <div class="text-muted hidden-xs small">
+                                    <t t-foreach="line.name.splitlines()[1:]" t-as="name_line">
+                                        <span>
+                                            <t t-esc="name_line" />
+                                        </span>
+                                        <br />
+                                    </t>
+                                </div>
+                            </td>
+                            <td class='td-qty'>
+                                <div
+                                    t-esc="int(line.product_uom_qty) == line.product_uom_qty and int(line.product_uom_qty) or line.product_uom_qty" />
+                            </td>
+                            <td class="text-center td-price">
+<!--                                <span t-field="line.price_reduce_taxexcl" style="white-space: nowrap;"-->
+<!--                                    t-options="{'widget': 'monetary', 'from_currency': website_sale_order.pricelist_id.currency_id, 'display_currency': website.currency_id}"-->
+<!--                                    groups="sale.group_show_price_subtotal" />-->
+<!--                                <span t-field="line.price_reduce_taxinc" style="white-space: nowrap;"-->
+<!--                                    t-options="{'widget': 'monetary', 'from_currency': website_sale_order.pricelist_id.currency_id, 'display_currency': website.currency_id}"-->
+<!--                                    groups="sale.group_show_price_total" />-->
+                                <span t-field="line.price_reduce_taxexcl" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}" groups="account.group_show_line_subtotals_tax_excluded"/>
+                                <span t-field="line.price_reduce_taxinc" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}" groups="account.group_show_line_subtotals_tax_included"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <t t-call='website_sale.total' />
+                <div t-if="website_sale_order.website_order_line" t-attf-class="form-group col-lg-6">
+                    <label t-if="website_sale_order.website_order_line" class="control-label"
+                        for="partner_comment">Customer Order Comment</label>
+                    <textarea t-if="website_sale_order.website_order_line"
+                        rows="3" id="partner_comment" name="partner_comment_on_website"
+                        class="form-control" t-esc="website_sale_order.partner_comment"
+                        readonly="readonly" />
+                </div>
+                <div class="clearfix" />
+            </xpath>
+        </template>
+    </data>
+</odoo>
+

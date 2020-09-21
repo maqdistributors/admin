@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_stock_inventory_line_inv_adj_manager,stock.inventory.line inv_adj_manager,stock.model_stock_inventory_line,maq_inventory.maq_inventory_adjustment_manager,1,1,1,1
+stock.access_stock_inventory_line_manager,stock.inventory.line manager,stock.model_stock_inventory_line,stock.group_stock_manager,1,1,1,0

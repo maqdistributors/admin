@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Improved the delivery slip report view for multicompany description -->
+    <template id="report_delivery_document_inherit" inherit_id="stock.report_delivery_document">
+        <xpath expr="//div[@class='page']/table[2]/tbody/tr/td[1]" position='replace'>
+            <td>
+                <span t-field="move.product_id"/>
+                <p t-if="o.picking_type_code == 'outgoing'">
+                    <span t-field="move.product_id.description_pickingout"/>
+                </p>
+                <p t-if="o.picking_type_code == 'incoming'">
+                    <span t-field="move.product_id.description_pickingin"/>
+                </p>
+            </td>
+        </xpath>
+        <xpath expr="//div[@class='page']/table[3]/tbody/tr/td[1]" position='replace'>
+            <td>
+                <span t-field="move_line.product_id"/>
+                <p t-if="o.picking_type_code == 'outgoing'">
+                    <span t-field="move_line.product_id.description_pickingout"/>
+                </p>
+                <p t-if="o.picking_type_code == 'incoming'">
+                    <span t-field="move_line.product_id.description_pickingin"/>
+                </p>
+            </td>
+        </xpath>
+    </template>
+</odoo>

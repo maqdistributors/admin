@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<record id="res_users_form_inherit_maqabim_extended_security" model="ir.ui.view">
+	    <field name="name">res.users.form.inherit.maqabim_extended_security</field>
+	    <field name="model">res.users</field>
+	    <field name="inherit_id" ref="base.view_users_form"/>
+	    <field name="arch" type="xml">
+	    	<xpath expr="//field[@name='pos_security_pin']" position="after">
+	    		<!-- <label for="session_ids"/> -->
+	    		<field name="pos_ids" widget="many2many_tags" domain="[('company_id', '=', company_id)]"/>
+	    		<!-- <label for="warehouse_ids"/> -->
+	    		<field name="warehouse_ids" widget="many2many_tags" domain="[('company_id', '=', company_id)]"/>
+	    	</xpath>
+	    </field>
+	</record>
+</odoo>

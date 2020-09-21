@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="maq_custom_theme.assets_frontend" model="ir.ui.view">
+            <field name="website_id" eval="1"/>
+        </record>
+        <record id="maq_custom_theme.custom_product_quantity" model="ir.ui.view">
+            <field name="website_id" eval="1"/>
+        </record>
+        <record id="maq_custom_theme.custom_product" model="ir.ui.view">
+            <field name="website_id" eval="1"/>
+        </record>
+        <record id="maq_custom_theme.custom_product_variants" model="ir.ui.view">
+            <field name="website_id" eval="1"/>
+        </record>
+        <record id="maq_custom_theme.custom_product_price" model="ir.ui.view">
+            <field name="website_id" eval="1"/>
+        </record>
+        <record id="maq_custom_theme.custom_product_description_new_style" model="ir.ui.view">
+            <field name="website_id" eval="1"/>
+        </record>
+    </data>
+</odoo>
+

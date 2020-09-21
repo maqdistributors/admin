@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="products_item_maqabim" inherit_id="website_sale.products_item">
+        <xpath expr="//a[@itemprop='name']" position="attributes">
+            <attribute name="t-att-content">product.display_name</attribute>
+            <attribute name="t-field">product.display_name</attribute>
+        </xpath>
+    </template>
+
+    <template id="product_maqabim" inherit_id="website_sale.product">
+        <xpath expr="//h1[@itemprop='name']" position="attributes">
+            <attribute name="t-field">product.display_name</attribute>
+        </xpath>
+    </template>
+
+    <template id="cart_lines_maqabim" inherit_id="website_sale.cart_lines">
+        <xpath expr="//td[@class='td-product_name']" position="replace">
+            <td t-if="line.product_id.product_tmpl_id" class="td-product_name">
+                <div>
+                    <a t-attf-href="/shop/product/#{ slug(line.product_id.product_tmpl_id) }">
+                        <strong t-esc="line.product_id.display_name"/>
+                    </a>
+                </div>
+                <div class="text-muted hidden-xs small">
+                    <t t-foreach="line.name.splitlines()[1:]" t-as="name_line">
+                        <span><t t-esc="name_line"/></span><br/>
+                    </t>
+                </div>
+                <a href="#" class="js_delete_product hidden-xs no-decoration"> <small><i class="fa fa-trash-o"/> Remove</small></a>
+            </td>
+        </xpath>
+    </template>
+
+    <!-- <template id="payment_maqabim" inherit_id="website_sale.payment">
+        <xpath expr="//td[@class='td-product_name']" position="replace">
+            <td class="td-product_name" t-if="line.product_id.product_tmpl_id">
+                <div>
+                    <strong t-field="line.product_id.display_name"/>
+                </div>
+                <div class="text-muted hidden-xs small">
+                    <t t-foreach="line.name.splitlines()[1:]" t-as="name_line">
+                        <span><t t-esc="name_line"/></span><br/>
+                    </t>
+                </div>
+            </td>
+        </xpath>
+    </template> -->
+
+    <template id="confirmation_maqabim" inherit_id="website_sale.cart_summary">
+        <xpath expr="//td[@class='td-product_name']" position="replace">
+            <td class="td-product_name">
+                <div>
+                    <a t-attf-href="/shop/product/#{ slug(line.product_id.product_tmpl_id) }">
+                        <strong t-esc="line.product_id.display_name"/>
+                    </a>
+                </div>
+                <div class="text-muted hidden-xs small">
+                    <t t-foreach="line.name.splitlines()[1:]" t-as="name_line">
+                        <span><t t-esc="name_line"/></span><br/>
+                    </t>
+                </div>
+            </td>
+        </xpath>
+    </template>
+
+    <template id="portal_order_page_maqabim" inherit_id="sale.sale_order_portal_content">
+        <xpath expr="//td[@id='product_name']" position="replace">
+            <td id="product_name"><span t-field="line.product_id.display_name"/></td>
+        </xpath>
+    </template>
+
+    <template id="cart_popover_maqabim" inherit_id="website_sale.cart_popover">
+        <xpath expr="//div[hasclass('cart_line')]" position="replace">
+            <div class="row mb8 cart_line">
+                <div class="col-3">
+                    <span t-field="line.product_id.image_small" t-options="{'widget': 'image', 'class': 'img-rounded'}" />
+                </div>
+                <div class="col-9">
+                    <a t-attf-href="/shop/product/#{ slug(line.product_id.product_tmpl_id) }">
+                        <span t-esc="line.product_id.display_name" class="h6" />
+                    </a>
+                    <br />
+                    <small>Qty: <t t-esc="int(line.product_uom_qty) == line.product_uom_qty and int(line.product_uom_qty) or line.product_uom_qty" /></small>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

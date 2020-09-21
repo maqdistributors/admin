@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+
+        <!-- Add field is_website_publish in product.product form view -->
+        <record id="product_product_view_inherit" model="ir.ui.view">
+            <field name="name">product.product.view.inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="/form/sheet/div[hasclass('oe_title')]/div[@name='options']" position="inside">
+                    <div>
+                        <field name="is_website_publish"/>
+                        <label for="is_website_publish"/>
+                    </div>
+                    <div>
+                        <!-- <field name="website_ids" widget="many2many_tags" attrs="{'invisible': [('is_website_publish','=', False)]}"/> -->
+                    </div>
+                    <div>
+                        <field name="is_hide_variant"/>
+                        <label for="is_hide_variant"/>
+                    </div>
+                    <div>
+                        <!-- <field name="product_hide_website_ids" widget="many2many_tags" attrs="{'invisible': [('is_hide_variant','=', False)]}"/> -->
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+
+</odoo>
+

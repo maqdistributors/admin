@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="custom_product_quantity" inherit_id="website_sale.product_quantity">
+        <xpath expr="//div[hasclass('css_quantity','input-group','oe_website_spinner')]" position="attributes">
+            <attribute name='t-if'>
+                len(product.product_variant_ids) == 1
+            </attribute>
+        </xpath>
+    </template>
+    <template id="custom_product_variants" inherit_id="website_sale.product">
+        <xpath expr="//t[@t-placeholder='select']" position="replace">
+            <t t-if="len(product.product_variant_ids) &gt; 1">
+                <table class="table table-responsive">
+                    <thead>
+                        <tr>
+                            <th scope="col">Product Name</th>
+                            <th scope="col">SKU</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Qty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="product.product_variant_ids" t-as="variant_id">
+                            <t t-if="variant_id.is_product_variant_hide() == False">
+                                <tr t-att-id="variant_id.id"
+                                    t-att-name="'attribute-%s-%s' % (product.id, variant_id.id)"
+                                    class="variant_details">
+                                    <td>
+                                        <label label-default="label-default">
+                                            <span name="product_name"
+                                                  t-esc="product.name + ' ' + variant_id.attribute_value_ids.name"/>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <span t-field="variant_id.default_code"/>
+                                    </td>
+                                    <td style="font-weight:600;">
+                                        <span class="text-danger oe_default_price"
+                                              style="text-decoration: line-through; white-space: nowrap;"
+                                              t-esc="compute_currency(variant_id.website_public_price)"
+                                              t-options="{'widget': 'monetary', 'display_currency': website.get_current_pricelist().currency_id, 'from_currency': website.currency_id}"
+                                              t-att-style="'text-decoration: line-through; white-space: nowrap; ' + '' if variant_id.website_price_difference and website.get_current_pricelist().discount_policy == 'without_discount' else 'display: none;'"/>
+                                        <br t-if="variant_id.website_price_difference and website.get_current_pricelist().discount_policy == 'without_discount'"/>
+                                        <span t-field="variant_id.website_price"
+                                              t-options="{'widget': 'monetary','display_currency': product.currency_id,}"/>
+                                    </td>
+                                    <td>
+                                        <t t-if="variant_id.is_product_variant_publish() == False">
+                                            <input type="number" class="form-control quantity"
+                                                   style="display:inline-block;width:50px;text-align:center;"
+                                                   data-min="0" t-att-name="variant_id.id" value="0" min="0"
+                                                   disabled="disabled"/>
+                                            <p style="display:inline-block;" class="text-danger">Currently Out of
+                                                Stock
+                                            </p>
+                                        </t>
+                                        <t t-else="">
+                                            <input type="number" class="form-control quantity"
+                                                   style="display:inline-block;width:50px;text-align:center;"
+                                                   data-min="0" t-att-name="variant_id.id" value="0" min="0"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </t>
+                        </t>
+                    </tbody>
+                </table>
+            </t>
+            <t t-else="">
+                <input type="hidden" class="product_id" name="product_id"
+                       t-att-value="product.product_variant_id.id if len(product.product_variant_ids) == 1 else '0'"/>
+                <t t-call="website_sale.variants">
+                    <t t-set="ul_class" t-value="'nav-stacked'"/>
+                </t>
+            </t>
+        </xpath>
+
+        <xpath expr="//a[@id='add_to_cart']" position="replace">
+            <t t-if="len(product.product_variant_ids) == 1">
+                <a id="add_to_cart" class="btn btn-success btn-lg mt8 js_check_product a-submit center-block" href="#"
+                   t-if="product.product_variant_id.is_product_variant_publish() == True">Add to Cart
+                </a>
+                <t t-if="product.website_price_difference and website.get_current_pricelist().discount_policy == 'without_discount'">
+                    <span class="product_discount1">Sale</span>
+                </t>
+            </t>
+            <t t-elif="len(product._get_published_product_ids()) &gt; 1">
+                <t t-if="product.website_price_difference and website.get_current_pricelist().discount_policy == 'without_discount'">
+                    <span class="product_discount2">Sale</span>
+                </t>
+                <a id="add_to_cart_b"
+                   class="btn btn-success pull-right btn-lg mt8 js_check_product b-submit center-block" href="#">Add to
+                    Cart
+                </a>
+            </t>
+            <t t-else="">
+                <t t-if="product.website_price_difference and website.get_current_pricelist().discount_policy == 'without_discount'">
+                    <span class="product_discount2">Sale</span>
+                </t>
+                <a id="add_to_cart_b"
+                   class="btn btn-success pull-right btn-lg mt8 js_check_product b-submit center-block" href="#">Add to
+                    Cart
+                </a>
+            </t>
+        </xpath>
+        <xpath expr="//div[@id='product_details']/hr[last()]" position="attributes">
+            <attribute name="t-if">
+                len(product.product_variant_ids) == 1
+            </attribute>
+        </xpath>
+        <xpath expr="//div[@id='product_details']/hr[last()]" position="after">
+            <t t-if="product.product_variant_id.is_product_variant_publish() == False and len(product.product_variant_ids) == 1 and product.product_variant_id.website_published">
+                <h3 class="text-danger">
+                    Currently Out of Stock
+                    <br/>
+                </h3>
+            </t>
+        </xpath>
+    </template>
+    <template id="custom_product_price" inherit_id="website_sale.product_price">
+        <xpath expr="//div[hasclass('product_price','mt16')]" position="attributes">
+            <attribute name="t-if">
+                len(product.product_variant_ids) == 1
+            </attribute>
+        </xpath>
+    </template>
+    <template id="custom_product_description_new_style"
+              inherit_id="website_product_page_layout_73lines.product_description_new_style">
+        <xpath expr="//div[@id='product_description_reviews']/ul/t[@t-if='product.attribute_line_ids']"
+               position="attributes">
+            <attribute name="t-if">
+                product.m_product_specification_ids
+            </attribute>
+        </xpath>
+        <xpath expr="//div[@id='product_description_reviews']/div[hasclass('tab-content')]/div[@id='product-additional-info']"
+               position="replace">
+            <div class="tab-pane fade" id="product-additional-info">
+                <div t-if="product.m_product_specification_ids">
+                    <div id="product_attribute_details" class="mt32 mb32">
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr t-foreach="product.m_product_specification_ids" t-as="pfl">
+                                    <td class="col-md-4">
+                                        <strong>
+                                            <p t-esc="pfl.product_specification_id.name" style="margin: 0 0 0px;"/>
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <p style="margin: 0 0 0px;">
+                                            <t t-set="i" t-value="0"/>
+                                            <t t-foreach="pfl.value_ids" t-as="pfv">
+                                                <t t-esc="pfv.name"/>
+                                                <span t-if="i != len(pfl.value_ids)-1">
+                                                    ,
+                                                </span>
+                                                <t t-set="i" t-value="i+1"/>
+                                            </t>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

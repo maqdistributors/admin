@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- <record id="bista_website_sale_options.bista_website_sale_modal" model="ir.ui.view">
+            <field name="website_id" eval="1"/>
+        </record> -->
+        <!-- <record id="bista_website_sale_options.assets_backend" model="ir.ui.view">
+            <field name="website_id" eval="1"/>
+        </record> -->
+        <record id="bista_website_sale_options.assets_maq_website_frontend" model="ir.ui.view">
+            <field name="website_id" eval="1"/>
+        </record>
+        <record id="bista_website_sale_options.maq_products_item_inherit" model="ir.ui.view">
+            <field name="website_id" eval="1"/>
+        </record>
+        <record id="bista_website_sale_options.products_add_to_cart_inherit" model="ir.ui.view">
+            <field name="website_id" eval="1"/>
+        </record>
+        <record id="ecommerce_category.cart_lines_maqabim" model="ir.ui.view">
+            <field name="website_id" eval="1"/>
+        </record>
+    </data>
+</odoo>

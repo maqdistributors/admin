@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_shopify_product_product_form" model='ir.ui.view'>
+            <field name="name">view.shopify.product.product.form</field>
+            <field name="model">shopify.product.product</field>
+            <field name="arch" type="xml">
+                <form name="shopify_product_product">
+                    <sheet>
+                        <group>
+                            <group>
+                                <!-- <field name="product_id"/> -->
+                                <!-- <field name="product_template_id" options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/> -->
+                                <field name="product_variant_id" options="{'no_create': True, 'no_create_edit': True, 'no_open': True}" required="1"/>
+                                <field name="lst_price"/>
+                            </group>
+                            <group>
+                                <field name="shopify_config_id" options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                <field name="shopify_published_variant" invisible="1"/>
+                                <field name="meta_fields_ids" options="{'no_create': True, 'no_create_edit': True, 'no_open': True}" widget="many2many_tags"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="shopify_product_template_id" options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                <field name="shopify_inventory_item_id" options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                            </group>
+                            <group>
+                                <field name="shopify_product_id" options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                <field name="shopify_uom" options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="default_code"/>
+                            </group>
+                            <group>
+                                <field name="shopify_weight"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="last_updated_date"/>
+                            </group>
+                            <group>
+                                <!-- <field name="create_date"/> -->
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_shopify_product_product_tree" model="ir.ui.view">
+            <field name="name">view.shopify.product.product.tree</field>
+            <field name="model">shopify.product.product</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="product_variant_id"/>
+                    <!-- <field name="default_code"/> -->
+                    <field name="shopify_product_template_id"/>
+                    <field name="shopify_product_id"/>
+                    <field name="shopify_inventory_item_id"/>
+                    <field name="product_template_id"/>
+                    <field name="last_updated_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_shopify_product_product_search" model="ir.ui.view">
+            <field name="name">view.shopify.product.product.search</field>
+            <field name="model">shopify.product.product</field>
+            <field name="arch" type="xml">
+                <search>
+                    <!-- <field name="product_id" /> -->
+                    <field name="product_variant_id" />
+                    <field name="shopify_product_template_id"/>
+                    <field name="shopify_product_id"/>
+
+                    <filter string="Published Templates" name="shopify_published_variant_filter" domain="[('product_template_id.shopify_product_template_ids','!=',False)]"/>
+                    <filter string="Published On Shopify" name="shopify_v_published_filter" domain="[('shopify_product_id','not in',['',False])]"/>
+                    <filter string="Ready To Published" name="shopify_v_ready_published_filter" domain="[('shopify_product_id','in',['',False])]"/>
+
+                    <group expand="1" string="Group By">
+                        <filter string="Shopify Config." name="shopify_config" context="{'group_by':'shopify_config_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_shopify_product_product" model="ir.actions.act_window">
+            <field name="name">Shopify Product Product</field>
+            <field name="res_model">shopify.product.product</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="shopify_connector.view_shopify_product_product_search"/>
+        </record>
+    </data>
+</odoo>

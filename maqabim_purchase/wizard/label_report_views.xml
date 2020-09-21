@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="view_label_report_wizard" model="ir.ui.view">
+            <field name="name">label.report.wizard.form</field>
+            <field name="model">label.report.wizard</field>
+            <field name="arch" type="xml">
+            <form string="Label Report">
+                <group string="Select Report Formats">
+                    <field name="formats" widget="radio"/>
+                    <field name="label_type" invisible="1"/>
+                </group>
+                <groups string="Products" attrs="{'invisible': [('label_type', '!=', 'product')]}">
+                    <field name="product_label_ids" nolabel="1">
+                        <tree editable="top" create="0" delete="0">
+                            <field name="product_id" readonly="True" force_save="1"/>
+                            <field name="print_qty"/>
+                        </tree>
+                    </field>
+                </groups>
+                <footer>
+                    <button name="print_report" string="Print" type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-default"/>
+                </footer>
+            </form>
+            </field>
+        </record>
+
+        <act_window id="action_purchase_label_report"
+            multi="False"
+            key2="client_action_multi"
+            name="Print PO-labels"
+            res_model="label.report.wizard"
+            src_model="purchase.order"
+            view_mode="form"
+            context="{'default_label_type': 'purchase'}"
+            target="new"
+            view_type="form" />
+
+        <act_window id="action_sale_label_report"
+            multi="False"
+            key2="client_action_multi"
+            name="Print SO-labels"
+            res_model="label.report.wizard"
+            src_model="sale.order"
+            view_mode="form"
+            context="{'default_label_type': 'sale'}"
+            target="new"
+            view_type="form" />
+
+        <act_window id="action_picking_label_report"
+            multi="False"
+            key2="client_action_multi"
+            name="Print Picking Labels"
+            res_model="label.report.wizard"
+            src_model="stock.picking"
+            view_mode="form"
+            context="{'default_label_type': 'picking'}"
+            target="new"
+            view_type="form" />
+
+        <act_window id="action_product_label_report"
+            multi="False"
+            key2="client_action_multi"
+            name="Print Product Labels"
+            res_model="label.report.wizard"
+            src_model="product.product"
+            view_mode="form"
+            context="{'default_label_type': 'product'}"
+            target="new"
+            view_type="form" />
+
+</odoo>

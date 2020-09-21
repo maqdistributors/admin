@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="POSOrderListButton">
+        <div class='control-button'>
+           <i class="fa fa-list" aria-hidden="true"/> Orders
+        </div>
+    </t>
+    <t t-name="PosOrderPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup" style="width:900px">
+                <div class="content-container ">
+                    <div class='subwindow-container-fix touch-scrollable scrollable-y'>
+                        <t t-if="widget.options.order">
+                            <table width="100%" style="margin: 31px;font-size: 12px;text-align: left;"> 
+                                <tr>
+                                    <td><b>Order Ref</b></td>
+                                    <td><span><t t-esc="widget.options.order.name"/></span></td>
+                                    <td><b>Order Date</b></td>
+                                    <td><span><t t-esc="widget.options.order.date_order"/></span></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Session</b></td>
+                                    <td><t t-esc="widget.options.order.session_id[1]"/></td>
+                                    <td><b>Customer</b></td>
+                                    <td>
+                                        <t t-if="widget.options.order.partner_id">
+                                            <t t-esc="widget.options.order.partner_id[1]"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </table>
+                        </t>
+                        <hr/>
+                        <div style="height: 240px;overflow: scroll;">
+                        <table class='client-list' width="95%" style="margin: 0px 25px;font-size: 12px;text-align: left;">
+                            <thead style="background: #6EC89B;font-size: 17px;">
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+                                    <th>Dis(%)</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody class='client-list-contents'>
+                                            
+                            <t t-if="widget.options.order_line">
+                                <t t-foreach='widget.options.order_line' t-as='line'>
+                                    <tr class='client-line'>
+                                        <td style="float:left;border:0"><t t-esc="line.product_id[1]"/></td>
+                                        <td><t t-esc="line.qty"/></td>
+                                        <td><t t-esc="line.price_unit"/></td>
+                                        <td><t t-esc="line.discount"/></td>
+                                        <td><t t-esc="widget.format_currency_no_symbol(line.price_subtotal_incl)"/></td>
+                                    </tr>
+                                </t>
+                            </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                </div>
+                <div class="footer">
+                    <div class="button cancel">
+                        Cancel 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+    <t t-name="WVOrderLine">
+        <tr class='client-line' t-att-data-id='order.id'>
+            <td><t t-esc='order.pos_reference' /></td>
+            <td><t t-if="order.partner_id"><t t-esc='order.partner_id[1]' /></t></td>
+            <td><t t-esc='order.date_order' /></td>
+            <td><t t-esc='widget.format_currency_no_symbol(order.amount_total)' /></td>
+            <td class="view_order"><button class="wv_checkout_button" t-att-data-id='order.id'><i class="fa fa-sign-out" aria-hidden="true"></i> View</button></td>
+        </tr>
+    </t>
+    <t t-name="OrderListScreenWidget">
+        <div class="clientlist-screen screen">
+            <div class="screen-content">
+                <section class="top-content">
+                    <span class='button back'>
+                        <i class='fa fa-angle-double-left'></i>
+                        Cancel
+                    </span>
+                    <span class='searchbox'>
+                        <input placeholder='Search....' />
+                        <span class='search-clear'></span>
+                    </span>
+                    <span class='searchbox'></span>
+                </section>
+                <section class="full-content">
+                    <div class='window'>
+                        <section class='subwindow'>
+                            <div class='subwindow-container'>
+                                <div class='subwindow-container-fix touch-scrollable scrollable-y'>
+                                    <table class='client-list'>
+                                        <thead>
+                                            <tr>
+                                                <th>Order Ref.</th>
+                                                <th>Partner Name</th>
+                                                <th>Date</th>
+                                                <th>Total amount</th>
+                                                <th class="view_order_h"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class='client-list-contents'>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </t>
+</templates>

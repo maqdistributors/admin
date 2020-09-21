@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="maq_shopify_sale_order_inherit_form" model="ir.ui.view">
+            <field name="name">maq.shopify.sale.order.inherit.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/notebook" position="inside">
+                    <page name="maq_shopify_sale_order" string="Shopify" groups="shopify_connector.group_shopify_admin,shopify_connector.group_shopify_manager,shopify_connector.group_shopify_user">
+                        <group>
+                            <group>
+                                <field name="shopify_name"/>
+                                <field name="shopify_order_id"/>
+                                <field name="shopify_note"/>
+                                <field name="shopify_fulfillment_status"/>
+                            </group>
+                            <group>
+                                <field name="shopify_financial_status"/>
+                                <field name="shopify_import_status"/>
+                                <field name="shopify_error_message"/>
+                                <field name="shopify_config_id"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/form" position="inside">
+                    <group name="shopify_order_line">
+                        <field name="shopify_order_line_id"/>
+                    </group>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree" position="inside">
+                    <field name="shopify_order_line_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- <record id="maq_shopify_sale_order_search_inherit" model="ir.ui.view">
+            <field name="name">maq.shopify.sale.order.search.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='activities_upcoming_all']" position="after">
+                    <filter string="Shopify Orders" name="shopify_order_id"
+                        domain="[('shopify_order_id', '!=', ('',False))]"/>
+                </xpath>
+                <xpath expr="//group" position="inside">
+                    <filter string="Shopify Import Status" domain="[]" context="{'group_by':'shopify_import_status'}"/>
+                    <filter string="Shopify Config" domain="[]" context="{'group_by':'shopify_config_id'}"/>
+                </xpath>
+            </field>
+        </record> -->
+
+        <record id="maq_shopify_sale_order_tree_new_view" model="ir.ui.view">
+            <field name="name">maq.shopify.sale.order.tree.new.view</field>
+            <field name="model">sale.order</field>
+            <field name="arch" type="xml">
+                <tree string="Sales Orders" decoration-bf="message_needaction==True" decoration-muted="state=='cancel'">
+                    <field name="message_needaction" invisible="1"/>
+                    <field name="name" string="Order Number"/>
+                    <field name="confirmation_date" string="Order Date"/>
+                    <field name="partner_id"/>
+                    <field name="user_id"/>
+                    <field name="amount_total" sum="Total Tax Included" widget="monetary"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="invoice_status" invisible="1"/>
+                    <field name="state" invisible="1"/>
+                    <field name="shopify_order_id" groups="shopify_connector.group_shopify_admin,shopify_connector.group_shopify_manager,shopify_connector.group_shopify_user"/>
+                    <field name="shopify_config_id" groups="shopify_connector.group_shopify_admin,shopify_connector.group_shopify_manager,shopify_connector.group_shopify_user"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="maq_sale_order_shopify_operation_action" model="ir.actions.act_window">
+            <field name="name">Sale Order</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="tree_view_id" ref="shopify_connector.maq_shopify_sale_order_tree_new_view"/>
+            <field name="context">{'shopify_sale_order': 1, 'default_search_shopify_order_id':1}</field>
+        </record>
+    </data>
+</odoo>

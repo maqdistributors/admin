@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="maq_shopify_stock_location_inherit_form" model="ir.ui.view">
+            <field name="name">maq.shopify.stock.location.inherit.form</field>
+            <field name="model">stock.location</field>
+            <field name="inherit_id" ref="stock.view_location_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/group" position="inside">
+                    <group string="Shopify">
+                        <field name="shopify_location_ids" widget="many2many_tags" options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"
+                        groups="shopify_connector.group_shopify_admin,shopify_connector.group_shopify_manager,shopify_connector.group_shopify_user"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+<!--         <record id="maq_shopify_stock_move_inherit_form" model="ir.ui.view">
+            <field name="name">maq.shopify.stock.move.inherit.form</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/group" position="inside">
+                    <group string="Shopify">
+                        <field name="shopify_update_id"/>
+                        <field name="shopify_export"/>
+                    </group>
+                </xpath>
+            </field>
+        </record> -->
+        <record id="maq_shopify_stock_move_line_inherit_form" model="ir.ui.view">
+            <field name="name">maq.shopify.stock.move.line.inherit.form</field>
+            <field name="model">stock.move.line</field>
+            <field name="inherit_id" ref="stock.view_move_line_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/group" position="inside">
+                    <group string="Shopify">
+                        <field name="shopify_error_log" groups="shopify_connector.group_shopify_admin,shopify_connector.group_shopify_manager,shopify_connector.group_shopify_user"/>
+                        <field name="shopify_export" groups="shopify_connector.group_shopify_admin,shopify_connector.group_shopify_manager,shopify_connector.group_shopify_user"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+        <record id="maq_shopify_stock_picking_inherit_form" model="ir.ui.view">
+            <field name="name">maq.shopify.stock.picking.inherit.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/notebook" position="inside">
+                    <page string="Shopify">
+                        <group>
+                            <field name="shopify_fulfillment_id" groups="shopify_connector.group_shopify_admin,shopify_connector.group_shopify_manager,shopify_connector.group_shopify_user"/>
+                            <field name="shopify_order_id" groups="shopify_connector.group_shopify_admin,shopify_connector.group_shopify_manager,shopify_connector.group_shopify_user"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Group Added to Hde/Show the Purchase order Costing fields like taxes, product cost, sub-total and total -->
+        <!-- <record id="group_po_amount" model="res.groups">
+            <field name="name">Allow Purchase Amount</field>
+            <field name="category_id" ref="base.module_category_purchase_management"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record> -->
+
+        <record id="group_po_joint" model="res.groups">
+            <field name="name">Joint PO Fields</field>
+            <field name="category_id" ref="base.module_category_purchase_management"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+    </data>
+</odoo>

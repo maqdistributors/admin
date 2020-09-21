@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_solabel">
+        <t t-call="web.basic_layout">
+            <div class="page" style="margin-right: -18px !important;">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-foreach="doc.order_line" t-as="line">
+                        <t t-foreach="range(line.print_qty)" t-as="n">
+                            <t t-call="maqabim_purchase.label_report">
+                                <t t-set="product" t-value="line.product_id"/>
+                            </t>
+                        </t>
+                    </t>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

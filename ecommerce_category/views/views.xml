@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="x_view_product_public_category" model="ir.ui.view">
+            <field name="name">product_public_category_form_view</field>
+            <field name="model">product.public.category</field>
+            <field name="inherit_id" ref="website_sale.product_public_category_form_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//group/field[last()]" position="after">
+                    <field name="website_id" attrs="{'invisible':[('parent_id','!=',False)]}" />
+                    <field name="parent_website_id" readonly="1" attrs="{'invisible':[('parent_id','=',False)]}" />
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

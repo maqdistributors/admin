@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="label_report_format1_version1">
+        <div class="col-xs-3" style="padding:0;">
+            <table style="border-spacing:0;margin-bottom:0.011in;width: 1.75in; height:0.50in;font-size:12px;">
+                <tbody>
+                    <tr>
+                        <td width="70%" style="text-align: center; vertical-align: middle;">
+                            <div style="line-height: 90%">
+                                <span t-field="product.default_code"/>
+                            </div>
+                            <div style="line-height: 98%;font-size:11px; margin-bottom: 1px;">
+                                <span t-field="product.lst_price" t-options='{"widget": "monetary", "display_currency": product.currency_id}'/>
+                            </div>
+                            <div>
+                                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', product.barcode, 600, 150)" style="width:100%;height:10%;"/>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </template>
+
+    <template id="label_report_format1_version2">
+        <div class="col-xs-3" style="padding:0;">
+            <table style="border-spacing:0;margin-bottom:0.011in;width: 1.75in; height:0.50in;font-size:13px;">
+                <tbody>
+                    <tr>
+                        <td width="70%" style="text-align: center; vertical-align: middle;">
+                            <div>
+                                <span t-field="product.default_code"/>
+                            </div>
+                            <div>
+                                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', product.barcode, 600, 150)" style="width:100%;height:10%;"/>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </template>
+
+    <template id="label_report_format2_version1">
+        <div class="col-xs-6" style="padding:0;">
+            <table style="border-spacing:0;margin-bottom:0.281in;width: 4in; height:1.75in;font-size:23px;">
+                <tbody>
+                    <tr>
+                        <td width="70%" style="text-align: center; vertical-align: middle;">
+                            <div class="mt16">
+                                <span t-field="product.default_code"/>
+                            </div>
+                            <div class="mt16">
+                                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', product.barcode, 600, 150)" style="width:100%;height:25%;"/>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </template>
+
+    <template id="label_report_format2_version2">
+        <div class="col-xs-6" style="padding:0;">
+            <table style="border-spacing:0;margin-bottom:0.281in;width: 4in; height:1.75in;font-size:19px;">
+                <tbody>
+                    <tr>
+                        <td width="70%" style="text-align: center; vertical-align: middle;">
+                            <div class="mt8">
+                                <span t-field="product.display_name"/>
+                            </div>
+                            <div class="mt8">
+                                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', product.barcode, 600, 150)" style="width:100%;height:25%;"/>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </template>
+
+    <template id="label_report">
+        <t t-if="report_format == 'f1_v1'">
+            <t t-call="maqabim_purchase.label_report_format1_version1"/>
+        </t>
+        <t t-if="report_format == 'f1_v2'">
+            <t t-call="maqabim_purchase.label_report_format1_version2"/>
+        </t>
+        <t t-if="report_format == 'f2_v1'">
+            <t t-call="maqabim_purchase.label_report_format2_version1"/>
+        </t>
+        <t t-if="report_format == 'f2_v2'">
+            <t t-call="maqabim_purchase.label_report_format2_version2"/>
+        </t>
+    </template>
+</odoo>

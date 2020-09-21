@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Import Order Wizard -->
+        <record id="shopify_import_orders_view" model="ir.ui.view">
+            <field name="name">shopify.import.orders.view</field>
+            <field name="model">shopify.import.orders</field>
+            <field name="arch" type="xml">
+                <form string="Shopify Import Order">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="shopify_order_id" string="Order ID#"
+                                    help="Enter order id of Shopify"/>
+                            </group>
+                            <group>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Import Order" name="import_shopify_orders"
+                            type="object" class="btn-primary"
+                            confirm="Are you sure you want to import order from Shopify?"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="import_order_wizard_action" model="ir.actions.act_window">
+           <field name="name">Shopify Import Order</field>
+           <field name="type">ir.actions.act_window</field>
+           <field name="res_model">shopify.import.orders</field>
+           <field name="view_type">form</field>
+           <field name="view_mode">form</field>
+           <field name="target">new</field>
+          </record>
+    </data>
+</odoo>

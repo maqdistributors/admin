@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sale_order_view_cust_ref_inherit" model="ir.ui.view">
+            <field name="name">sale.order.view.cust.ref.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/group/group[2]/field[@name='payment_term_id']" position="after">
+                    <field name='m_customer_ref' invisible="1" attrs="{'readonly': [('state','==','done')]}"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_picking_form_customer_ref_inherit" model="ir.ui.view">
+            <field name="name">view.picking.form.customer.ref.inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/group/group[1]/field[@name='backorder_id']" position="after">
+                    <field name="picking_type_code"/>
+                    <field name="m_delivery_customer_ref" attrs="{'invisible': [('picking_type_code', 'not in',('internal','outgoing'))], 'readonly': [('state','in',('done','cancel'))]}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_custom_sales_report_form" model="ir.ui.view">
+            <field name="name">view.custom.sales.report.form</field>
+            <field name="model">sales.report</field>
+            <field name="arch" type="xml">
+                <form name="Sales Report" delete="0" copy="0">
+                    <header>
+                        <button name="generate_report" string="Generate Report" type="object" class="oe_highlight"
+                            attrs="{'invisible': [('is_lock', '=', True)]}"/>
+                        <button name="clear_data"
+                            confirm="Are you sure you want to clear all data of report?"
+                            string="Clear Data" type="object"
+                            attrs="{'invisible': [('is_lock', '=', True)]}"/>
+                        <button name="lock_record"
+                            confirm="Are you sure you want to lock a report?"
+                            string="Lock" type="object"
+                            attrs="{'invisible': [('is_lock', '=', True)]}"/>
+                        <button name="unlock_record"
+                            confirm="Are you sure you want to unlock a report?"
+                            string="Unlock" type="object"
+                            attrs="{'invisible': [('is_lock', '=', False)]}"/>
+                    </header>
+                    <sheet>
+                        <group >
+                            <group>
+                                <field name="m_warehouse_id" widget="many2many_tags"
+                                    attrs="{'readonly': [('is_lock', '=', True)]}"
+                                    options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                <field name="company_ids" widget="many2many_tags"
+                                    invisible="0" readonly="1"
+                                    options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                <field name="m_exhausted" attrs="{'readonly': [('is_lock', '=', True)]}"/>
+                                <field name="is_update_total_qty" attrs="{'readonly': [('is_lock', '=', True)]}"/>
+                                <field name="is_lock" invisible="1"/>
+                                <field name="user_id" invisible="1"/>
+                                <field name="active" invisible="1"/>
+                                <field name="event_description" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="m_sales_start_date" attrs="{'readonly': [('is_lock', '=', True)]}"/>
+                                <field name="m_sales_end_date" attrs="{'readonly': [('is_lock', '=', True)]}"/>
+                            </group>
+                        </group>
+                        <!-- <group attrs="{'readonly': [('is_lock', '=', True)]}" col="6" colspan="3">
+                            <label for="m_product_ids" string="AND" />
+                            <field name="m_product_ids" string="Products" widget="many2many_tags" nolabel="1"
+                                help="Add product here which you would like to filter"
+                                placeholder="Products" attrs="{'readonly': [('is_lock', '=', True)]}"
+                                options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                            <label for="m_internal_ref" string="OR" />
+                            <field name="m_internal_ref" string="Internal Reference"  nolabel="1"
+                                help="Add internal ref here which you would like to filter"
+                                placeholder="Internal Reference" attrs="{'readonly': [('is_lock', '=', True)]}"/>
+                            <label for="m_prod_ref" string="OR" />
+                            <field name="m_prod_ref" string="Products Reference"  nolabel="1"
+                                help="Add product name here which you would like to filter"
+                                placeholder="Product1,Product2" attrs="{'readonly': [('is_lock', '=', True)]}"/>
+                        </group> -->
+                        <!-- <group attrs="{'readonly': [('is_lock', '=', True)]}">
+                            <field name="partner_ids" widget="many2many_tags"/>
+                            <label string="AND" />
+                            <label string="(" />
+                            <field name="product_ids" string="Products" widget="many2many_tags"/>
+                            <label string="OR" />
+                            <field name="internal_ref" string="Internal Reference" />
+                            <label string=")" />
+                        </group> -->
+                        <notebook>
+                            <page name="filters" string="Filter">
+                                <group attrs="{'readonly': [('is_lock', '=', True)]}" col="6" colspan="3">
+                                    <!-- <field name="partner_ids" widget="many2many_tags" nolabel="1"
+                                        help="Add vendors here which you would like to filter"
+                                        placeholder="Vendors" attrs="{'readonly': [('is_lock', '=', True)]}"
+                                        options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"
+                                        domain="[('supplier','=',True)]"
+                                        context="{'search_default_supplier':1, 'default_supplier':1, 'default_customer':0}"/>
+                                    <label for="product_ids" string="AND" /> -->
+                                    <field name="product_ids" string="Products" widget="many2many_tags" nolabel="1"
+                                        help="Add product here which you would like to filter"
+                                        placeholder="Products" attrs="{'readonly': [('is_lock', '=', True)]}"
+                                        options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                    <label for="internal_ref" string="OR" />
+                                    <field name="internal_ref" string="Internal Reference"  nolabel="1"
+                                        help="Add internal ref here which you would like to filter"
+                                        placeholder="Reference1,Reference2,..." attrs="{'readonly': [('is_lock', '=', True)]}"/>
+                                    <label for="prod_ref" string="OR" />
+                                    <field name="prod_ref" string="Products Reference"  nolabel="1"
+                                        help="Add product name here which you would like to filter"
+                                        placeholder="Prod1,Prod2,..." attrs="{'readonly': [('is_lock', '=', True)]}"/>
+                                </group>
+                                <group string="AND">
+                                </group>
+                                <group attrs="{'readonly': [('is_lock', '=', True)]}">
+                                    <field name="partner_ids" widget="many2many_tags" nolabel="1"
+                                        help="Add vendors here which you would like to filter"
+                                        placeholder="Vendors" attrs="{'readonly': [('is_lock', '=', True)]}"
+                                        options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"
+                                        domain="[('supplier','=',True)]"
+                                        context="{'search_default_supplier':1, 'default_supplier':1, 'default_customer':0}"/>
+                                </group>
+                                <group attrs="{'invisible': [('is_lock', '=', True)]}" col="6" colspan="3">
+                                    <button name="add_filter" string="Filter" type="object" class="oe_highlight"/>
+                                    <button name="clear_filter"
+                                        confirm="Are you sure you want to clear filters?"
+                                        string="Clear" type="object" class="oe_highlight"/>
+                                </group>
+                            </page>
+                        </notebook>
+                        <notebook>
+                            <page name="products" string="Result">
+                                <group>
+                                    <field name="m_sales_report_lines" nolabel="1" attrs="{'readonly': [('is_lock', '=', True)]}">
+                                        <form name="Sales Report Lines" create="0" delete="0" edit="0">
+                                            <group>
+                                                <group>
+                                                    <field name="product_id" readonly="1"
+                                                        options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                                    <!-- <field name="default_code"/> -->
+                                                    <field name="delivered_qty" readonly="1"/>
+                                                    <field name="forecasted_qty" readonly="1"/>
+                                                </group>
+                                                <group>
+                                                    <field name="sales_price" readonly="1"/>
+                                                    <field name="warehouse_id" readonly="1"
+                                                        options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                                    <field name="qty_on_hand" readonly="1"/>
+                                                    <field name="vendor_ids" widget="many2many_tags" readonly="1"
+                                                        options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                                    <field name="vendor_details" readonly="1"/>
+                                                </group>
+                                            </group>
+                                        </form>
+                                        <tree create="false" delete="false" edit="false">
+                                            <field name="default_code"/>
+<!--                                            <field name="company_id" invisible="1"/> -->
+                                            <field name="product_id"/>
+                                            <field name="sales_price"/>
+                                            <field name="warehouse_id"/>
+                                            <field name="tfr_to_shopify"/>
+                                            <field name="delivered_qty"/>
+                                            <field name="scrap_qty"/>
+                                            <field name="return_qty"/>
+                                            <field name="actual_delivered_qty"/>
+                                            <field name="total_delivered_qty"/>
+                                            <field name="qty_on_hand"/>
+                                            <field name="total_qty_on_hand"/>
+                                            <field name="forecasted_qty"/>
+                                            <field name="total_forecasted_qty"/>
+                                            <field name="vendor_ids" widget="many2many_tags"/>
+                                            <field name="vendor_details"/>
+                                            <field name="active" invisible="1"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_custom_sales_report_tree" model="ir.ui.view">
+            <field name="name">view.custom.sales.report.tree</field>
+            <field name="model">sales.report</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="m_sales_start_date"/>
+                    <field name="m_sales_end_date"/>
+                    <field name="m_warehouse_id" widget="many2many_tags"/>
+                    <field name="company_ids" widget="many2many_tags" readonly="1" invisible="0"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_custom_sales_report_search" model="ir.ui.view">
+            <field name="name">view.custom.sales.report.search</field>
+            <field name="model">sales.report</field>
+            <field name="arch" type="xml">
+                <search>
+                    <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_custom_sales_report" model="ir.actions.act_window">
+            <field name="name">Sales Report</field>
+            <field name="res_model">sales.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="tree_view_id" ref="view_custom_sales_report_tree"/>
+            <field name="search_view_id" ref="view_custom_sales_report_search"/>
+        </record>
+        
+    <menuitem id="menu_custom_sales_report"
+            name="Sales Report"
+            action="action_custom_sales_report"
+            parent="stock.menu_stock_warehouse_mgmt"
+            groups="maq_sales_report_warehouse.group_sales_report_manager,base.group_system"
+            sequence="30"/>
+        
+    </data>
+</odoo>

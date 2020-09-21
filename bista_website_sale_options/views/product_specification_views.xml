@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="specification_tree_view" model="ir.ui.view">
+            <field name="name">product.specification.tree</field>
+            <field name="model">product.specification.attribute</field>
+            <field name="arch" type="xml">
+                <tree string="Specification Values" editable="top">
+                    <field name="sequence" widget="handle" />
+                    <field name="name" />
+                    <field name="type" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_specification_view_form" model="ir.ui.view">
+            <field name="name">product.specification.form</field>
+            <field name="model">product.specification.attribute</field>
+            <field name="arch" type="xml">
+                <form string="Product Attribute">
+                    <group>
+                        <group name="main_fields">
+                            <label for="name" string="Attribute Name" />
+                            <field name="name" nolabel="1" />
+                        </group>
+                        <group>
+                            <field name="type" />
+                        </group>
+                    </group>
+                    <group name="values_ids">
+                        <label for="value_ids" string="Attribute Values" />
+                        <field name="value_ids" widget="one2many_list" nolabel="1">
+                            <tree string="Values" editable="bottom">
+                                <field name="name" />
+                            </tree>
+                            <form string="Values">
+                                <field name="name" />
+                            </form>
+                        </field>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="specification_action" model="ir.actions.act_window">
+            <field name="name">Specification</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.specification.attribute</field>
+            <field name="view_mode">tree</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <record id="specification_value_tree_view" model="ir.ui.view">
+            <field name="name">product.specification.value.tree</field>
+            <field name="model">product.specification.value</field>
+            <field name="arch" type="xml">
+                <tree string="Variant Values" editable="top">
+                    <field name="sequence" widget="handle" />
+                    <field name="specification_id" />
+                    <field name="name" />
+                    <field name="html_color" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="specification_value_action" model="ir.actions.act_window">
+            <field name="name">Specification Values</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.specification.value</field>
+            <field name="view_mode">tree</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <menuitem id="menu_specification_action"
+            action="bista_website_sale_options.specification_action" parent="sale.prod_config_main"
+            sequence="10" groups="product.group_product_variant" />
+        <menuitem action="bista_website_sale_options.specification_value_action"
+            id="menu_variants_action" parent="sale.prod_config_main" sequence="11"
+            groups="product.group_product_variant" />
+    </data>
+</odoo>
+

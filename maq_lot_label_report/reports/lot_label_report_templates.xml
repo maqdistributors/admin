@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="label_report_form1_vers1">
+            <table class="col-xs-3" style="border-spacing:0;margin-bottom:0.011in;width: 1.75in; height:0.50in;font-size:12px;page-break-inside: avoid;">
+                    <tr>
+                        <td width="70%" style="text-align: center; vertical-align: middle;">
+                            <div style="line-height: 90%; margin-bottom: 4px; margin-top: 2px;">
+                                <span t-field="product.govt_sku"/>
+                            </div>
+                            <div style="line-height: 98%;font-size:11px; margin-bottom: 1px;">
+                                <span t-field="lot_id.name"/>
+                            </div>
+                            <div style="margin-bottom: 2px;">
+                                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', lot_id.name, 600, 150)" style="width:100%;height:10%;"/>
+                            </div>
+                        </td>
+                    </tr>
+            </table>
+    </template>
+
+    <template id="label_report_form2_vers1">
+            <table class="col-xs-6" style="border-spacing:0;margin-bottom:0.281in;width: 4in; height:1.75in;font-size:21px;page-break-inside: avoid;">
+                    <tr>
+                        <td width="70%" style="text-align: center; vertical-align: middle;">
+                            <div class="mt1">
+                                [<span t-field="product.default_code"/>] <span t-field="product.name"/> <t t-if="product.attribute_value_ids">(<t t-foreach="product.attribute_value_ids" t-as="attribute">
+                                <t t-if="len(product.attribute_value_ids) &gt; 1">
+                                    <span t-field="attribute.name"/>
+                                </t>
+                                <t t-if="len(product.attribute_value_ids) == 1">
+                                    <span t-field="attribute.name"/>
+                                </t>
+                                </t>)</t>
+                            </div>
+                            <div class="mt1">
+                                <span t-field="product.govt_sku"/>
+                            </div>
+                            <div class="mt1">
+                                <span t-field="lot_id.name"/>
+                            </div>
+                            <div class="mt1">
+                                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', lot_id.name, 600, 150)" style="width:100%;height:25%;"/>
+                            </div>
+                        </td>
+                    </tr>
+            </table>
+    </template>
+
+    <!-- <template id="label_lot_report">
+        <t t-if="report_format == 'f1v1'">
+            <t t-call="maq_lot_label_report.label_report_form1_vers1"/>
+        </t>
+        <t t-if="report_format == 'f2v1'">
+            <t t-call="maq_lot_label_report.label_report_form2_vers1"/>
+        </t>
+    </template> -->
+</odoo>

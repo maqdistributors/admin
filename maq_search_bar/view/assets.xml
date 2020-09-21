@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="search_bar_frontend_assets" inherit_id="website.assets_frontend">
+        <xpath expr="//link[last()]" position="after">
+            <link href="/maq_search_bar/static/src/less/website_search.less"
+                  rel="stylesheet" type="text/less"/>
+        </xpath>
+        <xpath expr="//script[last()]" position="after">
+            <script src="/maq_search_bar/static/src/js/website_search.js"
+                    type="text/javascript"/>
+        </xpath>
+    </template>
+</odoo>

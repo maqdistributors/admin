@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_sale_order_partner_comment_form_inherit" model="ir.ui.view">
+            <field name="name">view.sale.order.customer.comment.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/notebook/page[last()]" position="after">
+                    <page name="partner_order_comment" string="Customer Order Comment">
+                        <group>
+                            <field name="partner_comment" nolabel="1" />
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+

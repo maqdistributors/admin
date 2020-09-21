@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_stock_move_line_shopify_search" model="ir.ui.view">
+            <field name="name">view.stock.move.line.shopify.search</field>
+            <field name="model">stock.move.line</field>
+            <field name="inherit_id" ref="stock.stock_move_line_view_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='manufacturing']" position="after">
+                    <filter string="Shopify Export" name="shopify_export" domain="[('shopify_export','=',True)]"/>
+                    <filter string="Error Log" name="error_log" domain="[('shopify_error_log','!=',False)]"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="maq_shopify_stock_move_line_search_inherit" model="ir.ui.view">
+            <field name="name">maq.shopify.stock.move.line.search.inherit</field>
+            <field name="model">stock.move.line</field>
+            <field name="inherit_id" ref="stock.stock_move_line_view_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='done']" position="after">
+                    <filter string="Shopify Product Move" name="shopify_product_move" domain="['|',('shopify_error_log','not in',('', False)),('shopify_export','=',True)]"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="stock_move_line_shopify_action" model="ir.actions.act_window">
+            <field name="name">Product Moves</field>
+            <field name="res_model">stock.move.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_shopify_product_move':1}</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <div t-name="maqabim_website_popup.status_welcome" class="modal fade" id="myModalWelcome">
+        <div id="age_modal" style="background-color: #FFFFFF" class="age_modal_enter">
+            <h1 id="age_modal_heading">Welcome To <t t-esc="company"/></h1>
+            <img id="age_modal_logo" src=""/>
+            <div id="age_modal_actions">
+                <span></span>
+                <button type="button" id="age_modal_submit" class="button-enter btn styled-submit spb-buttonfont spb-buttontextcolor spb-buttonbackground">Enter</button>
+                <a id="age_modal_exit" href="#">Exit</a>
+            </div>
+            <p id="age_modal_subheading">By clicking Enter, you are consenting to your State or Province's Laws. This website may contain smoking and smoking alternative products.</p>
+        </div>
+    </div>
+</templates>

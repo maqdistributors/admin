@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="maq_view_website_form_inherit_website_sale" model="ir.ui.view">
+            <field name="name">maq.website.form</field>
+            <field name="model">website</field>
+            <field name="inherit_id" ref="website.view_website_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="default_lang_id" position="after">
+                        <field name="website_shop_login" groups="base.group_no_one"/>
+                        <field name="website_shop_login_redirect" attrs="{'invisible': [('website_shop_login', '=', False)], 'required': [('website_shop_login', '=', True)]}" groups="base.group_no_one"/>
+                        <field name="search_all_products"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+    </data>
+</odoo>

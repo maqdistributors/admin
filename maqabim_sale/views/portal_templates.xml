@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<!-- <template id="portal_invoice_report_inherit_maqabim_sale" inherit_id="account.portal_invoice_report">
+		<xpath expr="//table/thead/tr" position="replace">
+			<tr>
+                <th>Description</th>
+                <th class="hidden">Source Document</th>
+				<th class="text-right">Ordered Qty</th>
+                <th class="text-right">Backorder Qty</th>
+                <th class="text-right">Invoiced Qty</th>
+                <th class="text-right">Unit Price</th>
+                <th t-if="display_discount" class="text-right">Disc.(%)</th>
+                <th class="text-right">Taxes</th>
+                <th class="text-right">Amount</th>
+            </tr>
+		</xpath>
+		<xpath expr="//tr[@t-foreach='invoice.invoice_line_ids']//span[@t-field='l.quantity']/.." position="before">
+			<td class="text-right">
+                <span t-field="l.ordered_qty"/>
+                <span t-field="l.uom_id"  groups="product.group_uom"/>
+            </td>
+            <td class="text-right">
+                <span t-field="l.back_order_qty"/>
+                <span t-field="l.uom_id"  groups="product.group_uom"/>
+            </td>
+		</xpath>
+		<xpath expr="//tr[@t-foreach='range(max(5-len(invoice.invoice_line_ids),0))']//td[2]" position="before">
+			<td>
+			</td>
+		</xpath>
+	</template> -->
+</odoo>

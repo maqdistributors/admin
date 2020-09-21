@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Added Groups to fields on purchase order form and added a new field in form-->
+        <record id="purchase_order_form_inherit" model="ir.ui.view">
+            <field name="name">purchase.order.form.inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <!-- <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="attributes">
+                    <attribute name="groups">maq_purchase_amount_grouping.group_po_amount</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="attributes">
+                    <attribute name="groups">maq_purchase_amount_grouping.group_po_amount</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='taxes_id']" position="attributes">
+                    <attribute name="groups">maq_purchase_amount_grouping.group_po_amount</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/form/sheet/group/group[1]/field[@name='price_unit']" position="attributes">
+                    <attribute name="groups">maq_purchase_amount_grouping.group_po_amount</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/form/sheet/group/group[2]/field[@name='taxes_id']" position="attributes">
+                    <attribute name="groups">maq_purchase_amount_grouping.group_po_amount</attribute>
+                </xpath>
+                <xpath expr="//group[contains(@class,'oe_subtotal_footer')]" position="attributes">
+                    <attribute name="groups">maq_purchase_amount_grouping.group_po_amount</attribute>
+                </xpath> -->
+                <xpath expr="//form/sheet/group/group[2]" position="inside">
+                    <field name="m_created_by" groups="maq_purchase.group_po_joint"
+                        attrs="{'readonly': [('state', 'not in', ('draft'))]}"/>
+                </xpath>
+                <xpath expr="//field[@name='company_id']" position="attributes">
+                    <attribute name="context">{'allowed_companies_only': True}</attribute>
+                    <attribute name="options">{'no_create': True,'no_create_edit': True, 'no_open': True}</attribute>
+                </xpath>
+            </field>
+        </record>
+        
+        <!-- Added Groups to fields on purchase order tree -->
+        <!-- <record id="purchase_order_tree_inherit" model="ir.ui.view">
+            <field name="name">purchase.order.tree.inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='amount_untaxed']" position="attributes">
+                    <attribute name="groups">maq_purchase_amount_grouping.group_po_amount</attribute>
+                </xpath>
+                <xpath expr="//field[@name='amount_total']" position="attributes">
+                    <attribute name="groups">maq_purchase_amount_grouping.group_po_amount</attribute>
+                </xpath>
+            </field>
+        </record> -->
+    </data>
+</odoo>

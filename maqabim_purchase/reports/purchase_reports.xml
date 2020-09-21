@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="paperformat_a4_po_label" model="report.paperformat">
+            <field name="name">A4 Purchase Order Label</field>
+            <field name="default" eval="False" />
+            <field name="format">custom</field>
+            <field name="page_width">216</field>
+            <field name="page_height">279</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">12</field>
+            <field name="margin_bottom">12</field>
+            <field name="margin_left">3</field>
+            <field name="margin_right">0</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">0</field>
+            <field name="dpi">78</field>
+        </record>
+        <report
+            id="report_po_label"
+            string="Print PO-labels"
+            model="purchase.order"
+            report_type="qweb-pdf"
+            name="maqabim_purchase.report_polabel"
+            file="maqabim_purchase.report_polabel"
+            print_report_name="'PO Labels - %s' % (object.name)"
+            paperformat="paperformat_a4_po_label"
+        />
+
+</odoo>

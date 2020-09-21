@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inherit Stock picking form to insert vendor code field in stock move line -->
+        <record id="view_custom_fields_stock_pikcing_inherit" model="ir.ui.view">
+            <field name="name">view.custom.fields.stock.pikcing.inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='move_ids_without_package']/tree/field[@name='product_id']" position="after">
+                    <field name="m_vendor_code"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
