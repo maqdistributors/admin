@@ -10,7 +10,7 @@
     "category": "Web",
     "license": "AGPL-3",
     'summary': """This module contains following features
-                1. Auto get price from pricelist as per start date, end date and active base.""",
+                1. Automatically get price from pricelist as per start date, end date and active base.""",
     "depends": [
         "website_sale",
         "product",
