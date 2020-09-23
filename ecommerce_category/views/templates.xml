@@ -10,8 +10,8 @@
         <xpath expr="//h1[@itemprop='name']" position="attributes">
             <attribute name="t-field">product.display_name</attribute>
         </xpath>
-        <xpath expr="//div[@id='product_details']/p[last()]" position="replace">
-        </xpath>
+        <!-- <xpath expr="//div[@id='product_details']/p[last()]" position="replace">
+        </xpath> -->
     </template>
     <template id="cart_lines_maqabim" inherit_id="website_sale.cart_lines">
         <xpath expr="//td[@class='td-product_name']" position="replace">
