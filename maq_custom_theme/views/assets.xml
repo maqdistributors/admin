@@ -4,7 +4,7 @@
     <template id="assets_frontend" inherit_id="website.assets_frontend">
         <xpath expr="." position="inside">
             <link type="text/less" rel='stylesheet' href='/maq_custom_theme/static/src/css/fonts.less'/>
-            <link type="text/less" rel='stylesheet' href='/maq_custom_theme/static/src/css/website.css'/>
+            <link type="text/less" rel='stylesheet' href='/maq_custom_theme/static/src/css/website.less'/>
             <link type="text/less" rel='stylesheet' href='/maq_custom_theme/static/src/css/ubuntu.less'/>
             <script type="text/javascript" src="/maq_custom_theme/static/src/js/website.js"></script>
         </xpath>
