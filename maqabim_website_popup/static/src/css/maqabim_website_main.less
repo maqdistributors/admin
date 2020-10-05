@@ -1,0 +1,159 @@
+@-webkit-keyframes age_modal_enter {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes age_modal_enter {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@-webkit-keyframes age_modal_shake {
+    0%, 100% {
+        margin-left: 0
+    }
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        margin-left: -10px
+    }
+    20%,
+    40%,
+    60%,
+    80% {
+        margin-left: 10px;
+    }
+}
+@keyframes age_modal_shake {
+    0%, 100% {
+        margin-left: 0
+    }
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        margin-left: -10px
+    }
+    20%,
+    40%,
+    60%,
+    80% {
+        margin-left: 10px;
+    }
+}
+body.age_active {
+    overflow-y: hidden;
+}
+.age_modal_shake {
+    -webkit-animation-name: age_modal_shake !important;
+    animation-name: age_modal_shake !important;
+}
+.age_modal_enter {
+    -webkit-animation-name: age_modal_enter !important;
+    animation-name: age_modal_enter !important;
+}
+#age_modal_dimmer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999999999 !important;
+}
+#age_modal_bg {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999999999 !important;
+    overflow: hidden;
+}
+#age_modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    box-sizing: border-box;
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.35);
+    width: 96%;
+    max-width: 600px;
+    max-height: 90%;
+    margin: 0;
+    padding: 15px 15px 0 15px;
+    z-index: 99999999999 !important;
+    text-align: center;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    color: #000000;
+}
+#age_modal img {
+    display: inline-block;
+    margin-bottom: 13px;
+    max-height: 200px;
+    max-width: 100%;
+}
+#age_modal select {
+    display: inline-block;
+    width: auto;
+    margin: 0;
+    font-size: 16px;
+}
+#age_modal_actions {
+    display: inline-block;
+    width: 100%;
+    margin-top: 15px;
+    text-align: center;
+}
+#age_modal_actions span {
+    display: block;
+}
+#age_modal_submit {
+    clear: left;
+    display: inline-block;
+    background-color: #000000;
+    color: #ffffff;
+}
+#age_modal_facebook {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 225px;
+    border-radius: 2px;
+}
+#age_modal_datepicker {
+    margin-top: 15px;
+}
+#age_modal_exit {
+    clear: left;
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+    padding-bottom: 15px;
+    color: #000000;
+    background-color: #ffffff;
+}
+@media screen and (max-device-width: 480px) {
+    body {
+        overflow-y: auto !important;
+    }
+}
