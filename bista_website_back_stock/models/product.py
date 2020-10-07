@@ -13,19 +13,23 @@ class Product(models.Model):
 
     @api.multi
     def write(self, vals):
-        __last_update = vals.get("__last_update")
-        sale_ok = vals.get('sale_ok')
-        if sale_ok:
-            vals['is_website_publish'] = False
-        elif sale_ok is None:
-            sale_ok = self.product_tmpl_id.sale_ok
-        is_website_publish = vals.get("is_website_publish")
-        if is_website_publish == True and sale_ok == True:
-            self.product_tmpl_id.update({"bck_stock_date": None})
-        elif is_website_publish == False and sale_ok == True:
-            self.product_tmpl_id.update({"bck_stock_date": datetime.now()})
-        else:
-            self.product_tmpl_id.update({"bck_stock_date": None})
-            vals['is_website_publish'] = False
+        for rec in self:
+            sale_ok = vals.get('sale_ok')
+            if sale_ok == True:
+                vals['is_website_publish'] = False
+            elif sale_ok is None:
+                sale_ok = rec.product_tmpl_id.sale_ok
+
+            is_website_publish = vals.get("is_website_publish")
+            bck_stock_date = rec.bck_stock_date
+
+            if is_website_publish == True and sale_ok == True:
+                rec.product_tmpl_id.update({"bck_stock_date": None})
+            elif is_website_publish == False and sale_ok == True:
+                rec.product_tmpl_id.update({"bck_stock_date": datetime.now()})
+            else:
+                rec.product_tmpl_id.update({"bck_stock_date": bck_stock_date})
+                vals['is_website_publish'] = False
+
         result = super(Product, self).write(vals)
         return result
