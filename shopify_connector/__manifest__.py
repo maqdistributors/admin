@@ -35,7 +35,6 @@ Key Features
         "views/product_uom_views.xml",
         "views/res_company_views.xml",
         "views/sale_order_and_sale_order_line_views.xml",
-        "wizard/shopify_import_orders_view.xml",
         "views/shopify_config_view.xml",
         "views/shopify_images_view.xml",
         "views/shopify_locations_view.xml",
