@@ -20,7 +20,7 @@ class SaleOrderLine(models.Model):
         PricelistItem = self.env['product.pricelist.item']
         field_name = 'lst_price'
         currency_id = None
-        product_currency = None
+        product_currency = product.currency_id
         if rule_id:
             pricelist_item = PricelistItem.browse(rule_id)
             if pricelist_item.pricelist_id.discount_policy == 'without_discount':
@@ -31,16 +31,13 @@ class SaleOrderLine(models.Model):
 
             if pricelist_item.base == 'standard_price':
                 field_name = 'standard_price'
-            if pricelist_item.base == 'pricelist' and pricelist_item.base_pricelist_id:
+                product_currency = product.cost_currency_id
+            elif pricelist_item.base == 'pricelist' and pricelist_item.base_pricelist_id:
                 field_name = 'price'
                 product = product.with_context(pricelist=pricelist_item.base_pricelist_id.id)
                 product_currency = pricelist_item.base_pricelist_id.currency_id
             currency_id = pricelist_item.pricelist_id.currency_id
-        else:
-            pricelist_item = False
 
-        product_currency = product_currency or (
-                    product.company_id and product.company_id.currency_id) or self.env.user.company_id.currency_id
         if not currency_id:
             currency_id = product_currency
             cur_factor = 1.0
@@ -48,7 +45,9 @@ class SaleOrderLine(models.Model):
             if currency_id.id == product_currency.id:
                 cur_factor = 1.0
             else:
-                cur_factor = currency_id._get_conversion_rate(product_currency, currency_id)
+                cur_factor = currency_id._get_conversion_rate(product_currency, currency_id,
+                                                              self.company_id or self.env.user.company_id,
+                                                              self.order_id.date_order or fields.Date.today())
 
         product_uom = self.env.context.get('uom') or product.uom_id.id
         if uom and uom.id != product_uom:
@@ -66,10 +65,10 @@ class SaleOrderLine(models.Model):
                     pu = ppi.fixed_price
 
             if pricelist_item.base == 'list_price' and pu and pricelist_item.pricelist_id.discount_policy == 'without_discount':
-                result = pu * uom_factor * cur_factor, currency_id.id
+                result = pu * uom_factor * cur_factor, currency_id
             else:
-                result = product[field_name] * uom_factor * cur_factor, currency_id.id
+                result = product[field_name] * uom_factor * cur_factor, currency_id
         else:
-            result = product[field_name] * uom_factor * cur_factor, currency_id.id
+            result = product[field_name] * uom_factor * cur_factor, currency_id
 
         return result
