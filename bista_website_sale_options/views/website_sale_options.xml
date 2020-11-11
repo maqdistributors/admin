@@ -4,7 +4,8 @@
     <template id="assets_maq_website_sale_options_frontend" name="website_sale_expand assets"
               inherit_id="website_sale.assets_frontend">
         <xpath expr="//script[last()]" position="after">
-            <script type="text/javascript" src="/bista_website_sale_options/static/src/js/website_sale.js"/>
+            <script type="text/javascript"
+                    src="/bista_website_sale_options/static/src/js/website_sale.js"/>
         </xpath>
     </template>
     <!-- Load custom less file of the module -->
@@ -37,7 +38,7 @@
             </t>
         </xpath>
         <xpath expr="//div[hasclass('oe_product_image')]" position="replace">
-            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+<!--            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>-->
             <div class="oe_product_image">
                 <a itemprop="url"
                    t-att-href="keep('/shop/product/%s' % slug(product), page=(pager['page']['num'] if pager['page']['num']&gt;1 else None))">
@@ -88,7 +89,7 @@
         <xpath expr="//section/div[hasclass('product_price')]/b" position="replace">
             <b>
                 <t t-if="product.website_price_difference and website.get_current_pricelist().discount_policy=='without_discount'">
-                    <del class="text-danger mr8" style="white-space: nowrap;"
+                    <del class="text-danger mr8 maq_hide_span" style="white-space: nowrap;"
                          t-esc="compute_currency(product.website_public_price)"
                          t-options="{'widget': 'monetary', 'display_currency': website.get_current_pricelist().currency_id, 'from_currency': website.currency_id}"/>
                 </t>
@@ -130,10 +131,7 @@
             <t t-if="len(filterd_value_ids) &lt; 1">
                 <a class="btn btn-default btn-xs"
                    t-att-href="keep('/shop/product/%s' % slug(product), page=(pager['page']['num'] if pager['page']['num']&gt;1 else None))">
-                    <span>Currently
-                        <br/>
-                        Out Of Stock
-                    </span>
+                    <span>Currently <br/> Out Of Stock</span>
                 </a>
             </t>
         </xpath>
@@ -282,7 +280,7 @@
         </xpath>
     </template>
     <template id="cart_button" inherit_id="website_sale.cart"
-              customize_show="True" name="Cart Button">
+            customize_show="True" name="Cart Button">
         <xpath expr="//a[@href='/shop']" position="replace">
             <a role="button" href="/shop" class="btn btn-secondary mb32 d-none d-xl-inline-block">
                 <span class="fa fa-long-arrow-left"/>

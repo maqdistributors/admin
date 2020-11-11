@@ -23,7 +23,7 @@
 }
 
 .oe_product div.oe_product_cart:hover .product_grid_qty {
-    display: inline-table;
+    display: flex;
     visibility: visible;
     top: 20px;
 }
@@ -54,4 +54,28 @@
 html[data-website-id="1"] * div#products_grid_before * > ul.nav-pills > li.active > a {
   background: #000 !important;
   color: #fff !important;
+}
+.js_product .oe_website_spinner .quantity{
+    height:50px;
+}
+#add_to_cart {
+    padding: 30px;
+    min-width: 240px;
+    display: inline-block;
+    -webkit-transition: all 0.5s ease-out;
+    -o-transition: all 0.5s ease-out;
+    transition: all 0.5s ease-out;
+}
+.js_product .btn-success {
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1) 0s;
+    background-color: #1ad68f;
+    border: 2px solid rgba(0, 0, 0, 0);
+    color: #ffffff;
+}
+.js_product .btn-success:hover, .js_product .btn-success:focus {
+    background-color: #14a971;
+    border: 2px solid #1ad68f;
+}
+.js_sale .breadcrumb li a {
+    color: #2e2e2e;
 }

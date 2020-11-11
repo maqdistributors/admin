@@ -37,12 +37,12 @@ odoo.define('bista_website_sale_options.website_sale_options', function (require
                         self.trigger('options_empty');
                         self.preventOpening = true;
                     }
-                     setTimeout(function () {
-                    $('.modal-footer button.btn-secondary').trigger('click');
-                }, 3000);
-                setTimeout(function () {
-                    self.container[0].className = "";
-                }, 3000);
+                    setTimeout(function () {
+                        $('.modal-footer button.btn-secondary').trigger('click');
+                    }, 3000);
+                    setTimeout(function () {
+                        self.container[0].className = "";
+                    }, 3000);
                 });
 
             var parentInit = self._super.apply(self, arguments);
