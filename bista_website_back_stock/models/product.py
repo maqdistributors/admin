@@ -28,7 +28,6 @@ class Product(models.Model):
                 rec.product_tmpl_id.update({"bck_stock_date": datetime.now()})
             else:
                 rec.product_tmpl_id.update({"bck_stock_date": bck_stock_date})
-                vals['is_website_publish'] = False
 
         result = super(Product, self).write(vals)
 
