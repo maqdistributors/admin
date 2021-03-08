@@ -34,24 +34,24 @@ class ProductTemplateAttributeValue(models.Model):
         company_dependent=True)
 
 
-# class ProductAttributePrice(models.Model):
-#     _inherit = "product.attribute.price"
-# 
-#     @api.depends('product_tmpl_id','value_id')
-#     def _get_product_variant(self):
-#         for rec in self:
-#             product_tmpl_id = rec.product_tmpl_id
-#             value_id = rec.value_id
-#             if product_tmpl_id and value_id:
-#                 product_variants = self.env['product.product'].sudo().search([('product_tmpl_id','=',product_tmpl_id.id),('attribute_value_ids','=',value_id.id)], limit=1)
-#                 if product_variants:
-#                     rec.product_id = product_variants.id
-#                 else:
-#                     rec.product_id = False
-#             else:
-#                 rec.product_id = False
-#     price_extra = fields.Float('Price Extra', company_dependent=True, digits=dp.get_precision('Product Price'))
-#     product_id = fields.Many2one('product.product', 'Product', compute='_get_product_variant')
+class ProductTempalteAttributeValue(models.Model):
+    _inherit = "product.template.attribute.value"
+
+    @api.depends('product_tmpl_id','product_attribute_value_id')
+    def _get_product_variant(self):
+        for rec in self:
+            product_tmpl_id = rec.product_tmpl_id
+            product_attribute_value_id = rec.product_attribute_value_id
+            if product_tmpl_id and product_attribute_value_id:
+                product_variants = self.env['product.product'].sudo().search([('product_tmpl_id','=',product_tmpl_id.id),('attribute_value_ids','=',product_attribute_value_id.id)], limit=1)
+                if product_variants:
+                    rec.product_id = product_variants.id
+                else:
+                    rec.product_id = False
+            else:
+                rec.product_id = False
+    price_extra = fields.Float('Price Extra', company_dependent=True, digits=dp.get_precision('Product Price'))
+    product_id = fields.Many2one('product.product', 'Product', compute='_get_product_variant')
 
 class ProductTemplateWebsiteDescription(models.Model):
     _name = 'product.template.website.description'

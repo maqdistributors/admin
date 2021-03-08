@@ -44,7 +44,7 @@ Update a view as per company restrictions and make fields to be company dependen
         'security/intercompany_security.xml',
         'security/ir.model.access.csv',
         'views/delivery_slip_report_view_inherit.xml',
-#         'views/product_attribute_price.xml',
+        'views/product_template_attribute_value.xml',
         'views/product_public_categ_inherit.xml',
         'views/product_style_view.xml',
         'views/product_template_inherit.xml',

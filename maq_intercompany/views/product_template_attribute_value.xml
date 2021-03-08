@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="maq_product_template_attribute_value_view_tree" model="ir.ui.view">
+            <field name="name">maq.product.template.attribute.value.view.tree</field>
+            <field name="model">product.template.attribute.value</field>
+            <field name="arch" type="xml">
+                <tree string="ProductAttributeValue" editable="bottom">
+                    <field name="product_tmpl_id"/>
+                    <field name="product_attribute_value_id"/>
+                    <field name="price_extra"/>
+                    <field name="product_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="maq_product_template_attribute_value_view_search" model="ir.ui.view">
+            <field name="name">maq.product.template.attribute.value.view.search</field>
+            <field name="model">product.template.attribute.value</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="product_tmpl_id"/>
+                    <field name="product_attribute_value_id"/>
+                    <field name="price_extra"/>
+                    <field name="product_id"/>
+                    <group>
+                        <filter name="group_product_tmpl_id" string="Product Template" context="{'group_by':'product_tmpl_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_maq_product_template_attribute_value" model="ir.actions.act_window">
+            <field name="name">Product Template Attribute Value</field>
+            <field name="res_model">product.template.attribute.value</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="tree_view_id" ref="maq_intercompany.maq_product_template_attribute_value_view_tree"/>
+            <field name="search_view_id" ref="maq_intercompany.maq_product_template_attribute_value_view_search"/>
+        </record>
+
+        <menuitem id="menu_maq_product_template_attribute" string="Product Template Attribute Value"
+            action="maq_intercompany.action_maq_product_template_attribute_value" parent="stock.menu_stock_warehouse_mgmt"
+            groups="base.group_erp_manager"
+            sequence="6"/>
+
+    </data>
+</odoo>
