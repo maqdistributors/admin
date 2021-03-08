@@ -14,7 +14,7 @@ class ResConfigSettings(models.TransientModel):
         # and user may not access to such details as first website company may not be alloweded
         # incase of multi company, we will try to load websitre of his current company allowing
         # Website>setting to load and then user can chage to any allowded companies or users.
-        user_company_websites = self.env['website'].search([('company_id', '=', self.env.user.company_id.id)])
+        user_company_websites = self.env['website'].search([('company_id', '=', self.env.user.company_id.id)],limit=1)
         if user_company_websites:
             res.update({'website_id': user_company_websites.id})
         return res
